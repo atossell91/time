@@ -8,55 +8,46 @@ namespace time
 {
     class data_4600
     {
-        class HourList
-        {
-
-        }
         class overtimeRow
         {
             public DateTime Start;
             public DateTime End;
             public TimeSpan MealPeriod;
-            public string code;
-
-            public int x100 = 0;
-            public int x150 = 1;
-            public int x175 = 2;
-            public int x200 = 3;
-            private List<double> Hours;
+            public string Code;
+            private HoursArray Hours;
 
             private double ExtendedHours;
             private bool Recoverable;
             private double ChargeableCosts;
 
             private string Reason;
-
-            private void initHoursList()
+            private overtimeRow()
             {
-                Hours = new List<double>();
-                for (int n =0; n < 4; ++n)
-                {
-                    Hours.Add(0.0);
-                }
+                Hours = new HoursArray();
             }
-            overtimeRow()
+            public overtimeRow(DateTime start, DateTime end, TimeSpan mealPeriod,
+                string code, int[] hours)
             {
-                initHoursList();
+                Start = start;
+                End = end;
+                MealPeriod = mealPeriod;
+                Code = code;
+
             }
 
             private double calcExtendedHours()
             {
                 double ext = 0.0;
-                ext += Hours[x100];
-                ext += Hours[x150] * 1.5;
-                ext += Hours[x175] * 1.75;
-                ext += Hours[x200] * 2;
+                ext += Hours.GetHours(HoursArray.x100);
+                ext += Hours.GetHours(HoursArray.x150);
+                ext += Hours.GetHours(HoursArray.x175);
+                ext += Hours.GetHours(HoursArray.x200);
 
                 return ext;
             }
             private void setHours(int index, double hours)
             {
-                Hours[index] = hours;
+                Hours.SetHours(hours, index);
             }
         }
         class codeSummary
