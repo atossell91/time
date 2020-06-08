@@ -119,6 +119,7 @@ namespace time
         }
         private void row_interface_MouseMove(object sender, MouseEventArgs e)
         {
+            /*
             cursorPos = e.Location;
             if (cursorIsInbounds(e.Location))
             {
@@ -128,6 +129,7 @@ namespace time
             {
                 changeBackgroundColour(false);
             }
+            //*/
         }
 
         private DateTime combineDateAndTime(DateTime date, TimeSpan time)
