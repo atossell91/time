@@ -24,7 +24,11 @@ namespace time
         }
         public string NextWord()
         {
-            while(isSeparator(line[index]) && index < line.Length)
+            if (index >= line.Length)
+            {
+                return "";
+            }
+            while(index < line.Length && isSeparator(line[index]))
             {
                 ++index;
             }

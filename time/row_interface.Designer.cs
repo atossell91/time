@@ -120,7 +120,6 @@
             this.l_DayOfWeek.Size = new System.Drawing.Size(127, 26);
             this.l_DayOfWeek.TabIndex = 7;
             this.l_DayOfWeek.Text = "Wednesday";
-            this.l_DayOfWeek.Click += new System.EventHandler(this.l_DayOfWeek_Click);
             // 
             // rtb_Comment
             // 
@@ -130,6 +129,7 @@
             this.rtb_Comment.Size = new System.Drawing.Size(430, 30);
             this.rtb_Comment.TabIndex = 8;
             this.rtb_Comment.Text = "";
+            this.rtb_Comment.TextChanged += new System.EventHandler(this.Rtb_Comment_TextChanged);
             this.rtb_Comment.Enter += new System.EventHandler(this.RichTextBox_Enter);
             this.rtb_Comment.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
             // 
@@ -144,7 +144,7 @@
             this.mtb_Start.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_Start.ValidatingType = typeof(System.DateTime);
             this.mtb_Start.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
-            this.mtb_Start.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
+            this.mtb_Start.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
             this.mtb_Start.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_Start_Validating);
             // 
             // mtb_End
@@ -158,7 +158,7 @@
             this.mtb_End.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_End.ValidatingType = typeof(System.DateTime);
             this.mtb_End.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
-            this.mtb_End.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
+            this.mtb_End.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
             this.mtb_End.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_End_Validating);
             // 
             // row_interface

@@ -17,7 +17,8 @@ namespace time
         private List<work_period> wp;
         private int currentYear;
         private int currentMonth;
-        private row_interface_group rig;
+        private readonly string filename;
+        private row_interface_group displayedRows;
 
 
         private void swap<T>(List<T> l, int i1, int i2)
@@ -65,7 +66,10 @@ namespace time
             List<string> list = new List<string>();
             foreach (work_period p in wp)
             {
-                list.Add(p.ToString());
+                if (p.StartTime != DateTime.MinValue && p.EndTime != DateTime.MinValue)
+                {
+                    list.Add(p.ToString());
+                }
             }
             return list;
         }
@@ -73,24 +77,33 @@ namespace time
         {
             sortWorkPeriods(compareWorkPeriodDates);
             Debug.WriteLine("Saving " + wp.Count + " records.");
-            File.WriteAllLines(@"data.txt", getDataToSave());
+            File.WriteAllLines(filename, getDataToSave());
+        }
+        private void getYear()
+        {
+            Date_Getter d = new Date_Getter();
+            d.ShowDialog();
+            currentYear = d.Year;
+            d.Dispose();
         }
         public Form1()
         {
             InitializeComponent();
 
             wp = new List<work_period>();
-            loadFromFile(@"data.txt");
-            Debug.WriteLine(wp.Count + " periods found");
 
-            currentYear = DateTime.Now.Year;
+            getYear();
+            filename = "data_" + currentYear + ".txt";
+            loadFromFile(filename);
+
             currentMonth = DateTime.Now.Month;
+            l_MonthName.Text = monthName(currentMonth);
             
-            rig = new row_interface_group(currentYear, currentMonth, wp);
-            rig.Location = new Point(10, 10);
-            rig.Size = new Size(this.Width, this.Height);
-            rig.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
-            Controls.Add(rig);
+            displayedRows = new row_interface_group(currentYear, currentMonth, wp);
+            displayedRows.Location = new Point(10, 10);
+            displayedRows.Size = new Size(this.Width, this.Height);
+            displayedRows.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
+            Controls.Add(displayedRows);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -106,10 +119,25 @@ namespace time
         {
             saveToFile(@"data.txt");
         }
+        private string monthName(int month)
+        {
+            int num = month - 1;
+
+            if (num < 1 || num >11)
+            {
+                return "";
+            }
+            string[] months = {"January", "February", "March",
+            "April", "May", "June", "July", "August",
+            "September", "October", "November", "December"};
+
+            return months[num];
+        }
         private void changeMonth(int month)
         {
             currentMonth = month;
-            rig.changeMonth(currentMonth);
+            l_MonthName.Text = monthName(currentMonth);
+            displayedRows.changeMonth(currentMonth);
         }
 
         private void b_April_Click(object sender, EventArgs e)
@@ -165,6 +193,11 @@ namespace time
         private void b_February_Click(object sender, EventArgs e)
         {
             changeMonth(2);
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            displayedRows.ClearRow();
         }
     }
 }

@@ -64,6 +64,7 @@ namespace time
         }
 
         private bool washupTime;
+        
         public bool WashupTime
         {
             get
@@ -73,6 +74,19 @@ namespace time
             set
             {
                 this.washupTime = value;
+            }
+        }
+
+        private string comment;
+        public string Comment
+        {
+            get
+            {
+                return this.comment;
+            }
+            set
+            {
+                this.comment = value;
             }
         }
        
@@ -106,7 +120,7 @@ namespace time
             this.WashupTime = false;
         }
         private work_period(DateTime d, DateTime s, DateTime e,
-            TimeSpan o, TimeSpan sp, bool w)
+            TimeSpan o, TimeSpan sp, bool w, string com)
         {
             this.Date = d;
             this.StartTime = s;
@@ -114,6 +128,7 @@ namespace time
             this.Overtime = o;
             this.ShiftPremiums = sp;
             this.WashupTime = w;
+            this.Comment = com;
         }
         public static bool TryParse(string s, out work_period result)
         {
@@ -125,6 +140,7 @@ namespace time
             TimeSpan ot;
             TimeSpan premium;
             bool wash;
+            string comment;
 
             string str = "";
             if (DateTime.TryParse(scanner.NextWord(), out fixedDate) &&
@@ -134,7 +150,8 @@ namespace time
                 TimeSpan.TryParse(scanner.NextWord(), out premium) &&
                 bool.TryParse((str = scanner.NextWord()), out wash))
             {
-                result = new work_period(fixedDate, start, end, ot, premium, wash);
+                comment = scanner.NextWord();
+                result = new work_period(fixedDate, start, end, ot, premium, wash, comment);
                 return true;
             }
             else
@@ -152,7 +169,8 @@ namespace time
                 EndTime.ToString() + s +
                 Overtime.ToString() + s +
                 ShiftPremiums.ToString() + s +
-                WashupTime.ToString();
+                WashupTime.ToString() + s +
+                Comment;
         }
     }
 }

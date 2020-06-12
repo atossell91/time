@@ -40,6 +40,8 @@
             this.b_March = new System.Windows.Forms.Button();
             this.b_February = new System.Windows.Forms.Button();
             this.b_January = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.l_MonthName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // b_April
@@ -173,11 +175,32 @@
             this.b_January.UseVisualStyleBackColor = true;
             this.b_January.Click += new System.EventHandler(this.b_January_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1147, 550);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // l_MonthName
+            // 
+            this.l_MonthName.AutoSize = true;
+            this.l_MonthName.Location = new System.Drawing.Point(12, 9);
+            this.l_MonthName.Name = "l_MonthName";
+            this.l_MonthName.Size = new System.Drawing.Size(35, 13);
+            this.l_MonthName.TabIndex = 13;
+            this.l_MonthName.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1234, 581);
+            this.Controls.Add(this.l_MonthName);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.b_November);
             this.Controls.Add(this.b_March);
             this.Controls.Add(this.b_February);
@@ -196,6 +219,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -213,6 +237,8 @@
         private System.Windows.Forms.Button b_March;
         private System.Windows.Forms.Button b_February;
         private System.Windows.Forms.Button b_January;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label l_MonthName;
     }
 }
 

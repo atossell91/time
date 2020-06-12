@@ -42,8 +42,11 @@ namespace time
             int daysInMonth = DateTime.DaysInMonth(year, month);
             for (int n =0; n < daysInMonth; ++n)
             {
-                DateTime d = new DateTime(year, month, n + 1);
-                work_period existingPeriod = findByDate(d);
+                DateTime day = new DateTime(year, month, n + 1);
+
+                //Check if work period exists already
+                //  Init row with period if it exists already, or create a new period
+                work_period existingPeriod = findByDate(day);
                 if (existingPeriod != null)
                 {
                     rowList.Add(
@@ -52,9 +55,11 @@ namespace time
                 }
                 else
                 {
-                    periods.Add(new work_period(d));
+                    periods.Add(new work_period(day));
                     rowList.Add(new row_interface(periods[periods.Count-1]));
                 }
+
+                //Set row properties and events
                 //rowList[n].KeyDownEvent += row_interface_group_KeyDown;
                 rowList[n].Location = new Point(0, n * row_interface.rowHeight);
                 rowList[n].VerticalArrowDown += ControlVerticalArrowPressed;
@@ -238,6 +243,10 @@ namespace time
         private void inputRowSelected(object sender, EventArgs e)
         {
             selectedRow = rowList.IndexOf((row_interface)sender);
+        }
+        public void ClearRow()
+        {
+            rowList[selectedRow].clearRowInterface();
         }
     }
 }
