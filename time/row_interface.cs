@@ -505,13 +505,31 @@ namespace time
                 changeEndTime(period.EndTime.AddDays(1));
             }
         }
-        private string checkMinuteValue(string str)
+        private string checkMinuteValue(MaskedTextBox mtb)
         {
+            string txt = mtb.Text;
+            int len = txt.Length;
 
+            if (len == 3 &&
+                (Char.IsDigit(txt[0]) ||
+                Char.IsDigit(txt[1])))
+            {
+                return txt + "00";
+            }
+            else if (len == 4)
+            {
+                return txt + "0";
+            }
+            else
+            {
+                return txt;
+            }
         }
         private void mtb_Start_Validating(object sender, CancelEventArgs e)
         {
             MaskedTextBox mtb = (MaskedTextBox)sender;
+
+            mtb.Text = checkMinuteValue(mtb);
 
             TimeSpan ts;
             if (parseInputDate(mtb, out ts))
@@ -536,6 +554,9 @@ namespace time
         private void mtb_End_Validating(object sender, CancelEventArgs e) //NEED TO ENSURE CHANGES TO OT, PREMIUMS AND WASHUP ARE REFLECTED IN DATASOURCE!!!
         {
             MaskedTextBox mtb = (MaskedTextBox)sender;
+
+            mtb.Text = checkMinuteValue(mtb);
+
             TimeSpan ts;
             if (parseInputDate(mtb, out ts))
             {
@@ -639,9 +660,10 @@ namespace time
                 e.Handled = true;
                 raiseHorizontalArrowEvent(e);
             }
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
+                e.SuppressKeyPress = true;
                 if(!cursorIsInbounds(cursorPos))
                 {
                     changeBackgroundColour(false);
@@ -698,7 +720,8 @@ namespace time
         private void mtb_Times_KeyDown(object sender, KeyEventArgs e)
         {
             Keys k = e.KeyCode;
-            if(k == Keys.OemPeriod)
+            if(k == Keys.OemPeriod ||
+                k == Keys.Decimal)
             {
                 e.Handled = true;
                 validateHours((MaskedTextBox)sender);

@@ -235,7 +235,7 @@ namespace time
             {
                 changeSelectedRow(-1);
             }
-            else if (e.KeyCode == Keys.Down)
+            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
             {
                 changeSelectedRow(1);
             }
