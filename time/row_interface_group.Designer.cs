@@ -36,7 +36,7 @@
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(0, 80);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1240, 60);
+            this.panel1.Size = new System.Drawing.Size(500, 60);
             this.panel1.TabIndex = 0;
             // 
             // row_interface_group
@@ -45,7 +45,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "row_interface_group";
-            this.Size = new System.Drawing.Size(1246, 150);
+            this.Size = new System.Drawing.Size(550, 150);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.row_interface_group_KeyDown);
             this.ResumeLayout(false);
 

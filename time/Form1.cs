@@ -101,7 +101,8 @@ namespace time
             
             displayedRows = new row_interface_group(currentYear, currentMonth, wp);
             displayedRows.Location = new Point(10, 10);
-            displayedRows.Size = new Size(this.Width, this.Height);
+            displayedRows.Size = new Size(this.Width-50, this.Height-100);
+            displayedRows.BorderStyle = BorderStyle.Fixed3D;
             displayedRows.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
             Controls.Add(displayedRows);
         }
@@ -198,6 +199,62 @@ namespace time
         private void Button1_Click(object sender, EventArgs e)
         {
             displayedRows.ClearRow();
+        }
+        private DateTime getRangeStart(DateTime date)
+        {
+            int weekNum = WeekNumber.GetWeekNumber(date);
+
+            if (weekNum % 2 == 0)
+            {
+                --weekNum;
+            }
+
+            return WeekNumber.GetDateFromWeek(date.Year, weekNum);
+        }
+        private int findPeriodByDate(DateTime d, bool exactMatch)
+        {
+            sortWorkPeriods(compareWorkPeriodDates);
+            for (int n =0; n < wp.Count; ++n)
+            {
+                if (wp[n].Date >= d)
+                {
+                    if (!exactMatch)
+                    {
+                        return n;
+                    }
+                    else if (wp[n].Date == d)
+                    {
+                        return n;
+                    }
+                }
+            }
+            return -1;
+        }
+        private List<work_period> getRange(DateTime rangeStart, int numDays)
+        {
+            List<work_period> outputRange = new List<work_period>();
+
+            int startIndex = findPeriodByDate(rangeStart, true);
+
+            for (int n = startIndex; n < startIndex + numDays; ++n)
+            {
+                outputRange.Add(wp[n]);
+            }
+
+            return outputRange;
+        }
+        private void outputToTimesheet()
+        {
+            DateTime date = DateTime.Now;
+
+            DateTime rangeStart = getRangeStart(date);
+            List<work_period> DayRange = getRange(rangeStart, 14);
+            PhoenixOTSheet sheet = new PhoenixOTSheet(DayRange);
+            sheet.ShowDialog();
+        }
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            outputToTimesheet();
         }
     }
 }

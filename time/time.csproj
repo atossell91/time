@@ -60,6 +60,13 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="HoursArray.cs" />
+    <Compile Include="PhoenixOTSheet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PhoenixOTSheet.Designer.cs">
+      <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PhoenixOTSheetDims.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="row_interface.cs">
@@ -90,6 +97,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PhoenixOTSheet.resx">
+      <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -98,6 +108,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="row_interface.resx">
       <DependentUpon>row_interface.cs</DependentUpon>
@@ -120,6 +131,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
+    <None Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

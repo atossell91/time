@@ -60,6 +60,31 @@ namespace time
 
             return new DateTime(d.Year, d.Month, day);
         }
+        public static DateTime WeekStart(DateTime d)
+        {
+            int dayOfWeek = convDayOfWeek(d.DayOfWeek);
+            int prevSunday = d.Day - dayOfWeek;
+
+            if (prevSunday > 0)
+            {
+                return new DateTime(d.Year, d.Month, prevSunday);
+            }
+            else
+            {
+                int month = d.Month -1;
+                int year = d.Year;
+
+                if (month < 1)
+                {
+                    month = 12;
+                    --year;
+                }
+
+                int day = DateTime.DaysInMonth(year, month) - prevSunday;
+
+                return new DateTime(year, month, day);
+            }
+        }
         public static int GetWeekNumber(DateTime date)
         {
             DateTime yrStart;

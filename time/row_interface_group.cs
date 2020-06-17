@@ -173,7 +173,8 @@ namespace time
             selectFirstRow();
 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Size = new Size(row_interface.rowWidth + 20, 500);
+            panel1.Size = this.Size;
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.Location = new Point(0, maxHeaderHeight);
         }
         public void changeMonth(int m)
