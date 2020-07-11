@@ -28,7 +28,7 @@ namespace time
                 Hours = new HoursArray();
             }
             public overtimeRow(DateTime start, DateTime end, TimeSpan mealPeriod,
-                string code, int[] hours)
+                string code, double[] hours)
             {
                 Start = start;
                 End = end;
@@ -125,7 +125,7 @@ namespace time
         }
 
         public void AddRow(DateTime start, DateTime end, TimeSpan mealPeriod, string code,
-            int[] hours)
+            double[] hours)
         {
             rows.Add(new overtimeRow(start, end, mealPeriod, code, hours));
             codes.Add(rows[rows.Count - 1]);

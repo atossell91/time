@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="4600_data.cs" />
+    <Compile Include="DateRangeGetter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateRangeGetter.Designer.cs">
+      <DependentUpon>DateRangeGetter.cs</DependentUpon>
+    </Compile>
     <Compile Include="date_name_getter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +103,9 @@
     <Compile Include="WeekNumber.cs" />
     <Compile Include="WordParser.cs" />
     <Compile Include="work_period.cs" />
+    <EmbeddedResource Include="DateRangeGetter.resx">
+      <DependentUpon>DateRangeGetter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="date_name_getter.resx">
       <DependentUpon>date_name_getter.cs</DependentUpon>
     </EmbeddedResource>

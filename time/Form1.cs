@@ -277,6 +277,25 @@ namespace time
             PhoenixOTSheet sheet = new PhoenixOTSheet(employee_name, DayRange);
             sheet.ShowDialog();
         }
+        private void createWashup4600(DateTime d1, DateTime d2)
+        {
+            int days = (int)d2.Subtract(d1).TotalDays;
+            List<work_period> periodCovered = getRange(d1, days);
+
+            double[] hours = { 0, 0.167, 0, 0 };
+            string washupCode = "155";
+
+            data_4600 sheet = new data_4600();
+
+            foreach (work_period p in periodCovered)
+            {
+                if (p.WashupTime)
+                {
+                    sheet.AddRow(p.StartTime, p.EndTime, ShiftInformation.LunchLength,
+                        washupCode, hours);
+                }
+            }
+        }
         private void Button2_Click(object sender, EventArgs e)
         {
             Number_Getter numGet = new Number_Getter(0, 53, WeekNumber.GetWeekNumber(DateTime.Now));
@@ -286,6 +305,19 @@ namespace time
             DateTime date = WeekNumber.GetDateFromWeek(currentYear, weekNum);
 
             outputToTimesheet(date);
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            DateRangeGetter drg = new DateRangeGetter();
+            drg.ShowDialog();
+
+            DateTime d1 = drg.RangeStartDate;
+            DateTime d2 = drg.RangeEndDate;
+
+            drg.Dispose();
+
+            createWashup4600(d1, d2);
         }
     }
 }
