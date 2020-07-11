@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
+    <Resource Include="Resources\blank4600.png" />
     <Resource Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
