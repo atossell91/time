@@ -47,11 +47,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="4600_data.cs" />
-    <Compile Include="Date_Getter.cs">
+    <Compile Include="date_name_getter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Date_Getter.Designer.cs">
-      <DependentUpon>Date_Getter.cs</DependentUpon>
+    <Compile Include="date_name_getter.Designer.cs">
+      <DependentUpon>date_name_getter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Number_Getter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Number_Getter.Designer.cs">
+      <DependentUpon>Number_Getter.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -91,8 +97,11 @@
     <Compile Include="WeekNumber.cs" />
     <Compile Include="WordParser.cs" />
     <Compile Include="work_period.cs" />
-    <EmbeddedResource Include="Date_Getter.resx">
-      <DependentUpon>Date_Getter.cs</DependentUpon>
+    <EmbeddedResource Include="date_name_getter.resx">
+      <DependentUpon>date_name_getter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Number_Getter.resx">
+      <DependentUpon>Number_Getter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -134,7 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
-    <None Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
+    <Resource Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

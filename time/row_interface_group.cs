@@ -49,6 +49,7 @@ namespace time
                 work_period existingPeriod = findByDate(day);
                 if (existingPeriod != null)
                 {
+                    periods.Add(existingPeriod);
                     rowList.Add(
                         new row_interface(existingPeriod)
                         );

@@ -1,6 +1,6 @@
 ﻿namespace time
 {
-    partial class Date_Getter
+    partial class Number_Getter
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.nud_Year = new System.Windows.Forms.NumericUpDown();
+            this.nud_Number = new System.Windows.Forms.NumericUpDown();
             this.b_Ok = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.nud_Year)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_Number)).BeginInit();
             this.SuspendLayout();
             // 
-            // nud_Year
+            // nud_Number
             // 
-            this.nud_Year.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nud_Year.Location = new System.Drawing.Point(12, 6);
-            this.nud_Year.Maximum = new decimal(new int[] {
-            3000,
+            this.nud_Number.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nud_Number.Location = new System.Drawing.Point(12, 6);
+            this.nud_Number.Maximum = new decimal(new int[] {
+            10000,
             0,
             0,
             0});
-            this.nud_Year.Minimum = new decimal(new int[] {
+            this.nud_Number.Name = "nud_Number";
+            this.nud_Number.Size = new System.Drawing.Size(83, 31);
+            this.nud_Number.TabIndex = 0;
+            this.nud_Number.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nud_Number.Value = new decimal(new int[] {
             1900,
             0,
             0,
             0});
-            this.nud_Year.Name = "nud_Year";
-            this.nud_Year.Size = new System.Drawing.Size(83, 31);
-            this.nud_Year.TabIndex = 0;
-            this.nud_Year.Value = new decimal(new int[] {
-            1900,
-            0,
-            0,
-            0});
-            this.nud_Year.ValueChanged += new System.EventHandler(this.Nud_Year_ValueChanged);
+            this.nud_Number.ValueChanged += new System.EventHandler(this.Nud_Number_ValueChanged);
             // 
             // b_Ok
             // 
@@ -68,23 +64,23 @@
             this.b_Ok.UseVisualStyleBackColor = true;
             this.b_Ok.Click += new System.EventHandler(this.B_Ok_Click);
             // 
-            // Date_Getter
+            // Number_Getter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(120, 92);
             this.Controls.Add(this.b_Ok);
-            this.Controls.Add(this.nud_Year);
-            this.Name = "Date_Getter";
+            this.Controls.Add(this.nud_Number);
+            this.Name = "Number_Getter";
             this.Text = "Date_Getter";
-            ((System.ComponentModel.ISupportInitialize)(this.nud_Year)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_Number)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown nud_Year;
+        private System.Windows.Forms.NumericUpDown nud_Number;
         private System.Windows.Forms.Button b_Ok;
     }
 }

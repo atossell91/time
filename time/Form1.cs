@@ -19,6 +19,7 @@ namespace time
         private int currentMonth;
         private readonly string filename;
         private row_interface_group displayedRows;
+        private string employee_name;
 
 
         private void swap<T>(List<T> l, int i1, int i2)
@@ -79,11 +80,27 @@ namespace time
             Debug.WriteLine("Saving " + wp.Count + " records.");
             File.WriteAllLines(filename, getDataToSave());
         }
-        private void getYear()
+        private int getFiscalYear(int yr)
         {
-            Date_Getter d = new Date_Getter();
+            DateTime now = DateTime.Now;
+            int year = now.Year;
+
+            if (now < new DateTime(year, 4, 1))
+            {
+                --year;
+            }
+            return year;
+        }
+        private void promptForYear()
+        {
+            date_name_getter d = new date_name_getter(1990, 2200, DateTime.Now.Year);
             d.ShowDialog();
-            currentYear = d.Year;
+
+            int year = getFiscalYear(d.Number);
+
+            currentYear = d.Number;
+            this.employee_name = d.Name;
+
             d.Dispose();
         }
         public Form1()
@@ -92,7 +109,7 @@ namespace time
 
             wp = new List<work_period>();
 
-            getYear();
+            promptForYear();
             filename = "data_" + currentYear + ".txt";
             loadFromFile(filename);
 
@@ -234,27 +251,41 @@ namespace time
         {
             List<work_period> outputRange = new List<work_period>();
 
-            int startIndex = findPeriodByDate(rangeStart, true);
-
-            for (int n = startIndex; n < startIndex + numDays; ++n)
+            for (int n = 0; n < numDays; ++n)
             {
-                outputRange.Add(wp[n]);
+                DateTime d = rangeStart.AddDays(n);
+                int dateIndex = findPeriodByDate(d, true);
+
+                if (dateIndex < 0)
+                {
+                    outputRange.Add(new work_period(d));
+                }
+                else
+                {
+                    outputRange.Add(wp[dateIndex]);
+                }
             }
 
             return outputRange;
         }
-        private void outputToTimesheet()
+        private void outputToTimesheet(DateTime date)
         {
-            DateTime date = DateTime.Now;
+            //DateTime date = DateTime.Now;
 
             DateTime rangeStart = getRangeStart(date);
             List<work_period> DayRange = getRange(rangeStart, 14);
-            PhoenixOTSheet sheet = new PhoenixOTSheet(DayRange);
+            PhoenixOTSheet sheet = new PhoenixOTSheet(employee_name, DayRange);
             sheet.ShowDialog();
         }
         private void Button2_Click(object sender, EventArgs e)
         {
-            outputToTimesheet();
+            Number_Getter numGet = new Number_Getter(0, 53, WeekNumber.GetWeekNumber(DateTime.Now));
+            numGet.ShowDialog();
+
+            int weekNum = numGet.Number;
+            DateTime date = WeekNumber.GetDateFromWeek(currentYear, weekNum);
+
+            outputToTimesheet(date);
         }
     }
 }

@@ -71,7 +71,27 @@ namespace time
         class CodesList
         {
             private List<CodeTotal> list;
+            private int findCodeIndex(string code, string[] arr)
+            {
+                int index = 0;
+                for (; index < arr.Length && arr[index] != code; ++index);
+                return index;
+            }
+            private int codeCompare(object c1, object c2)
+            {
+                CodeTotal codeTotal1 = (CodeTotal)c1;
+                CodeTotal codeTotal2 = (CodeTotal)c2;
 
+                string code1 = codeTotal1.code;
+                string code2 = codeTotal2.code;
+
+                string[] codeOrder = { "260", "260R", "155", "055"};
+
+                int c1Index = findCodeIndex(code1, codeOrder);
+                int c2Index = findCodeIndex(code2, codeOrder);
+
+                return c1Index - c2Index;
+            }
             public void Add(overtimeRow r)
             {
                 foreach(CodeTotal c in list)
@@ -86,10 +106,13 @@ namespace time
                         c.actualHours = r.Hours.GetTotalActualHours();
                         c.extendedHours = r.Hours.GetTotalExtendedHours();
 
-                        break;
+                        return;
                     }
-
                 }
+                CodeTotal newCode = new CodeTotal();
+                list.Add(newCode);
+
+                list.Sort(codeCompare);
             }
         }
 

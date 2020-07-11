@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace time
             TextBox tb = new TextBox();
 
             tb.Location = location;
-            tb.Font = new Font("Arial", 14);
+            tb.Font = new Font("Arial", 18);
 
             pictureBox1.Controls.Add(tb);
 
@@ -58,7 +59,7 @@ namespace time
         private TextBox createLargeTextBox(Point location)
         {
             TextBox tb = createStandardTextBox(location);
-            tb.Font = new Font("Arial", 24);
+            tb.Font = new Font("Arial", 26);
             return tb;
         }
         private void FillDateAndWeek()
@@ -78,6 +79,13 @@ namespace time
 
             string dateFormat = "yyyy-MM-dd";
             date.Text = start.ToString(dateFormat) + " - " + end.ToString(dateFormat);
+        }
+        private void FillName(string str_name)
+        {
+            name = createLargeTextBox(PhoenixOTSheetDims.NameInput_TopLeft);
+            CentreTextBox(ref name, PhoenixOTSheetDims.NameInput_TopLeft, PhoenixOTSheetDims.NameInput_BottomRight);
+
+            name.Text = str_name;
         }
         private void fillDateRow(ref TextBox[] row, Point startPoint, int rangeStart)
         {
@@ -102,14 +110,15 @@ namespace time
         }
         private void FillIndividualDates()
         {
-            firstWeekDates = new TextBox[7];
-            secondWeekDates = new TextBox[7];
-            Size cellSize = PhoenixOTSheetDims.CellSize;
             int count = 7;
+
+            firstWeekDates = new TextBox[count];
+            secondWeekDates = new TextBox[count];
+            Size cellSize = PhoenixOTSheetDims.CellSize;
 
             if (range.Count > count *2)
             {
-                Debug.WriteLine("Range exceeds column count");
+                Debug.WriteLine("Range (" + range.Count + ") exceeds column count");
                 return;
             }
 
@@ -136,7 +145,28 @@ namespace time
                 }
             }
         }
-        public PhoenixOTSheet(List<work_period> range)
+        private void addDataToGrid(ref TextBox[,] grid, int rangeStartIndex)
+        {
+            for (int n =0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
+            {
+                int row = 0;
+                Debug.WriteLine("RangeStart: " + rangeStartIndex + " n: " + n);
+                double prems = range[rangeStartIndex + n/2].ShiftPremiums.TotalHours;
+                double ot = range[rangeStartIndex + n/2].Overtime.TotalHours;
+                if (prems > 0)
+                {
+                    grid[row, n].Text = prems.ToString();
+                    grid[row, n + 1].Text = "055";
+                    ++row;
+                }
+                if (ot > 0)
+                {
+                    grid[row, n].Text = ot.ToString();
+                    grid[row, n + 1].Text = "260";
+                }
+            }
+        }
+        public PhoenixOTSheet(string name, List<work_period> range)
         {
             this.range = range;
 
@@ -149,6 +179,7 @@ namespace time
             CentreTextBox(ref date, PhoenixOTSheetDims.GlobalDate_TopLeft, PhoenixOTSheetDims.GlobalDate_BottomRight);
 
             FillDateAndWeek();
+            FillName(name);
 
             FillIndividualDates();
 
@@ -156,13 +187,16 @@ namespace time
                 PhoenixOTSheetDims.ColumnsPerGrid, PhoenixOTSheetDims.RowsPerGrid, PhoenixOTSheetDims.BorderWidth);
             CreateLabelGrid(ref secondWeek, PhoenixOTSheetDims.TableTwoStart, PhoenixOTSheetDims.CellSize,
                 PhoenixOTSheetDims.ColumnsPerGrid, PhoenixOTSheetDims.RowsPerGrid, PhoenixOTSheetDims.BorderWidth);
+
+            addDataToGrid(ref firstWeek, 0);
+            addDataToGrid(ref secondWeek, 7);
         }
 
         private void setAllBorders(BorderStyle b)
         {
             weekNo.BorderStyle = b;
             date.BorderStyle = b;
-            //name.BorderStyle = b;
+            name.BorderStyle = b;
 
             for (int n =0; n < firstWeekDates.Length; ++n)
             {
@@ -178,7 +212,6 @@ namespace time
                 }
             }
         }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             //pictureBox1.Enabled = false;
@@ -186,7 +219,11 @@ namespace time
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Rectangle r = new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height);
             pictureBox1.DrawToBitmap(bmp, r);
-            bmp.Save(@"C:\Users\atoss\OneDrive\Documents\Filled_Phoenix_Form.png", ImageFormat.Png);
+            String filename = Directory.GetCurrentDirectory() + "\\" + range[0].Date.Year + "_Weeks_" + WeekNumber.GetWeekNumber(range[0].Date) +
+                "-" + WeekNumber.GetWeekNumber(range[range.Count-1].Date) + ".png";
+            Debug.WriteLine("Saving to: " + filename);
+            bmp.Save(filename, ImageFormat.Png);
+            this.Close();
         }
     }
 }
