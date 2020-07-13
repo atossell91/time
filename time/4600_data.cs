@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace time
 {
-    class data_4600
+    public class data_4600
     {
         class overtimeRow
         {
