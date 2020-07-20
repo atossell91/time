@@ -15,6 +15,7 @@ namespace time.Resources
         public Render_4600(PersonalInfo pInfo, data_4600 sheet)
         {
             InitializeComponent();
+            int a = 1;
         }
     }
 }
