@@ -21,7 +21,6 @@ namespace time
         private row_interface_group displayedRows;
         private string employee_name;
 
-
         private void swap<T>(List<T> l, int i1, int i2)
         {
             T temp = l[i1];
