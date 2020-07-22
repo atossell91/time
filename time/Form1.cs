@@ -21,7 +21,6 @@ namespace time
         private row_interface_group displayedRows;
         private string employee_name;
 
-
         private void swap<T>(List<T> l, int i1, int i2)
         {
             T temp = l[i1];
@@ -277,7 +276,7 @@ namespace time
             PhoenixOTSheet sheet = new PhoenixOTSheet(employee_name, DayRange);
             sheet.ShowDialog();
         }
-        private void createWashup4600(DateTime d1, DateTime d2)
+        private data_4600 createWashup4600(DateTime d1, DateTime d2)
         {
             int days = (int)d2.Subtract(d1).TotalDays;
             List<work_period> periodCovered = getRange(d1, days);
@@ -295,6 +294,7 @@ namespace time
                         washupCode, hours);
                 }
             }
+            return sheet;
         }
         private void Button2_Click(object sender, EventArgs e)
         {
@@ -317,7 +317,11 @@ namespace time
 
             drg.Dispose();
 
-            createWashup4600(d1, d2);
+            data_4600 sheet = createWashup4600(d1, d2);
+
+            PersonalInfo pi = new PersonalInfo();
+            Render_4600 viewSheet = new Render_4600(pi, sheet);
+            viewSheet.ShowDialog();
         }
     }
 }

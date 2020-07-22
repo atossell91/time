@@ -21,14 +21,15 @@ namespace time
         public static readonly Point TableOneStart = new Point(226, 372);
         public static readonly Point TableTwoStart = new Point(226, 763);
 
-        public static readonly Point WeekInput_TopLeft = new Point(839, 148);
-        public static readonly Point WeekInput_BottomRight = new Point(990, 225);
+        public static readonly Box WeekInput= new Box(839, 148, 990, 225);
 
-        public static readonly Point GlobalDate_TopLeft = new Point(1091, 148);
-        public static readonly Point GlobalDate_BottomRight = new Point(1502, 225);
+        //public static readonly Point GlobalDate_TopLeft = new Point(1091, 148);
+        //public static readonly Point GlobalDate_BottomRight = new Point(1502, 225);
+        public static readonly Box GlobalDate = new Box(1091, 148, 1502, 225);
 
-        public static readonly Point NameInput_TopLeft = new Point(609, 229);
-        public static readonly Point NameInput_BottomRight = new Point(1374, 286);
+        //public static readonly Point NameInput_TopLeft = new Point(609, 229);
+        //public static readonly Point NameInput_BottomRight = new Point(1374, 286);
+        public static readonly Box NameInput = new Box(609, 229, 1374, 286);
 
         public static readonly Point SignatureDate_TopLeft = new Point(1540, 1449);
         //public static readonly Point SignatureDate_BottomRight = new Point();

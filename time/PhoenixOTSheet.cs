@@ -27,39 +27,18 @@ namespace time
 
         private List<work_period> range;
 
-        private void CentreTextBox(ref TextBox tb, Point p1, Point p2)
-        {
-            int xDif = Math.Abs(p2.X - p1.X);
-            int yDif = Math.Abs(p2.Y - p1.Y);
+        private const int STANDARD_FONT_SIZE = 18;
+        private const int LARGE_FONT_SIZE = 26;
 
-            int xPos = p1.X;
-            int yPos = p1.Y;
-
-            tb.Size = new Size(xDif, tb.Size.Height);
-            tb.TextAlign = HorizontalAlignment.Center;
-
-            if (tb.Height < yDif)
-            {
-                int ySpace = yDif - tb.Height;
-                yPos += ySpace / 2;
-            }
-            tb.Location = new Point(xPos, yPos);
-        }
-        private TextBox createStandardTextBox(Point location)
-        {
+        private TextBox createStandardTextBox(Point location, int fontSize)
+        {// 18 and 26
             TextBox tb = new TextBox();
 
             tb.Location = location;
-            tb.Font = new Font("Arial", 18);
+            tb.Font = new Font("Arial", fontSize);
 
             pictureBox1.Controls.Add(tb);
 
-            return tb;
-        }
-        private TextBox createLargeTextBox(Point location)
-        {
-            TextBox tb = createStandardTextBox(location);
-            tb.Font = new Font("Arial", 26);
             return tb;
         }
         private void FillDateAndWeek()
@@ -82,8 +61,8 @@ namespace time
         }
         private void FillName(string str_name)
         {
-            name = createLargeTextBox(PhoenixOTSheetDims.NameInput_TopLeft);
-            CentreTextBox(ref name, PhoenixOTSheetDims.NameInput_TopLeft, PhoenixOTSheetDims.NameInput_BottomRight);
+            name = createStandardTextBox(PhoenixOTSheetDims.NameInput.TopLeft, LARGE_FONT_SIZE);
+            PageTools.CentreTextBox(name, PhoenixOTSheetDims.NameInput);
 
             name.Text = str_name;
         }
@@ -102,9 +81,9 @@ namespace time
                 Point p1 = new Point(p1x, p1y);
                 Point p2 = new Point(p2x, p2y);
 
-                row[n] = createStandardTextBox(startPoint);
+                row[n] = createStandardTextBox(startPoint, STANDARD_FONT_SIZE);
                 TextBox tb = row[n];
-                CentreTextBox(ref tb, p1, p2);
+                PageTools.CentreTextBox(tb, new Box(p1, p2));
                 tb.Text = range[n + rangeStart].Date.DayOfWeek.ToString() + ", " + range[n + rangeStart].Date.ToString("MMMM dd");
             }
         }
@@ -139,9 +118,9 @@ namespace time
 
                     Point p1 = new Point(p1X, p2Y);
 
-                    week[y, x] = createStandardTextBox(p1);
-                    CentreTextBox(ref week[y, x], p1,
-                        new Point(p1.X + PhoenixOTSheetDims.CellSize.Width-1, p1.Y + PhoenixOTSheetDims.CellSize.Height-1));
+                    week[y, x] = createStandardTextBox(p1, STANDARD_FONT_SIZE);
+                    PageTools.CentreTextBox(week[y, x], new Box(p1,
+                        new Point(p1.X + PhoenixOTSheetDims.CellSize.Width-1, p1.Y + PhoenixOTSheetDims.CellSize.Height-1)));
                 }
             }
         }
@@ -172,11 +151,11 @@ namespace time
 
             InitializeComponent();
 
-            weekNo = createLargeTextBox(PhoenixOTSheetDims.WeekInput_TopLeft);
-            CentreTextBox(ref weekNo, PhoenixOTSheetDims.WeekInput_TopLeft, PhoenixOTSheetDims.WeekInput_BottomRight);
+            weekNo = createStandardTextBox(PhoenixOTSheetDims.WeekInput.TopLeft, LARGE_FONT_SIZE);
+            PageTools.CentreTextBox(weekNo, PhoenixOTSheetDims.WeekInput);
 
-            date = createLargeTextBox(PhoenixOTSheetDims.GlobalDate_TopLeft);
-            CentreTextBox(ref date, PhoenixOTSheetDims.GlobalDate_TopLeft, PhoenixOTSheetDims.GlobalDate_BottomRight);
+            date = createStandardTextBox(PhoenixOTSheetDims.GlobalDate.TopLeft, LARGE_FONT_SIZE);
+            PageTools.CentreTextBox(date, PhoenixOTSheetDims.GlobalDate);
 
             FillDateAndWeek();
             FillName(name);
