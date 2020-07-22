@@ -1,4 +1,4 @@
-﻿namespace time.Resources
+﻿namespace time
 {
     partial class Render_4600
     {
@@ -53,7 +53,8 @@
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(785, 405);
+            this.pictureBox1.Size = new System.Drawing.Size(1701, 2803);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -76,6 +77,7 @@
             this.Name = "Render_4600";
             this.Text = "Render_4600";
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

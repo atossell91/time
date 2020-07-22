@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="4600_data.cs" />
+    <Compile Include="Box.cs" />
     <Compile Include="DateRangeGetter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +74,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="HoursArray.cs" />
+    <Compile Include="PageTools.cs" />
     <Compile Include="PhoenixOTSheet.cs">
       <SubType>Form</SubType>
     </Compile>

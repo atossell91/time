@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace time.Resources
+namespace time
 {
     public class PersonalInfo
     {
-        public string GivenNames { get; set; }
-        public string Surname { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public int PRI { get; set; }
-        public string Group { get; set; }
-        public int Level { get; set; }
-        public string WorkAddress { get; set; }
-        public string HomeAddress { get; set; }
-        public string WorkPhoneNumber { get; set; }
-        public string HomePhoneNumber { get; set; }
+        public string GivenNames { get; set; } = "";
+        public string Surname { get; set; } = "";
+        public DateTime DateOfBirth { get; set; } = DateTime.MinValue;
+        public string PRI { get; set; } = "";
+        public string Group { get; set; } = "";
+        public string Level { get; set; } = "";
+        public string WorkAddress { get; set; } = "";
+        public string HomeAddress { get; set; } = "";
+        public string WorkPhoneNumber { get; set; } = "";
+        public string HomePhoneNumber { get; set; } = "";
 
         public int GetAge(DateTime date)
         {
