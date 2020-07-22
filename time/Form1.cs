@@ -281,17 +281,16 @@ namespace time
             int days = (int)d2.Subtract(d1).TotalDays;
             List<work_period> periodCovered = getRange(d1, days);
 
-            double[] hours = { 0, 0.167, 0, 0 };
+            double washupHours = 0.167;
             string washupCode = "155";
 
             data_4600 sheet = new data_4600();
-
             foreach (work_period p in periodCovered)
             {
                 if (p.WashupTime)
                 {
-                    sheet.AddRow(p.StartTime, p.EndTime, ShiftInformation.LunchLength,
-                        washupCode, hours);
+                    sheet.FillNewRow(p.StartTime, p.EndTime, ShiftInformation.LunchLength,
+                        washupCode, 0.0, washupHours, 0.0, 0.0);
                 }
             }
             return sheet;

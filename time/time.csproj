@@ -73,7 +73,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="HoursArray.cs" />
     <Compile Include="PageTools.cs" />
     <Compile Include="PhoenixOTSheet.cs">
       <SubType>Form</SubType>

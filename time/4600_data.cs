@@ -8,128 +8,57 @@ namespace time
 {
     public class data_4600
     {
-        class overtimeRow
+        public class overtimeRow
         {
-            public event EventHandler DataChanged;
+            public DateTime StartDate;
+            public DateTime EndDate;
 
-            public DateTime Start;
-            public DateTime End;
             public TimeSpan MealPeriod;
+
             public string Code;
-            public HoursArray Hours;
 
-            private double ExtendedHours;
-            private bool Recoverable;
-            private double ChargeableCosts;
+            public double X100Hours;
+            public double X150Hours;
+            public double X175Hours;
+            public double X200Hours;
 
-            private string Reason;
-            private overtimeRow()
+            public double ExtendedHours;
+            public bool Recoverable;
+            public double ChargeableCosts;
+
+            public string Reason;
+
+            public overtimeRow(DateTime start, DateTime end, TimeSpan meal, string code,
+                double x100, double x150, double x175, double x200)
             {
-                Hours = new HoursArray();
-            }
-            public overtimeRow(DateTime start, DateTime end, TimeSpan mealPeriod,
-                string code, double[] hours)
-            {
-                Start = start;
-                End = end;
-                MealPeriod = mealPeriod;
-                Code = code;
+                this.StartDate = start;
+                this.EndDate = end;
 
-                this.DataChanged += UpdateFields;
+                this.MealPeriod = meal;
 
-                ExtendedHours = this.Hours.GetTotalActualHours();
-            }
-            private void TriggerDataChanged()
-            {
-                DataChanged?.Invoke(this, EventArgs.Empty);
-            }
-            private void UpdateFields(Object sender, EventArgs e)
-            {
-                this.Hours.GetTotalExtendedHours();
-            }
-            private void setHours(int index, double hours)
-            {
-                Hours.SetHours(hours, index);
-            }
-            public double getHours(int index)
-            {
-                return Hours.GetHours(index);
-            }
-        }
-        class CodeTotal
-        {
-            public string code;
-            public HoursArray hours;
+                this.Code = code;
 
-            public double actualHours;
-            public double extendedHours;
-
-            public double cashHours;
-            public double leaveHours;
-            public double premiums;
-        }
-        class CodesList
-        {
-            private List<CodeTotal> list;
-            private int findCodeIndex(string code, string[] arr)
-            {
-                int index = 0;
-                for (; index < arr.Length && arr[index] != code; ++index);
-                return index;
-            }
-            private int codeCompare(object c1, object c2)
-            {
-                CodeTotal codeTotal1 = (CodeTotal)c1;
-                CodeTotal codeTotal2 = (CodeTotal)c2;
-
-                string code1 = codeTotal1.code;
-                string code2 = codeTotal2.code;
-
-                string[] codeOrder = { "260", "260R", "155", "055"};
-
-                int c1Index = findCodeIndex(code1, codeOrder);
-                int c2Index = findCodeIndex(code2, codeOrder);
-
-                return c1Index - c2Index;
-            }
-            public void Add(overtimeRow r)
-            {
-                foreach(CodeTotal c in list)
-                {
-                    if (c.code == r.Code)
-                    {
-                        c.hours.AddHours(r.getHours(HoursArray.x100), HoursArray.x100);
-                        c.hours.AddHours(r.getHours(HoursArray.x150), HoursArray.x150);
-                        c.hours.AddHours(r.getHours(HoursArray.x175), HoursArray.x175);
-                        c.hours.AddHours(r.getHours(HoursArray.x200), HoursArray.x200);
-
-                        c.actualHours = r.Hours.GetTotalActualHours();
-                        c.extendedHours = r.Hours.GetTotalExtendedHours();
-
-                        return;
-                    }
-                }
-                CodeTotal newCode = new CodeTotal();
-                list.Add(newCode);
-
-                list.Sort(codeCompare);
+                this.X100Hours = x100;
+                this.X150Hours = x150;
+                this.X175Hours = x175;
+                this.X200Hours = x200;
             }
         }
 
-        List<overtimeRow> rows;
-        CodesList codes;
+        public List<overtimeRow> OvertimeRows;
 
         public data_4600()
         {
-            rows = new List<overtimeRow>();
         }
-
-        public void AddRow(DateTime start, DateTime end, TimeSpan mealPeriod, string code,
-            double[] hours)
+        public void FillNewRow(DateTime start, DateTime end, TimeSpan lunch, string code,
+            double x100Hours, double x150Hours, double x175Hours, double x200Hours)
         {
-            rows.Add(new overtimeRow(start, end, mealPeriod, code, hours));
-            codes.Add(rows[rows.Count - 1]);
-            //rows[rows.Count - 1].DataChanged += 
+            OvertimeRows.Add(new overtimeRow(start, end, lunch, code, x100Hours, x150Hours,
+                x175Hours, x200Hours));
+        }
+        public overtimeRow GetOvertimeRow(int index)
+        {
+            return OvertimeRows[index];
         }
     }
 }
