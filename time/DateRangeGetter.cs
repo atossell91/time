@@ -19,6 +19,8 @@ namespace time
         public DateRangeGetter()
         {
             InitializeComponent();
+            dateTimePicker1.Value = DateTime.Today.AddDays(-14.0);
+            dateTimePicker2.Value = DateTime.Today;
         }
 
         private void DateTimePicker1_ValueChanged(object sender, EventArgs e)

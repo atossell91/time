@@ -26,17 +26,6 @@ namespace time
         private int selectedRow;
 
         public event KeyEventHandler KeyDownEvent;
-        private work_period findByDate(DateTime d)
-        {
-            for (int n =0; n < periods.Count; ++n)
-            {
-                if (periods[n].Date == d)
-                {
-                    return periods[n];
-                }
-            }
-            return null;
-        }
         private void initRows()
         {
             int daysInMonth = DateTime.DaysInMonth(year, month);
@@ -46,13 +35,12 @@ namespace time
 
                 //Check if work period exists already
                 //  Init row with period if it exists already, or create a new period
-                work_period existingPeriod = findByDate(day);
-                if (existingPeriod != null)
+                int periodIndex = periods.BinarySearch(new work_period(day), work_period.CompareByDate());
+                if (periodIndex >= 0)
                 {
-                    periods.Add(existingPeriod);
-                    rowList.Add(
-                        new row_interface(existingPeriod)
-                        );
+                    work_period p = periods[periodIndex];
+                    //periods.Add(p);
+                    rowList.Add(new row_interface(p));
                 }
                 else
                 {

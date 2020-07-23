@@ -21,26 +21,6 @@ namespace time
         private row_interface_group displayedRows;
         private string employee_name;
 
-        private void swap<T>(List<T> l, int i1, int i2)
-        {
-            T temp = l[i1];
-            l[i1] = l[i2];
-            l[i2] = temp;
-        }
-        private bool compareWorkPeriodDates(work_period p1, work_period p2)
-        {
-            return p1.Date < p2.Date;
-        }
-        private void sortWorkPeriods (Func<work_period, work_period, bool> compare)
-        {
-            for (int n =0; n < wp.Count; ++n)
-            {
-                for (int m = n; m > 1 && compare(wp[m], wp[m-1]); --m)
-                {
-                    swap(wp, m, m-1);
-                }
-            }
-        }
         private void loadFromFile(string filepath)
         {
             if (!File.Exists(filepath))
@@ -59,7 +39,8 @@ namespace time
                 }
             }
 
-            sortWorkPeriods(compareWorkPeriodDates);
+            wp.Sort(work_period.CompareByDate());
+            //sortWorkPeriods(compareWorkPeriodDates);
         }
         private List<string> getDataToSave()
         {
@@ -75,7 +56,7 @@ namespace time
         }
         private void saveToFile(string filepath)
         {
-            sortWorkPeriods(compareWorkPeriodDates);
+            wp.Sort(work_period.CompareByDate());
             Debug.WriteLine("Saving " + wp.Count + " records.");
             File.WriteAllLines(filename, getDataToSave());
         }
@@ -227,25 +208,6 @@ namespace time
 
             return WeekNumber.GetDateFromWeek(date.Year, weekNum);
         }
-        private int findPeriodByDate(DateTime d, bool exactMatch)
-        {
-            sortWorkPeriods(compareWorkPeriodDates);
-            for (int n =0; n < wp.Count; ++n)
-            {
-                if (wp[n].Date >= d)
-                {
-                    if (!exactMatch)
-                    {
-                        return n;
-                    }
-                    else if (wp[n].Date == d)
-                    {
-                        return n;
-                    }
-                }
-            }
-            return -1;
-        }
         private List<work_period> getRange(DateTime rangeStart, int numDays)
         {
             List<work_period> outputRange = new List<work_period>();
@@ -253,14 +215,20 @@ namespace time
             for (int n = 0; n < numDays; ++n)
             {
                 DateTime d = rangeStart.AddDays(n);
-                int dateIndex = findPeriodByDate(d, true);
+                
+                work_period dateToFind = new work_period(d);
+                Debug.WriteLine("Looking up " + dateToFind.Date.ToString("yyyy-MM-dd"));
+                int dateIndex = wp.BinarySearch(dateToFind, work_period.CompareByDate());
 
+                Debug.Write("Searching for " + dateToFind.Date.ToString() + ". ");
                 if (dateIndex < 0)
                 {
+                    Debug.WriteLine("Search failed.");
                     outputRange.Add(new work_period(d));
                 }
                 else
                 {
+                    Debug.WriteLine("Search successful.");
                     outputRange.Add(wp[dateIndex]);
                 }
             }
@@ -281,16 +249,18 @@ namespace time
             int days = (int)d2.Subtract(d1).TotalDays;
             List<work_period> periodCovered = getRange(d1, days);
 
+
             double washupHours = 0.167;
-            string washupCode = "155";
+            string washupCode = "290";
+            string washupMessage = "Article 60 - Washup time";
 
             data_4600 sheet = new data_4600();
             foreach (work_period p in periodCovered)
             {
                 if (p.WashupTime)
                 {
-                    sheet.FillNewRow(p.StartTime, p.EndTime, ShiftInformation.LunchLength,
-                        washupCode, 0.0, washupHours, 0.0, 0.0);
+                    sheet.FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
+                        washupCode, 0.0, washupHours, 0.0, 0.0, washupMessage);
                 }
             }
             return sheet;

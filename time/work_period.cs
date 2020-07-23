@@ -4,11 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace time
 {
     public class work_period
     {
+        private class sortByDateHelper : IComparer<work_period>
+        {
+            int IComparer<work_period>.Compare(work_period x, work_period y)
+            {
+                return x.Date.CompareTo(y.Date);
+            }
+        }
+        public static IComparer<work_period> CompareByDate()
+        {
+            return (IComparer<work_period>)new sortByDateHelper();
+        }
         public readonly DateTime Date;
 
         private DateTime startTime;
