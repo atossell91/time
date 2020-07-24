@@ -11,15 +11,15 @@ namespace time
     {
         public class HoursRow
         {
-            public static readonly string[] CodePriority = { "055", "260", "260R", "290" };
+            public static readonly string[] LeaveCodes = {"260", "260R", "290" };
             //public static readonly string[] CodePriority = {"290", "260R", "260", "055"};
 
             private class compareByCodeHelper : IComparer<HoursRow>
             {
                 int IComparer<HoursRow>.Compare(HoursRow x, HoursRow y)
                 {
-                    int xIndex = Array.FindIndex(CodePriority, e => e == x.Code);
-                    int yIndex = Array.FindIndex(CodePriority, e => e == y.Code);
+                    int xIndex = Array.FindIndex(LeaveCodes, e => e == x.Code);
+                    int yIndex = Array.FindIndex(LeaveCodes, e => e == y.Code);
 
                     return xIndex - yIndex;
                 }
@@ -190,10 +190,12 @@ namespace time
             public void AddLeaveHours(double hours)
             {
                 this.LeaveHours += hours;
+                this.CashHours -= hours;
             }
             public void AddCashHours(double hours)
             {
                 this.CashHours += hours;
+                this.LeaveHours -= hours;
             }
         }
         public class CodeSummary
@@ -238,6 +240,30 @@ namespace time
                     output += c.LeaveHours;
                 }
                 return output;
+            }
+
+            public void adjustTotalHours(double desiredLeave)
+            {
+                double currentLeaveWanted = desiredLeave;
+                foreach(codeSummaryRow row in rows)
+                {
+                    if (!Array.Exists(HoursRow.LeaveCodes, e => e == row.Code))
+                    {
+                        continue;
+                    }
+
+                    if (desiredLeave >= row.CashHours)
+                    {
+                        desiredLeave -= row.CashHours;
+                        row.AddLeaveHours(row.CashHours);
+                    }
+                    else
+                    {
+                        row.AddLeaveHours(desiredLeave);
+                        desiredLeave = 0.0;
+                        break;
+                    }
+                }
             }
         }
 
@@ -297,6 +323,10 @@ namespace time
         public double GetLeaveHours()
         {
             return codeSums.SumAllLeaveHours();
+        }
+        public void RequestLeaveHours(double leave)
+        {
+            codeSums.adjustTotalHours(leave);
         }
 
     }

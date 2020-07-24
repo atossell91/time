@@ -28,12 +28,7 @@ namespace time
 
             fillPersonalInfo();
             fillPeriodCovered();
-
-            for (int n =0; n < sheet.GetNumberOfFilledRows(); ++n)
-            {
-                fillOvertimeRow(n);
-            }
-
+            fillMultipleOvertimeRows();
             fillCodeSummary();
             fillTotalHours();
             fillSignatureDate();
@@ -134,6 +129,13 @@ namespace time
             createFixedLabel(mainSheet.GetOvertimeRow(rowNum).Reason, currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
         }
+        private void fillMultipleOvertimeRows()
+        {
+            for (int n = 0; n < mainSheet.GetNumberOfFilledRows(); ++n)
+            {
+                fillOvertimeRow(n);
+            }
+        }
         private void fillPersonalInfo()
         {
             createFixedLabel(this.personInfo.Surname, dims4600.Surname);
@@ -214,6 +216,8 @@ namespace time
         public void addPersonalInfo()
         {
         }
+
+        //Methods for drawing and scaling the signature
         private Rectangle GetRectangle(Box b, Image img)
         {
             int original;
@@ -239,12 +243,20 @@ namespace time
 
             return new Rectangle(b.TopLeft, new Size(newWidth, newHeight));
         }
+        private Point centreImageInBox(Box b, Rectangle r)
+        {
+            int yPos = b.TopLeft.Y;
+            int xPos = b.TopLeft.X + (b.CalcSize().Width / 2) - (r.Width / 2);
+
+            return new Point(xPos, yPos);
+        }
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Image img = Image.FromFile(@"B:\Downloads\ant_sig.png");
 
             Box b = dims4600.EmployeeSignature;
             Rectangle r = GetRectangle(dims4600.EmployeeSignature, img);
+            r.Location = centreImageInBox(b, r);
 
             e.Graphics.DrawImage(img, r);
         }
