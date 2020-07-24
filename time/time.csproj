@@ -74,6 +74,18 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="PageTools.cs" />
+    <Compile Include="PersonalInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PersonalInfoForm.Designer.cs">
+      <DependentUpon>PersonalInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalnfoGetter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PersonalnfoGetter.Designer.cs">
+      <DependentUpon>PersonalnfoGetter.cs</DependentUpon>
+    </Compile>
     <Compile Include="PhoenixOTSheet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +135,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PersonalInfoForm.resx">
+      <DependentUpon>PersonalInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PersonalnfoGetter.resx">
+      <DependentUpon>PersonalnfoGetter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PhoenixOTSheet.resx">
       <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
