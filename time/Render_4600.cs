@@ -111,11 +111,9 @@ namespace time
             createFixedLabel("Rec", currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
-            /*
             s = dims4600.OTGridChargeableCosts.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).ChargeableCosts.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(/*mainSheet.GetOvertimeRow(rowNum).ChargeableCosts.ToString()*/"", currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
-            */
 
             s = dims4600.OTGridReason.CalcSize();
             createFixedLabel(mainSheet.GetOvertimeRow(rowNum).Reason, currentXpos, yPos, s.Width, s.Height);

@@ -201,9 +201,10 @@ namespace time
                 if (index < 0)
                 {
                     rows.Add(csr);
+                    index = rows.Count - 1;
                 }
 
-                csr.AddHours(otRow.X100Hours, otRow.X150Hours, otRow.X175Hours, otRow.X200Hours);
+                rows[index].AddHours(otRow.X100Hours, otRow.X150Hours, otRow.X175Hours, otRow.X200Hours);
 
                 rows.Sort(HoursRow.compareByCode());
             }
