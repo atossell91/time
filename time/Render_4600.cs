@@ -26,11 +26,14 @@ namespace time
             mainSheet = sheet;
 
             fillPersonalInfo();
+            fillPeriodCovered();
 
             for (int n =0; n < sheet.GetNumberOfFilledRows(); ++n)
             {
                 fillOvertimeRow(n);
             }
+
+            fillCodeSummary();
         }
         private void createFixedLabel(string text, int topLeftX, int topLeftY, int width, int height)
         {
@@ -81,11 +84,11 @@ namespace time
             currentXpos += s.Width + dims4600.StandardBorderWidth + dims4600.CodeBorder;
 
             s = dims4600.OTGridCodes.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).Code, currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(mainSheet.GetOvertimeRow(rowNum)._code, currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX100.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).X100Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(mainSheet.GetOvertimeRow(rowNum)._X100Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX150.CalcSize();
@@ -101,16 +104,18 @@ namespace time
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridExtendedHours.CalcSize();
-            createFixedLabel("Ext", currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).ExtendedHours.ToString(), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridRecoverableHours.CalcSize();
             createFixedLabel("Rec", currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
+            /*
             s = dims4600.OTGridChargeableCosts.CalcSize();
             createFixedLabel(mainSheet.GetOvertimeRow(rowNum).ChargeableCosts.ToString(), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
+            */
 
             s = dims4600.OTGridReason.CalcSize();
             createFixedLabel(mainSheet.GetOvertimeRow(rowNum).Reason, currentXpos, yPos, s.Width, s.Height);
@@ -125,15 +130,66 @@ namespace time
             createFixedLabel(this.personInfo.Level, dims4600.Level);
             createFixedLabel(this.personInfo.WorkAddress, dims4600.Establishment);
         }
-        private Size getSuggestedSize(string text, Font f)
+        private void fillPeriodCovered()
         {
-            Label l = new Label();
-            l.Text = text;
-            l.Font = f;
-            l.AutoSize = true;
-            Size s = l.Size;
-            l.Dispose();
-            return s;
+            string f_date = "yyyy-MM-dd";
+            string value = "";
+            if (mainSheet.PeriodStart != mainSheet.PeriodEnd)
+            {
+                value = mainSheet.PeriodStart.ToString(f_date) + " - " +
+                    mainSheet.PeriodEnd.ToString(f_date);
+            }
+            else
+            {
+                value = mainSheet.PeriodStart.ToString(f_date);
+            }
+            createFixedLabel(value, dims4600.Period);
+        }
+        private void fillSummaryCodeRow(int rowNum)
+        {
+            int rowHeight = 10;
+
+            int gridStart = dims4600.OTSummaryCodeColumn.TopLeft.Y;
+            int yPos = gridStart + (rowHeight * rowNum);
+
+            int currentXpos = dims4600.OTSummaryCodeColumn.TopLeft.X;
+
+            Size s;
+
+            s = dims4600.OTSummaryCodeColumn.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).Code, dims4600.OTSummaryCodeColumn);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryX100Column.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X100Hours.ToString(), dims4600.OTSummaryX100Column);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryX150Column.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X150Hours.ToString(), dims4600.OTSummaryX150Column);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryX175Column.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X175Hours.ToString(), dims4600.OTSummaryX175Column);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryX200Column.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X200Hours.ToString(), dims4600.OTSummaryX200Column);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryActualHours.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).ActualHours.ToString(), dims4600.OTSummaryActualHours);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            s = dims4600.OTSummaryExtendedHours.CalcSize();
+            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).ExtendedHours.ToString(), dims4600.OTSummaryExtendedHours);
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+        }
+        private void fillCodeSummary()
+        {
+            for (int n =0; n < mainSheet.GetNumberOfCodes(); ++n)
+            {
+                fillSummaryCodeRow(n);
+            }
         }
         public void addPersonalInfo()
         {
