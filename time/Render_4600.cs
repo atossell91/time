@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,8 @@ namespace time
             }
 
             fillCodeSummary();
+            fillTotalHours();
+            fillSignatureDate();
         }
         private void createFixedLabel(string text, int topLeftX, int topLeftY, int width, int height)
         {
@@ -52,6 +55,18 @@ namespace time
         {
             Size s = position.CalcSize();
             createFixedLabel(text, position.TopLeft.X, position.TopLeft.Y, s.Width, s.Height);
+        }
+        private int drawHorizontalGridCell(string text, int xPos, int yPos, Box refBox)
+        {
+            int currentXpos = xPos;
+
+            Size s = refBox.CalcSize();
+            
+            createFixedLabel(text, xPos, yPos, s.Width, s.Height);
+
+            currentXpos += s.Width + dims4600.StandardBorderWidth;
+
+            return currentXpos;
         }
         private void fillOvertimeRow(int rowNum)
         {
@@ -145,52 +160,93 @@ namespace time
         }
         private void fillSummaryCodeRow(int rowNum)
         {
-            int rowHeight = 10;
 
             int gridStart = dims4600.OTSummaryCodeColumn.TopLeft.Y;
-            int yPos = gridStart + (rowHeight * rowNum);
+            int yPos = gridStart + (dims4600.OTSummaryRowHeight * rowNum);
 
             int currentXpos = dims4600.OTSummaryCodeColumn.TopLeft.X;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).Code,
+                currentXpos, yPos, dims4600.OTSummaryCodeColumn);
 
-            Size s;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X100Hours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryX100Column);
 
-            s = dims4600.OTSummaryCodeColumn.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).Code, dims4600.OTSummaryCodeColumn);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X150Hours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryX150Column);
 
-            s = dims4600.OTSummaryX100Column.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X100Hours.ToString(), dims4600.OTSummaryX100Column);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X175Hours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryX175Column);
 
-            s = dims4600.OTSummaryX150Column.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X150Hours.ToString(), dims4600.OTSummaryX150Column);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X200Hours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryX200Column);
 
-            s = dims4600.OTSummaryX175Column.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X175Hours.ToString(), dims4600.OTSummaryX175Column);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).ActualHours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryActualHours);
 
-            s = dims4600.OTSummaryX200Column.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).X200Hours.ToString(), dims4600.OTSummaryX200Column);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).ExtendedHours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryExtendedHours);
 
-            s = dims4600.OTSummaryActualHours.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).ActualHours.ToString(), dims4600.OTSummaryActualHours);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).LeaveHours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryLeaveHours);
 
-            s = dims4600.OTSummaryExtendedHours.CalcSize();
-            createFixedLabel(mainSheet.GetCodeSummaryRow(rowNum).ExtendedHours.ToString(), dims4600.OTSummaryExtendedHours);
-            currentXpos += s.Width + dims4600.StandardBorderWidth;
+            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).CashHours.ToString(),
+                currentXpos, yPos, dims4600.OTSummaryCashHours);
+        }
+        private void fillTotalHours()
+        {
+            createFixedLabel(mainSheet.GetLeaveHours().ToString(),
+                dims4600.TotalCash);
+            createFixedLabel(mainSheet.GetCashHours().ToString(),
+                dims4600.TotalLeave);
         }
         private void fillCodeSummary()
         {
+            Debug.WriteLine("Number of codes: " + mainSheet.GetNumberOfCodes());
             for (int n =0; n < mainSheet.GetNumberOfCodes(); ++n)
             {
                 fillSummaryCodeRow(n);
             }
         }
+        private void fillSignatureDate()
+        {
+            createFixedLabel(DateTime.Now.ToString("yyyy-MM-dd"), dims4600.SignatureDate);
+        }
         public void addPersonalInfo()
         {
+        }
+        private Rectangle GetRectangle(Box b, Image img)
+        {
+            int original;
+            int scaled;
+
+            Size s = b.CalcSize();
+
+            if (s.Width > s.Height)
+            {
+                original = img.Height;
+                scaled = s.Height;
+            }
+            else
+            {
+                original = img.Width;
+                scaled = s.Width;
+            }
+
+            double scaleFacor = ((double)scaled) / ((double)original);
+
+            int newWidth = (int)(scaleFacor * img.Width);
+            int newHeight = (int)(scaleFacor * img.Height);
+
+            return new Rectangle(b.TopLeft, new Size(newWidth, newHeight));
+        }
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            Image img = Image.FromFile(@"B:\Downloads\ant_sig.png");
+
+            Box b = dims4600.EmployeeSignature;
+            Rectangle r = GetRectangle(dims4600.EmployeeSignature, img);
+
+            e.Graphics.DrawImage(img, r);
         }
     }
 }

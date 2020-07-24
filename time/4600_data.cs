@@ -93,7 +93,7 @@ namespace time
             public double ExtendedHours;
             public double ActualHours;
 
-            private void calcExtendedHours()
+            protected virtual void calcExtendedHours()
             {
                 string[] validCodes = { "260", "260R", "290" };
 
@@ -176,6 +176,13 @@ namespace time
             public double LeaveHours;
             public double CashHours;
 
+            protected override void calcExtendedHours()
+            {
+                base.calcExtendedHours();
+                CashHours = ExtendedHours;
+                LeaveHours = 0.0;
+            }
+
             public codeSummaryRow(string code)
             {
                 this.Code = code;
@@ -212,6 +219,25 @@ namespace time
             public CodeSummary()
             {
                 rows = new List<codeSummaryRow>();
+            }
+
+            public double SumAllCashHours()
+            {
+                double output = 0.0;
+                foreach(codeSummaryRow c in rows)
+                {
+                    output += c.CashHours;
+                }
+                return output;
+            }
+            public double SumAllLeaveHours()
+            {
+                double output = 0.0;
+                foreach(codeSummaryRow c in rows)
+                {
+                    output += c.LeaveHours;
+                }
+                return output;
             }
         }
 
@@ -264,5 +290,14 @@ namespace time
         {
             return codeSums.rows[index];
         }
+        public double GetCashHours()
+        {
+            return codeSums.SumAllCashHours();
+        }
+        public double GetLeaveHours()
+        {
+            return codeSums.SumAllLeaveHours();
+        }
+
     }
 }

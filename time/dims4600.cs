@@ -44,16 +44,19 @@ namespace time
         public readonly static Box OvertimeGrid = new Box(50, 757, 1647, 1558);
 
         //OT Summary
-        public readonly static Box OTSummaryCodeColumn = new Box(579, 1699, 665, 2179);
-        public readonly static Box OTSummaryX100Column = new Box(668, 1699, 754, 2179);
-        public readonly static Box OTSummaryX150Column = new Box(758, 1699, 844, 2179);
-        public readonly static Box OTSummaryX175Column = new Box(847, 1699, 933, 2179);
-        public readonly static Box OTSummaryX200Column = new Box(937, 1699, 1023, 2179);
-        public readonly static Box OTSummaryActualHours = new Box(1026, 1699, 1143, 2179);
-        public readonly static Box OTSummaryExtendedHours = new Box(1147, 1699, 1263, 2179);
-        public readonly static Box OTSummaryLeaveHours = new Box(1267, 1699, 1381, 2179);
-        public readonly static Box OTSummaryCash = new Box(1384, 1699, 1498, 2179);
-        public readonly static Box OTSummaryRecoverable = new Box(1501, 1699, 1647, 2179);
+        public const int OTSummaryRowHeight = 40;
+        private const int OTSummaryStartY = 1699;
+        private const int OTSummaryFirstRowEndY = OTSummaryStartY + OTSummaryRowHeight;
+        public readonly static Box OTSummaryCodeColumn = new Box(579, OTSummaryStartY, 665, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryX100Column = new Box(668, OTSummaryStartY, 754, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryX150Column = new Box(758, OTSummaryStartY, 844, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryX175Column = new Box(847, OTSummaryStartY, 933, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryX200Column = new Box(937, OTSummaryStartY, 1023, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryActualHours = new Box(1026, OTSummaryStartY, 1143, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryExtendedHours = new Box(1147, OTSummaryStartY, 1263, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryLeaveHours = new Box(1267, OTSummaryStartY, 1381, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryCashHours = new Box(1384, OTSummaryStartY, 1498, OTSummaryFirstRowEndY);
+        public readonly static Box OTSummaryRecoverable = new Box(1501, OTSummaryStartY, 1647, OTSummaryFirstRowEndY);
 
         //Totals
         public readonly static Box TotalCash = new Box(780, 2183, 933, 2269);
