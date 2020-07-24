@@ -48,14 +48,13 @@
             this.tb_Surname = new System.Windows.Forms.TextBox();
             this.tb_givenNames = new System.Windows.Forms.TextBox();
             this.dtp_DOB = new System.Windows.Forms.DateTimePicker();
-            this.b_Ok = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.label9);
@@ -77,9 +76,9 @@
             this.panel1.Controls.Add(this.tb_Surname);
             this.panel1.Controls.Add(this.tb_givenNames);
             this.panel1.Controls.Add(this.dtp_DOB);
-            this.panel1.Location = new System.Drawing.Point(10, 10);
+            this.panel1.Location = new System.Drawing.Point(0, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(520, 370);
+            this.panel1.Size = new System.Drawing.Size(512, 372);
             this.panel1.TabIndex = 0;
             // 
             // label9
@@ -278,26 +277,16 @@
             this.dtp_DOB.TabIndex = 2;
             this.dtp_DOB.ValueChanged += new System.EventHandler(this.dtp_DOB_ValueChanged);
             // 
-            // b_Ok
-            // 
-            this.b_Ok.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Ok.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.b_Ok.Location = new System.Drawing.Point(230, 390);
-            this.b_Ok.Name = "b_Ok";
-            this.b_Ok.Size = new System.Drawing.Size(75, 30);
-            this.b_Ok.TabIndex = 1;
-            this.b_Ok.Text = "OK";
-            this.b_Ok.UseVisualStyleBackColor = true;
-            this.b_Ok.Click += new System.EventHandler(this.b_Ok_Click);
-            this.SuspendLayout();
-            // 
             // PersonalnfoGetter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
             this.Name = "PersonalnfoGetter";
-            this.Size = new System.Drawing.Size(762, 583);
+            this.Size = new System.Drawing.Size(515, 378);
+            this.Load += new System.EventHandler(this.PersonalnfoGetter_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -324,6 +313,5 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button b_Ok;
     }
 }

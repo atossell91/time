@@ -12,7 +12,7 @@ namespace time
 
         public string GivenNames { get; set; } = "";
         public string Surname { get; set; } = "";
-        public DateTime DateOfBirth { get; set; } = DateTime.MinValue;
+        public DateTime DateOfBirth { get; set; }
         public string PRI { get; set; } = "";
         public string Group { get; set; } = "";
         public string Level { get; set; } = "";
@@ -21,6 +21,10 @@ namespace time
         public string WorkPhoneNumber { get; set; } = "";
         public string HomePhoneNumber { get; set; } = "";
 
+        public PersonalInfo()
+        {
+            this.DateOfBirth = DateTime.Now;
+        }
         public int GetAge(DateTime date)
         {
             return (int)((date.Subtract(this.DateOfBirth)).Days / 365.25);

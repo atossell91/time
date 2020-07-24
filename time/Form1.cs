@@ -19,7 +19,7 @@ namespace time
         private int currentMonth;
         private readonly string filename;
         private row_interface_group displayedRows;
-        private string employee_name;
+        private PersonalInfo personInfo;
 
         private void loadFromFile(string filepath)
         {
@@ -73,15 +73,13 @@ namespace time
         }
         private void promptForYear()
         {
-            date_name_getter d = new date_name_getter(1990, 2200, DateTime.Now.Year);
-            d.ShowDialog();
+            DateAndInfoSplash splash = new DateAndInfoSplash();
+            splash.ShowDialog();
 
-            int year = getFiscalYear(d.Number);
+            this.currentYear = splash.Year;
+            this.personInfo = splash.PersonalInfo;
 
-            currentYear = d.Number;
-            this.employee_name = d.Name;
-
-            d.Dispose();
+            splash.Dispose();
         }
         public Form1()
         {
@@ -241,7 +239,8 @@ namespace time
 
             DateTime rangeStart = getRangeStart(date);
             List<work_period> DayRange = getRange(rangeStart, 14);
-            PhoenixOTSheet sheet = new PhoenixOTSheet(employee_name, DayRange);
+            String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
+            PhoenixOTSheet sheet = new PhoenixOTSheet(name, DayRange);
             sheet.ShowDialog();
         }
         private data_4600 createWashup4600(DateTime d1, DateTime d2)
@@ -291,8 +290,7 @@ namespace time
 
             data_4600 sheet = createWashup4600(d1, d2);
 
-            PersonalInfo pi = new PersonalInfo();
-            Render_4600 viewSheet = new Render_4600(pi, sheet);
+            Render_4600 viewSheet = new Render_4600(this.personInfo, sheet);
             viewSheet.ShowDialog();
         }
     }

@@ -7,25 +7,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
 
 namespace time
 {
     public partial class PersonalnfoGetter : UserControl
     {
         public PersonalInfo Info;
+        public bool IsFilledOut = false;
+
         private readonly string filename = @"person_info.txt";
 
-        public PersonalInfoForm()
+        public PersonalnfoGetter()
         {
             InitializeComponent();
+            Info = new PersonalInfo();
         }
-
-        private void saveToFile(string filename)
+        public void SavePersonalInfoToFile()
         {
-            File.WriteAllText(filename, Info.printInfo());
+            string file = this.filename;
+            File.WriteAllText(file, Info.printInfo());
         }
+        
         private bool loadFromFile(string filename)
         {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+
             string[] file = File.ReadAllLines(filename);
 
             PersonalInfo p;
@@ -40,34 +51,39 @@ namespace time
                 return false;
             }
         }
-
-        private void PersonalInfoForm_Load(object sender, EventArgs e)
+        private bool isBlankString(string s)
         {
-            if (loadFromFile(this.filename))
-            {
-                tb_givenNames.Text = this.Info.GivenNames;
-                tb_Surname.Text = this.Info.Surname;
-                dtp_DOB.Value = this.Info.DateOfBirth;
-                mtb_PRI.Text = this.Info.PRI;
-                tb_Group.Text = this.Info.Group;
-                tb_Level.Text = this.Info.Level;
-                tb_HomeAddress.Text = this.Info.HomeAddress;
-                tb_WorkAddress.Text = this.Info.WorkAddress;
-                mtb_HomePhone.Text = this.Info.HomePhoneNumber;
-                mtb_WorkPhone.Text = this.Info.WorkPhoneNumber;
-            }
+            return String.IsNullOrEmpty(s) &&
+                string.IsNullOrWhiteSpace(s);
+        }
+        private void checkIfComplete()
+        {
+            string surname = tb_Surname.Text;
+            string givenname = tb_givenNames.Text;
+            string pri = mtb_PRI.Text;
+
+            this.IsFilledOut = isBlankString(surname) &&
+                isBlankString(givenname) &&
+                isBlankString(pri);
         }
 
         private void tb_givenNames_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
             Info.GivenNames = tb.Text;
+
+            checkIfComplete();
         }
 
         private void tb_Surname_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            Info.Surname = tb.Text;
+
+            string t = tb.Text;
+
+            Info.Surname = t;
+
+            checkIfComplete();
         }
 
         private void dtp_DOB_ValueChanged(object sender, EventArgs e)
@@ -80,6 +96,8 @@ namespace time
         {
             MaskedTextBox mtb = (MaskedTextBox)sender;
             Info.PRI = mtb.Text;
+
+            checkIfComplete();
         }
 
         private void tb_Group_TextChanged(object sender, EventArgs e)
@@ -118,10 +136,22 @@ namespace time
             Info.HomePhoneNumber = mtb.Text;
         }
 
-        private void b_Ok_Click(object sender, EventArgs e)
+        private void PersonalnfoGetter_Load(object sender, EventArgs e)
         {
-            saveToFile(this.filename);
-            this.Close();
+            if (loadFromFile(this.filename))
+            {
+                tb_givenNames.Text = this.Info.GivenNames;
+                tb_Surname.Text = this.Info.Surname;
+                Debug.WriteLine("Date: " + this.Info.DateOfBirth);
+                dtp_DOB.Value = this.Info.DateOfBirth;
+                mtb_PRI.Text = this.Info.PRI;
+                tb_Group.Text = this.Info.Group;
+                tb_Level.Text = this.Info.Level;
+                tb_HomeAddress.Text = this.Info.HomeAddress;
+                tb_WorkAddress.Text = this.Info.WorkAddress;
+                mtb_HomePhone.Text = this.Info.HomePhoneNumber;
+                mtb_WorkPhone.Text = this.Info.WorkPhoneNumber;
+            }
         }
     }
 }

@@ -48,6 +48,12 @@
   <ItemGroup>
     <Compile Include="4600_data.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="DateAndInfoSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateAndInfoSplash.Designer.cs">
+      <DependentUpon>DateAndInfoSplash.cs</DependentUpon>
+    </Compile>
     <Compile Include="DateRangeGetter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +130,9 @@
     <Compile Include="WeekNumber.cs" />
     <Compile Include="WordParser.cs" />
     <Compile Include="work_period.cs" />
+    <EmbeddedResource Include="DateAndInfoSplash.resx">
+      <DependentUpon>DateAndInfoSplash.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DateRangeGetter.resx">
       <DependentUpon>DateRangeGetter.cs</DependentUpon>
     </EmbeddedResource>

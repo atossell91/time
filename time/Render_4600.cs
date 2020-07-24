@@ -252,13 +252,13 @@ namespace time
         }
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            Image img = Image.FromFile(@"B:\Downloads\ant_sig.png");
+            /*Image img = Image.FromFile(@"B:\Downloads\ant_sig.png");
 
             Box b = dims4600.EmployeeSignature;
             Rectangle r = GetRectangle(dims4600.EmployeeSignature, img);
             r.Location = centreImageInBox(b, r);
 
-            e.Graphics.DrawImage(img, r);
+            e.Graphics.DrawImage(img, r);*/
         }
     }
 }
