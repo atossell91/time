@@ -145,6 +145,7 @@
             this.mtb_Start.ValidatingType = typeof(System.DateTime);
             this.mtb_Start.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_Start.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
+            this.mtb_Start.Leave += new System.EventHandler(this.control_Leave);
             this.mtb_Start.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_Start_Validating);
             // 
             // mtb_End
@@ -159,6 +160,7 @@
             this.mtb_End.ValidatingType = typeof(System.DateTime);
             this.mtb_End.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_End.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
+            this.mtb_End.Leave += new System.EventHandler(this.control_Leave);
             this.mtb_End.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_End_Validating);
             // 
             // row_interface
@@ -177,7 +179,9 @@
             this.Name = "row_interface";
             this.Size = new System.Drawing.Size(1200, 52);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.row_interface_KeyDown);
+            this.Leave += new System.EventHandler(this.control_Leave);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.row_interface_MouseMove);
+            this.Validated += new System.EventHandler(this.row_interface_Validated);
             ((System.ComponentModel.ISupportInitialize)(this.nud_overtime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_premiums)).EndInit();
             this.ResumeLayout(false);

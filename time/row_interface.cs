@@ -31,6 +31,8 @@ namespace time
 
         private Point cursorPos;
 
+        private bool keyPressed = false;
+
         private void initControlsList()
         {
             currentControl.Add(mtb_Start);
@@ -239,7 +241,7 @@ namespace time
             long increment = interval.Ticks;
             long cut = cutoff.Ticks;
 
-            long correctedTime = ((totalTime + cut) / increment) * increment;
+            long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);
         }
         private TimeSpan calcOvertime(TimeSpan interval, TimeSpan cutoff)
@@ -259,24 +261,19 @@ namespace time
                 return TimeSpan.Zero;
             }
 
-            TimeSpan cut = ShiftInformation.NightShiftCutoff;
-
             TimeSpan hoursWorked = calcHoursWorked(start, end, ShiftInformation.LunchLength);
-            TimeSpan halfPoint = new TimeSpan(hoursWorked.Ticks/2);
+            TimeSpan halfPoint = new TimeSpan(hoursWorked.Ticks / 2);
 
-            if (start.TimeOfDay.Add(halfPoint) > cut)
+            if (start.TimeOfDay >= ShiftInformation.NightShiftCutoff)
             {
-                if (start.TimeOfDay > ShiftInformation.NightShiftCutoff)
-                {
-                    return calcHoursWorked(start, end, ShiftInformation.LunchLength);
-                }
-                else
-                {
-                    return calcHoursWorked(combineDateAndTime(period.StartTime, ShiftInformation.NightShiftCutoff),
-                        end, ShiftInformation.LunchLength);
-                }
+                return calcHoursWorked(start, end, ShiftInformation.LunchLength);
             }
-            
+            else if (start.TimeOfDay.Add(halfPoint) > ShiftInformation.NightShiftCutoff)
+            {
+                return calcHoursWorked(combineDateAndTime(period.StartTime, ShiftInformation.NightShiftCutoff),
+                    end, ShiftInformation.LunchLength);
+            }
+
             return TimeSpan.Zero;
         }
         private TimeSpan calcShiftPremium(TimeSpan interval, TimeSpan cutoff)
@@ -309,7 +306,7 @@ namespace time
                 nud.Value = decimal.Zero;
                 return;
             }
-            changePremiums(decimalToTimeSpan((double)nud.Value));
+            period.ShiftPremiums = decimalToTimeSpan((double)nud.Value);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -525,8 +522,17 @@ namespace time
                 return txt;
             }
         }
+        private void updateOvertime()
+        {
+            nud_overtime.Value = new Decimal(calcOvertime(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+        }
+        private void updateShiftPremiums()
+        {
+            nud_premiums.Value = new Decimal(calcShiftPremium(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+        }
         private void mtb_Start_Validating(object sender, CancelEventArgs e)
         {
+            Debug.WriteLine("Validating start input");
             MaskedTextBox mtb = (MaskedTextBox)sender;
 
             mtb.Text = checkMinuteValue(mtb);
@@ -534,6 +540,10 @@ namespace time
             TimeSpan ts;
             if (parseInputDate(mtb, out ts))
             {
+                if (!keyPressed)
+                {
+                    return;
+                }
                 Debug.WriteLine("TS:" + ts.ToString());
                 mtb.Text = ts.ToString();
                 changeStartTime(combineDateAndTime(Date, ts));
@@ -543,16 +553,13 @@ namespace time
                 Debug.WriteLine("Validation fail");
             }
             checkTimes();
-            nud_overtime.Value = new Decimal(calcOvertime(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
-            nud_premiums.Value = new Decimal(calcShiftPremium(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+            updateOvertime();
+            updateShiftPremiums();
             cb_Washup.Checked = calcWashupTime();
-            /*else
-            {
-                e.Cancel = true;
-            }*/
         }
         private void mtb_End_Validating(object sender, CancelEventArgs e) //NEED TO ENSURE CHANGES TO OT, PREMIUMS AND WASHUP ARE REFLECTED IN DATASOURCE!!!
         {
+            Debug.WriteLine("Validating start input");
             MaskedTextBox mtb = (MaskedTextBox)sender;
 
             mtb.Text = checkMinuteValue(mtb);
@@ -560,18 +567,17 @@ namespace time
             TimeSpan ts;
             if (parseInputDate(mtb, out ts))
             {
+                if (!keyPressed)
+                {
+                    return;
+                }
                 changeEndTime(combineDateAndTime(Date, ts));
                 tryAutoSetStartTime();
                 checkEndTime();
                 checkTimes();
-                nud_overtime.Value = new Decimal(calcOvertime(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
-                nud_premiums.Value = new Decimal(calcShiftPremium(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+                updateOvertime();
+                updateShiftPremiums();
                 cb_Washup.Checked = calcWashupTime();
-
-                if (period.StartTime == period.EndTime)
-                {
-                    MessageBox.Show("Hello");
-                }
             }
         }
         private void MaskedTextBox_Enter(object sender, EventArgs e)
@@ -663,12 +669,16 @@ namespace time
             else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
-                e.SuppressKeyPress = true;
-                if(!cursorIsInbounds(cursorPos))
+                //e.SuppressKeyPress = true;
+                if (!cursorIsInbounds(cursorPos))
                 {
                     changeBackgroundColour(false);
                 }
                 raiseVerticalArrowEvent(e);
+            }
+            else
+            {
+                keyPressed = true;
             }
         }
         private string removeMask(string s)
@@ -696,7 +706,6 @@ namespace time
             }
             else if (s.Length == 2)
             {
-                Debug.WriteLine("Two");
                 return "" + s + ":";
             }
             else
@@ -707,7 +716,6 @@ namespace time
         private void validateHours(MaskedTextBox hrs)
         {
             string s = checkHourValue(hrs.Text);
-            Debug.WriteLine("v: '" + s + "' L: " + s.Length);
 
             if (hrs.Text == s)
             {
@@ -740,6 +748,15 @@ namespace time
         {
             RichTextBox tb = (RichTextBox)sender;
             period.Comment = tb.Text;
+        }
+
+        private void control_Leave(object sender, EventArgs e)
+        {
+        }
+
+        private void row_interface_Validated(object sender, EventArgs e)
+        {
+            keyPressed = false;
         }
     }
 }
