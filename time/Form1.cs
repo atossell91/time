@@ -263,8 +263,6 @@ namespace time
                 }
             }
             DateTime d = new DateTime(2020, 07, 24, 7, 9, 0);
-            sheet.FillNewRow(d, d.AddHours(8.75), ShiftInformation.LunchLength,
-                "260", 0.0, 0.75, 0, 0, "Duty OT");
             return sheet;
         }
         private void Button2_Click(object sender, EventArgs e)

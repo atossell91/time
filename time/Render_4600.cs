@@ -40,7 +40,7 @@ namespace time
             l.Location = new Point(topLeftX+marginWith, topLeftY+marginWith);
             l.Text = text;
             l.Font = this.defaultFont;
-            l.BackColor = Color.HotPink;
+            l.BackColor = Color.Transparent;
             l.TextAlign = ContentAlignment.MiddleCenter;
             l.Size = new Size(width-marginWith*2, height-marginWith*2);
             //PageTools.CentreTextBox(l, dims4600.Surname);
@@ -63,6 +63,14 @@ namespace time
 
             return currentXpos;
         }
+        private string ToString(double d)
+        {
+            if (d == 0.0)
+            {
+                return "";
+            }
+            return d.ToString();
+        }
         private void fillOvertimeRow(int rowNum)
         {
             int gridStart = dims4600.OTGridCodes.TopLeft.Y;
@@ -72,6 +80,7 @@ namespace time
 
             string f_date = "yyyy-MM-dd";
             string f_time = "HH:mm";
+            string f_num = "######";
             Size s;
             s = dims4600.OTGridStartDate.CalcSize();
             createFixedLabel(mainSheet.GetOvertimeRow(rowNum).StartDate.ToString(f_date), currentXpos, yPos, s.Width, s.Height);
@@ -98,27 +107,27 @@ namespace time
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX100.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum)._X100Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(ToString(mainSheet.GetOvertimeRow(rowNum)._X100Hours), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX150.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).X150Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(ToString(mainSheet.GetOvertimeRow(rowNum).X150Hours), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX175.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).X175Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(ToString(mainSheet.GetOvertimeRow(rowNum).X175Hours), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridX200.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).X200Hours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(ToString(mainSheet.GetOvertimeRow(rowNum).X200Hours), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridExtendedHours.CalcSize();
-            createFixedLabel(mainSheet.GetOvertimeRow(rowNum).ExtendedHours.ToString(), currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel(ToString(mainSheet.GetOvertimeRow(rowNum).ExtendedHours), currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridRecoverableHours.CalcSize();
-            createFixedLabel("Rec", currentXpos, yPos, s.Width, s.Height);
+            createFixedLabel("", currentXpos, yPos, s.Width, s.Height);
             currentXpos += s.Width + dims4600.StandardBorderWidth;
 
             s = dims4600.OTGridChargeableCosts.CalcSize();
