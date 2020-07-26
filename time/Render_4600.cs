@@ -69,7 +69,7 @@ namespace time
             {
                 return "";
             }
-            return d.ToString();
+            return d.ToString("0.###");
         }
         private void fillOvertimeRow(int rowNum)
         {
@@ -179,35 +179,35 @@ namespace time
             currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).Code,
                 currentXpos, yPos, dims4600.OTSummaryCodeColumn);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X100Hours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).X100Hours),
                 currentXpos, yPos, dims4600.OTSummaryX100Column);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X150Hours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).X150Hours),
                 currentXpos, yPos, dims4600.OTSummaryX150Column);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X175Hours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).X175Hours),
                 currentXpos, yPos, dims4600.OTSummaryX175Column);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).X200Hours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).X200Hours),
                 currentXpos, yPos, dims4600.OTSummaryX200Column);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).ActualHours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).ActualHours),
                 currentXpos, yPos, dims4600.OTSummaryActualHours);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).ExtendedHours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).ExtendedHours),
                 currentXpos, yPos, dims4600.OTSummaryExtendedHours);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).LeaveHours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).LeaveHours),
                 currentXpos, yPos, dims4600.OTSummaryLeaveHours);
 
-            currentXpos = drawHorizontalGridCell(mainSheet.GetCodeSummaryRow(rowNum).CashHours.ToString(),
+            currentXpos = drawHorizontalGridCell(ToString(mainSheet.GetCodeSummaryRow(rowNum).CashHours),
                 currentXpos, yPos, dims4600.OTSummaryCashHours);
         }
         private void fillTotalHours()
         {
-            createFixedLabel(mainSheet.GetLeaveHours().ToString(),
+            createFixedLabel(ToString(mainSheet.GetLeaveHours()),
                 dims4600.TotalCash);
-            createFixedLabel(mainSheet.GetCashHours().ToString(),
+            createFixedLabel(ToString(mainSheet.GetCashHours()),
                 dims4600.TotalLeave);
         }
         private void fillCodeSummary()
