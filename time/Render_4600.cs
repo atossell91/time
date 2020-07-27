@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -268,6 +270,48 @@ namespace time
             r.Location = centreImageInBox(b, r);
 
             e.Graphics.DrawImage(img, r);*/
+        }
+        private string printToFile()
+        {
+            string filename = "Washup_" + mainSheet.PeriodEnd.ToString("dd-MMMM-yyyy") + ".png";
+
+            int h = pictureBox1.Height;
+            int w = pictureBox1.Width;
+
+            Bitmap bmp = new Bitmap(w, h);
+
+            Rectangle r = new Rectangle(0, 0, w, h);
+
+            pictureBox1.DrawToBitmap(bmp, r);
+
+            bmp.Save(filename, ImageFormat.Png);
+
+            return filename;
+        }
+        private void openImage(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                return;
+            }
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = filename;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+
+            Process p = new Process();
+            p.StartInfo = psi;
+
+            p.Start();
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            string file;
+            file = printToFile();
+            if (cb_openFile.Checked)
+            {
+                openImage(file);
+            }
         }
     }
 }

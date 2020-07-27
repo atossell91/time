@@ -32,6 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.cb_openFile = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -62,18 +63,33 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(65, 426);
+            this.button1.Location = new System.Drawing.Point(15, 422);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Print to file";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // cb_openFile
+            // 
+            this.cb_openFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_openFile.AutoSize = true;
+            this.cb_openFile.Checked = true;
+            this.cb_openFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_openFile.Location = new System.Drawing.Point(662, 426);
+            this.cb_openFile.Name = "cb_openFile";
+            this.cb_openFile.Size = new System.Drawing.Size(126, 17);
+            this.cb_openFile.TabIndex = 2;
+            this.cb_openFile.Text = "Open file after saving";
+            this.cb_openFile.UseVisualStyleBackColor = true;
             // 
             // Render_4600
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cb_openFile);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
             this.Name = "Render_4600";
@@ -82,6 +98,7 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -90,5 +107,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox cb_openFile;
     }
 }

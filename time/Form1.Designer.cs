@@ -210,11 +210,12 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 550);
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button3.Location = new System.Drawing.Point(15, 546);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(85, 23);
             this.button3.TabIndex = 15;
-            this.button3.Text = "button3";
+            this.button3.Text = "View Washup";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
