@@ -191,17 +191,43 @@ namespace time
                 }
             }
         }
-        private void Button1_Click(object sender, EventArgs e)
+        private string saveToFile()
         {
-            //pictureBox1.Enabled = false;
-            setAllBorders(BorderStyle.None);
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Rectangle r = new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height);
             pictureBox1.DrawToBitmap(bmp, r);
             String filename = Directory.GetCurrentDirectory() + "\\" + range[0].Date.Year + "_Weeks_" + WeekNumber.GetWeekNumber(range[0].Date) +
-                "-" + WeekNumber.GetWeekNumber(range[range.Count-1].Date) + ".png";
+                "-" + WeekNumber.GetWeekNumber(range[range.Count - 1].Date) + ".png";
             Debug.WriteLine("Saving to: " + filename);
             bmp.Save(filename, ImageFormat.Png);
+            return filename;
+        }
+        private void openImage(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                return;
+            }
+
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = filename;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+
+            Process p = new Process();
+            p.StartInfo = psi;
+            p.Start();
+        }
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            //pictureBox1.Enabled = false;
+            setAllBorders(BorderStyle.None);
+            string file = saveToFile();
+
+            if (cb_autoOpen.Checked)
+            {
+                openImage(file);
+            }
+
             this.Close();
         }
     }

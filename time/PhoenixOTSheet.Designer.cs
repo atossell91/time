@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.cb_autoOpen = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -60,7 +61,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(128, 415);
+            this.button1.Location = new System.Drawing.Point(10, 420);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -68,11 +69,25 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // cb_autoOpen
+            // 
+            this.cb_autoOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cb_autoOpen.AutoSize = true;
+            this.cb_autoOpen.Checked = true;
+            this.cb_autoOpen.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_autoOpen.Location = new System.Drawing.Point(660, 420);
+            this.cb_autoOpen.Name = "cb_autoOpen";
+            this.cb_autoOpen.Size = new System.Drawing.Size(129, 17);
+            this.cb_autoOpen.TabIndex = 2;
+            this.cb_autoOpen.Text = "Open file when saved";
+            this.cb_autoOpen.UseVisualStyleBackColor = true;
+            // 
             // PhoenixOTSheet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cb_autoOpen);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
             this.Name = "PhoenixOTSheet";
@@ -81,6 +96,7 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -89,5 +105,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox cb_autoOpen;
     }
 }
