@@ -666,10 +666,10 @@ namespace time
                 e.Handled = true;
                 raiseHorizontalArrowEvent(e);
             }
-            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+            else if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down/* || e.KeyCode == Keys.Enter*/)
             {
                 e.Handled = true;
-                //e.SuppressKeyPress = true;
+                e.SuppressKeyPress = true;
                 if (!cursorIsInbounds(cursorPos))
                 {
                     changeBackgroundColour(false);
