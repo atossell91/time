@@ -154,6 +154,7 @@
             this.b_March.TabIndex = 10;
             this.b_March.Text = "March";
             this.b_March.UseVisualStyleBackColor = true;
+            this.b_March.Click += new System.EventHandler(this.b_March_Click);
             // 
             // b_February
             // 

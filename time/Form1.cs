@@ -191,6 +191,11 @@ namespace time
             changeMonth(2);
         }
 
+        private void b_March_Click(object sender, EventArgs e)
+        {
+            changeMonth(3);
+        }
+
         private void Button1_Click(object sender, EventArgs e)
         {
             displayedRows.ClearRow();
