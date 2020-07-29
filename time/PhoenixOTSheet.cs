@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -191,17 +192,72 @@ namespace time
                 }
             }
         }
+        private Bitmap getBitmap()
+        {
+            Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            Rectangle r = new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height);
+            pictureBox1.DrawToBitmap(bmp, r);
+
+            return bmp;
+        }
+        private void printToFile()
+        {
+            Bitmap bmp = getBitmap();
+            String filename = Directory.GetCurrentDirectory() + "\\" + range[0].Date.Year + "_Weeks_" + WeekNumber.GetWeekNumber(range[0].Date) +
+                "-" + WeekNumber.GetWeekNumber(range[range.Count - 1].Date) + ".png";
+            Debug.WriteLine("Saving to: " + filename);
+            bmp.Save(filename, ImageFormat.Png);
+        }
+        private PaperSize GetPaperSize(PrinterSettings ps, PaperKind kind)
+        {
+            foreach(PaperSize p in ps.PaperSizes)
+            {
+                if (p.Kind == kind)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+        private Margins GetMargins(PrinterSettings ps)
+        {
+            float m = 20.0F;
+            float hm_x = ps.DefaultPageSettings.HardMarginX;
+            float hm_y = ps.DefaultPageSettings.HardMarginY;
+
+            int top = (int)(m > hm_y ? m - hm_y : 0);
+            int left = (int)(m > hm_x ? m - hm_x : 0);
+
+            return new Margins(left, (int)m, top, (int)m);
+        }
+        private void printPhysical()
+        {
+            PrinterSettings ps = new PrinterSettings();
+            ps.DefaultPageSettings.PaperSize = GetPaperSize(ps, PaperKind.Letter);
+            ps.DefaultPageSettings.Landscape = true;
+            ps.DefaultPageSettings.Margins = GetMargins(ps);
+
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += printSheet;
+            pd.PrinterSettings = ps;
+
+            PrintPreviewDialog ppd = new PrintPreviewDialog();
+            ppd.Document = pd;
+            ppd.ShowDialog();
+        }
+        private void printSheet(object sender, PrintPageEventArgs e)
+        {
+            Bitmap bmp = getBitmap();
+            e.Graphics.DrawImage(bmp, e.MarginBounds);
+        }
+
         private void Button1_Click(object sender, EventArgs e)
         {
             //pictureBox1.Enabled = false;
             setAllBorders(BorderStyle.None);
-            Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            Rectangle r = new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height);
-            pictureBox1.DrawToBitmap(bmp, r);
-            String filename = Directory.GetCurrentDirectory() + "\\" + range[0].Date.Year + "_Weeks_" + WeekNumber.GetWeekNumber(range[0].Date) +
-                "-" + WeekNumber.GetWeekNumber(range[range.Count-1].Date) + ".png";
-            Debug.WriteLine("Saving to: " + filename);
-            bmp.Save(filename, ImageFormat.Png);
+
+            printPhysical();
+
             this.Close();
         }
     }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -271,22 +272,28 @@ namespace time
 
             e.Graphics.DrawImage(img, r);*/
         }
-        private string printToFile()
+        private Bitmap getBitmap()
         {
-            string filename = "Washup_" + mainSheet.PeriodEnd.ToString("dd-MMMM-yyyy") + ".png";
-
             int h = pictureBox1.Height;
             int w = pictureBox1.Width;
 
             Bitmap bmp = new Bitmap(w, h);
 
-            Rectangle r = new Rectangle(0, 0, w, h);
+            Rectangle r = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
             pictureBox1.DrawToBitmap(bmp, r);
 
+            return bmp;
+        }
+        private void printToFile()
+        {
+            string filename = "Washup_" + mainSheet.PeriodEnd.ToString("dd-MMMM-yyyy") + ".png";
+
+            Bitmap bmp = getBitmap();
+
             bmp.Save(filename, ImageFormat.Png);
 
-            return filename;
+            openImage(filename);
         }
         private void openImage(string filename)
         {
@@ -303,15 +310,58 @@ namespace time
 
             p.Start();
         }
+        private PaperSize GetPageSize(PrinterSettings ps, PaperKind pk)
+        {
+            PaperSize p = null;
+
+            foreach (PaperSize size in ps.PaperSizes)
+            {
+                if (size.Kind == pk)
+                {
+                    p = size;
+                    break;
+                }
+            }
+
+            return p;
+        }
+        private void printPhysical()
+        {
+            PrinterSettings printerSettings = new PrinterSettings();
+
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += printPage;
+            pd.PrinterSettings = printerSettings;
+            pd.DefaultPageSettings = printerSettings.DefaultPageSettings;
+
+            pd.DefaultPageSettings.PaperSize = GetPageSize(printerSettings, PaperKind.Legal);
+            pd.OriginAtMargins = true;
+            pd.DefaultPageSettings.Margins = new Margins(20, 20, 20, 20);
+
+            PrintDialog pdiag = new PrintDialog();
+            pdiag.Document = pd;
+
+            PrintPreviewDialog ppd = new PrintPreviewDialog();
+            ppd.Document = pd;
+
+            //ppd.ShowDialog();
+            //*
+            if (pdiag.ShowDialog() == DialogResult.OK)
+            {
+                pd.Print();
+            }
+            //*/
+        }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            string file;
-            file = printToFile();
-            if (cb_openFile.Checked)
-            {
-                openImage(file);
-            }
+            //printToFile();
+            printPhysical();
+        }
+        private void printPage(object sender, PrintPageEventArgs e)
+        {
+            Bitmap bmp = getBitmap();
+            e.Graphics.DrawImage(bmp, e.MarginBounds);
         }
     }
 }
