@@ -225,6 +225,8 @@ namespace time
             float hm_x = ps.DefaultPageSettings.HardMarginX;
             float hm_y = ps.DefaultPageSettings.HardMarginY;
 
+            Debug.WriteLine("Hard Margins - X: " + hm_x.ToString() + ", Y: " + hm_y.ToString());
+
             int top = (int)(m > hm_y ? m - hm_y : 0);
             int left = (int)(m > hm_x ? m - hm_x : 0);
 

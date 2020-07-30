@@ -325,18 +325,30 @@ namespace time
 
             return p;
         }
+        private Margins GetMargins(PrinterSettings ps)
+        {
+            float m = 20.0F;
+            float hm_x = ps.DefaultPageSettings.HardMarginX;
+            float hm_y = ps.DefaultPageSettings.HardMarginY;
+
+            Debug.WriteLine("Hard Margins - X: " + hm_x.ToString() + ", Y: " + hm_y.ToString());
+
+            int top = (int)(m > hm_y ? m - hm_y : 0);
+            int left = (int)(m > hm_x ? m - hm_x : 0);
+
+            return new Margins(left, (int)m, top, (int)m);
+        }
         private void printPhysical()
         {
-            PrinterSettings printerSettings = new PrinterSettings();
+            PrinterSettings ps = new PrinterSettings();
+            ps.DefaultPageSettings.PaperSize = GetPageSize(ps, PaperKind.Legal);
+            ps.DefaultPageSettings.Margins = GetMargins(ps);
 
             PrintDocument pd = new PrintDocument();
             pd.PrintPage += printPage;
-            pd.PrinterSettings = printerSettings;
-            pd.DefaultPageSettings = printerSettings.DefaultPageSettings;
-
-            pd.DefaultPageSettings.PaperSize = GetPageSize(printerSettings, PaperKind.Legal);
             pd.OriginAtMargins = true;
-            pd.DefaultPageSettings.Margins = new Margins(20, 20, 20, 20);
+            pd.PrinterSettings = ps;
+
 
             PrintDialog pdiag = new PrintDialog();
             pdiag.Document = pd;
