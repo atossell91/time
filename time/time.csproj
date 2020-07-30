@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="4600_data.cs" />
+    <Compile Include="ArrowNavigators.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArrowNavigators.Designer.cs">
+      <DependentUpon>ArrowNavigators.cs</DependentUpon>
+    </Compile>
     <Compile Include="Box.cs" />
     <Compile Include="DateAndInfoSplash.cs">
       <SubType>Form</SubType>
@@ -120,6 +126,21 @@
     <Compile Include="row_interface_group.Designer.cs">
       <DependentUpon>row_interface_group.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sheet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SheetViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SheetViewer.Designer.cs">
+      <DependentUpon>SheetViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sheet_4600.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Sheet_PhoenixOT.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ShiftInformation.cs" />
     <Compile Include="TimeEntry.cs">
       <SubType>UserControl</SubType>
@@ -130,6 +151,9 @@
     <Compile Include="WeekNumber.cs" />
     <Compile Include="WordParser.cs" />
     <Compile Include="work_period.cs" />
+    <EmbeddedResource Include="ArrowNavigators.resx">
+      <DependentUpon>ArrowNavigators.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DateAndInfoSplash.resx">
       <DependentUpon>DateAndInfoSplash.cs</DependentUpon>
     </EmbeddedResource>
@@ -173,6 +197,9 @@
     <EmbeddedResource Include="row_interface_group.resx">
       <DependentUpon>row_interface_group.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SheetViewer.resx">
+      <DependentUpon>SheetViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TimeEntry.resx">
       <DependentUpon>TimeEntry.cs</DependentUpon>
     </EmbeddedResource>
@@ -190,8 +217,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="blank4600.png" />
     <Content Include="Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
-    <Resource Include="Resources\blank4600.png" />
+    <None Include="Resources\blank4600.png" />
     <Resource Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

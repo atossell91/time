@@ -245,10 +245,15 @@ namespace time
             DateTime rangeStart = getRangeStart(date);
             List<work_period> DayRange = getRange(rangeStart, 14);
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
-            PhoenixOTSheet sheet = new PhoenixOTSheet(name, DayRange);
-            sheet.ShowDialog();
+
+            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(name, DayRange);
+            List<Sheet> sheets = new List<Sheet>();
+            sheets.Add(sheet);
+
+            SheetViewer sv = new SheetViewer(sheets);
+            sv.ShowDialog();
         }
-        private data_4600 createWashup4600(DateTime d1, DateTime d2)
+        private List<data_4600> createWashup4600(DateTime d1, DateTime d2)
         {
             int days = (int)d2.Subtract(d1).TotalDays;
             List<work_period> periodCovered = getRange(d1, days);
@@ -258,17 +263,29 @@ namespace time
             string washupCode = "290";
             string washupMessage = "Article 60 - Washup time";
 
-            data_4600 sheet = new data_4600();
+            List<data_4600> dataSheets = new List<data_4600>();
+            dataSheets.Add(new data_4600());
+
+            int rowCount = 0;
+            int sheetCount = 0;
             foreach (work_period p in periodCovered)
             {
                 if (p.WashupTime)
                 {
-                    sheet.FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
+                    dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
                         washupCode, 0.0, washupHours, 0.0, 0.0, washupMessage);
+                    ++rowCount;
+
+                    if (rowCount > 15)
+                    {
+                        rowCount = 0;
+                        ++sheetCount;
+                        dataSheets.Add(new data_4600());
+                    }
                 }
             }
-            DateTime d = new DateTime(2020, 07, 24, 7, 9, 0);
-            return sheet;
+            //DateTime d = new DateTime(2020, 07, 24, 7, 9, 0);
+            return dataSheets;
         }
         private void Button2_Click(object sender, EventArgs e)
         {
@@ -291,10 +308,19 @@ namespace time
 
             drg.Dispose();
 
-            data_4600 sheet = createWashup4600(d1, d2);
+            List<data_4600> dataSheets = createWashup4600(d1, d2);
+            List <Sheet> wash = new List<Sheet>();
+            //wash.Add(new Sheet_4600(this.personInfo, sheet));
+            foreach (data_4600 d in dataSheets)
+            {
+                wash.Add(new Sheet_4600(this.personInfo, d));
+            }
 
-            Render_4600 viewSheet = new Render_4600(this.personInfo, sheet);
-            viewSheet.ShowDialog();
+            SheetViewer sv = new SheetViewer(wash);
+            sv.ShowDialog();
+
+            //Render_4600 viewSheet = new Render_4600(this.personInfo, sheet);
+            //viewSheet.ShowDialog();
         }
     }
 }

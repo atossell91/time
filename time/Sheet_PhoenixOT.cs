@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +9,7 @@ using System.Windows.Forms;
 
 namespace time
 {
-    public partial class PhoenixOTSheet : Form
+    public partial class Sheet_PhoenixOT : Sheet
     {
         private TextBox weekNo;
         private TextBox date;
@@ -38,7 +33,7 @@ namespace time
             tb.Location = location;
             tb.Font = new Font("Arial", fontSize);
 
-            pictureBox1.Controls.Add(tb);
+            this.Controls.Add(tb);
 
             return tb;
         }
@@ -82,7 +77,7 @@ namespace time
                 Point p1 = new Point(p1x, p1y);
                 Point p2 = new Point(p2x, p2y);
 
-                row[n] = createStandardTextBox(startPoint, STANDARD_FONT_SIZE);
+                row[n] = createStandardTextBox(startPoint, STANDARD_FONT_SIZE-4);
                 TextBox tb = row[n];
                 PageTools.CentreTextBox(tb, new Box(p1, p2));
                 tb.Text = range[n + rangeStart].Date.DayOfWeek.ToString() + ", " + range[n + rangeStart].Date.ToString("MMMM dd");
@@ -96,7 +91,7 @@ namespace time
             secondWeekDates = new TextBox[count];
             Size cellSize = PhoenixOTSheetDims.CellSize;
 
-            if (range.Count > count *2)
+            if (range.Count > count * 2)
             {
                 Debug.WriteLine("Range (" + range.Count + ") exceeds column count");
                 return;
@@ -108,31 +103,31 @@ namespace time
         private void CreateLabelGrid(ref TextBox[,] week, Point GridStart, Size CellSize,
             int NumColumns, int NumRows, int BorderSize)
         {
-            week = new TextBox[NumRows,NumColumns];
-            
+            week = new TextBox[NumRows, NumColumns];
+
             for (int y = 0; y < NumRows; ++y)
             {
-                for (int x =0; x < NumColumns; ++x)
+                for (int x = 0; x < NumColumns; ++x)
                 {
-                    int p1X = (GridStart.X + (CellSize.Width-1 + BorderSize) * x);
-                    int p2Y = (GridStart.Y + (CellSize.Height-1 + BorderSize) * y);
+                    int p1X = (GridStart.X + (CellSize.Width - 1 + BorderSize) * x);
+                    int p2Y = (GridStart.Y + (CellSize.Height - 1 + BorderSize) * y);
 
                     Point p1 = new Point(p1X, p2Y);
 
                     week[y, x] = createStandardTextBox(p1, STANDARD_FONT_SIZE);
                     PageTools.CentreTextBox(week[y, x], new Box(p1,
-                        new Point(p1.X + PhoenixOTSheetDims.CellSize.Width-1, p1.Y + PhoenixOTSheetDims.CellSize.Height-1)));
+                        new Point(p1.X + PhoenixOTSheetDims.CellSize.Width - 1, p1.Y + PhoenixOTSheetDims.CellSize.Height - 1)));
                 }
             }
         }
         private void addDataToGrid(ref TextBox[,] grid, int rangeStartIndex)
         {
-            for (int n =0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
+            for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
             {
                 int row = 0;
                 Debug.WriteLine("RangeStart: " + rangeStartIndex + " n: " + n);
-                double prems = range[rangeStartIndex + n/2].ShiftPremiums.TotalHours;
-                double ot = range[rangeStartIndex + n/2].Overtime.TotalHours;
+                double prems = range[rangeStartIndex + n / 2].ShiftPremiums.TotalHours;
+                double ot = range[rangeStartIndex + n / 2].Overtime.TotalHours;
                 if (prems > 0)
                 {
                     grid[row, n].Text = prems.ToString();
@@ -146,11 +141,18 @@ namespace time
                 }
             }
         }
-        public PhoenixOTSheet(string name, List<work_period> range)
+        public Sheet_PhoenixOT(string name, List<work_period> range)
         {
+            this.IsLandscape = true;
+            this.PaperType = System.Drawing.Printing.PaperKind.Letter;
+
+            this.Image = time.Properties.Resources.Phoenix_Inspectors_Weekly_OT_Template_With_Blank_Form;
+            this.SizeMode = PictureBoxSizeMode.AutoSize;
+            this.Location = new Point(0, 0);
+
             this.range = range;
 
-            InitializeComponent();
+            //InitializeComponent();
 
             weekNo = createStandardTextBox(PhoenixOTSheetDims.WeekInput.TopLeft, LARGE_FONT_SIZE);
             PageTools.CentreTextBox(weekNo, PhoenixOTSheetDims.WeekInput);
@@ -178,27 +180,19 @@ namespace time
             date.BorderStyle = b;
             name.BorderStyle = b;
 
-            for (int n =0; n < firstWeekDates.Length; ++n)
+            for (int n = 0; n < firstWeekDates.Length; ++n)
             {
                 firstWeekDates[n].BorderStyle = b;
                 secondWeekDates[n].BorderStyle = b;
             }
             for (int r = 0; r < PhoenixOTSheetDims.RowsPerGrid; ++r)
             {
-                for (int c =0; c < PhoenixOTSheetDims.ColumnsPerGrid; ++c)
+                for (int c = 0; c < PhoenixOTSheetDims.ColumnsPerGrid; ++c)
                 {
                     firstWeek[r, c].BorderStyle = b;
                     secondWeek[r, c].BorderStyle = b;
                 }
             }
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            //pictureBox1.Enabled = false;
-            setAllBorders(BorderStyle.None);
-
-            this.Close();
         }
     }
 }
