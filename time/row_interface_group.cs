@@ -27,8 +27,11 @@ namespace time
 
         public event KeyEventHandler KeyDownEvent;
         private void initRows()
+
+
         {
             int daysInMonth = DateTime.DaysInMonth(year, month);
+            Debug.WriteLine("ACTUAL DATE: " + periods[periods.Count - 1]);
             for (int n =0; n < daysInMonth; ++n)
             {
                 DateTime day = new DateTime(year, month, n + 1);
@@ -38,16 +41,18 @@ namespace time
                 int periodIndex = periods.BinarySearch(new work_period(day), work_period.CompareByDate());
                 if (periodIndex >= 0)
                 {
+                    Debug.WriteLine("Search succss");
                     work_period p = periods[periodIndex];
                     //periods.Add(p);
                     rowList.Add(new row_interface(p));
                 }
                 else
                 {
+                    Debug.WriteLine("Search fail");
                     periods.Add(new work_period(day));
                     rowList.Add(new row_interface(periods[periods.Count-1]));
                 }
-
+                periods.Sort(work_period.CompareByDate());
                 //Set row properties and events
                 //rowList[n].KeyDownEvent += row_interface_group_KeyDown;
                 rowList[n].Location = new Point(0, n * row_interface.rowHeight);

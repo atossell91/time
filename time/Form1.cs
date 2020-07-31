@@ -39,6 +39,10 @@ namespace time
                 {
                     wp.Add(period);
                 }
+                else
+                {
+                    Debug.WriteLine("Line parse failed: " + line);
+                }
             }
 
             wp.Sort(work_period.CompareByDate());
@@ -269,7 +273,7 @@ namespace time
         }
         private List<data_4600> createWashup4600(DateTime d1, DateTime d2)
         {
-            int days = (int)d2.Subtract(d1).TotalDays;
+            int days = (int)d2.Subtract(d1).TotalDays +1; //Added one to correct for last day not appearing
             List<work_period> periodCovered = getRange(d1, days);
 
 

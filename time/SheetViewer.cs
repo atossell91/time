@@ -123,8 +123,13 @@ namespace time
             pd.PrintPage += printAllSheets;
             pd.PrinterSettings = ps;
 
-            prepareSheetsForPrinting();
-            pd.Print();
+            PrintDialog pDiag = new PrintDialog();
+
+            if (pDiag.ShowDialog() == DialogResult.OK)
+            {
+                prepareSheetsForPrinting();
+                pd.Print();
+            }
             /*PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Document = pd;
             ppd.ShowDialog();*/
