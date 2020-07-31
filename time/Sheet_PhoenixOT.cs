@@ -194,5 +194,9 @@ namespace time
                 }
             }
         }
+        public override void PrepareForPrinting()
+        {
+            setAllBorders(BorderStyle.None);
+        }
     }
 }

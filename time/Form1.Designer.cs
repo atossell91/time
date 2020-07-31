@@ -192,9 +192,10 @@
             // l_MonthName
             // 
             this.l_MonthName.AutoSize = true;
-            this.l_MonthName.Location = new System.Drawing.Point(12, 9);
+            this.l_MonthName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l_MonthName.Location = new System.Drawing.Point(10, 10);
             this.l_MonthName.Name = "l_MonthName";
-            this.l_MonthName.Size = new System.Drawing.Size(35, 13);
+            this.l_MonthName.Size = new System.Drawing.Size(70, 25);
             this.l_MonthName.TabIndex = 13;
             this.l_MonthName.Text = "label1";
             // 

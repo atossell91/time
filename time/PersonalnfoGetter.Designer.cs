@@ -206,9 +206,9 @@
             // 
             this.mtb_PRI.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mtb_PRI.Location = new System.Drawing.Point(190, 130);
-            this.mtb_PRI.Mask = "00000000";
+            this.mtb_PRI.Mask = "000000000";
             this.mtb_PRI.Name = "mtb_PRI";
-            this.mtb_PRI.Size = new System.Drawing.Size(100, 29);
+            this.mtb_PRI.Size = new System.Drawing.Size(120, 29);
             this.mtb_PRI.TabIndex = 3;
             this.mtb_PRI.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_PRI.ValidatingType = typeof(int);

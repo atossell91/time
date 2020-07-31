@@ -104,6 +104,13 @@ namespace time
 
             return new Margins(left, (int)m, top, (int)m);
         }
+        private void prepareSheetsForPrinting()
+        {
+            foreach (Sheet s in sheets)
+            {
+                s.PrepareForPrinting();
+            }
+        }
         private void printPhysical()
         {
             printIndex = 0;
@@ -116,6 +123,7 @@ namespace time
             pd.PrintPage += printAllSheets;
             pd.PrinterSettings = ps;
 
+            prepareSheetsForPrinting();
             pd.Print();
             /*PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Document = pd;

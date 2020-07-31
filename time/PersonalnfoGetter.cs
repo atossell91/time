@@ -14,6 +14,8 @@ namespace time
 {
     public partial class PersonalnfoGetter : UserControl
     {
+        readonly WorkingDirectory MainDir = new WorkingDirectory("Time_Tracking");
+
         public PersonalInfo Info;
         public bool IsFilledOut = false;
 
@@ -27,7 +29,7 @@ namespace time
         public void SavePersonalInfoToFile()
         {
             string file = this.filename;
-            File.WriteAllText(file, Info.printInfo());
+            File.WriteAllText(MainDir.DirectoryPath + "\\" + file, Info.printInfo());
         }
         
         private bool loadFromFile(string filename)
@@ -138,7 +140,7 @@ namespace time
 
         private void PersonalnfoGetter_Load(object sender, EventArgs e)
         {
-            if (loadFromFile(this.filename))
+            if (loadFromFile(MainDir.DirectoryPath + "\\" + this.filename))
             {
                 tb_givenNames.Text = this.Info.GivenNames;
                 tb_Surname.Text = this.Info.Surname;

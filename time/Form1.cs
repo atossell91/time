@@ -14,6 +14,8 @@ namespace time
 {
     public partial class Form1 : Form
     {
+        private readonly WorkingDirectory MainDir;
+
         private List<work_period> wp;
         private int currentYear;
         private int currentMonth;
@@ -23,12 +25,12 @@ namespace time
 
         private void loadFromFile(string filepath)
         {
-            if (!File.Exists(filepath))
+            if (!System.IO.File.Exists(filepath))
             {
                 return;
             }
 
-            string[] lines = File.ReadAllLines(filepath);
+            string[] lines = System.IO.File.ReadAllLines(filepath);
 
             foreach (string line in lines)
             {
@@ -58,7 +60,7 @@ namespace time
         {
             wp.Sort(work_period.CompareByDate());
             Debug.WriteLine("Saving " + wp.Count + " records.");
-            File.WriteAllLines(filename, getDataToSave());
+            System.IO.File.WriteAllLines(MainDir.DirectoryPath + "\\" + filename, getDataToSave());
         }
         private int getFiscalYear(int yr)
         {
@@ -83,13 +85,29 @@ namespace time
         }
         public Form1()
         {
+            if (WorkingDirectory.RootDirectory() == "")
+            {
+                MessageBox.Show("No valid directories.", "Nowhere to go", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
             InitializeComponent();
+
+            MainDir = new WorkingDirectory("Time_Tracking");
+            if (!Directory.Exists(MainDir.DirectoryPath))
+            {
+                Debug.WriteLine("Creating directory at: " + MainDir.DirectoryPath);
+                Directory.CreateDirectory(MainDir.DirectoryPath);
+            }
+            else
+            {
+                Debug.WriteLine("Directory found at: " + MainDir.DirectoryPath);
+            }
 
             wp = new List<work_period>();
 
             promptForYear();
             filename = "data_" + currentYear + ".txt";
-            loadFromFile(filename);
+            loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
             currentMonth = DateTime.Now.Month;
             l_MonthName.Text = monthName(currentMonth);
@@ -113,7 +131,7 @@ namespace time
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            saveToFile(@"data.txt");
+            saveToFile(MainDir.DirectoryPath + "\\" + @"data.txt");
         }
         private string monthName(int month)
         {
@@ -220,18 +238,14 @@ namespace time
                 DateTime d = rangeStart.AddDays(n);
                 
                 work_period dateToFind = new work_period(d);
-                Debug.WriteLine("Looking up " + dateToFind.Date.ToString("yyyy-MM-dd"));
                 int dateIndex = wp.BinarySearch(dateToFind, work_period.CompareByDate());
 
-                Debug.Write("Searching for " + dateToFind.Date.ToString() + ". ");
                 if (dateIndex < 0)
                 {
-                    Debug.WriteLine("Search failed.");
                     outputRange.Add(new work_period(d));
                 }
                 else
                 {
-                    Debug.WriteLine("Search successful.");
                     outputRange.Add(wp[dateIndex]);
                 }
             }
@@ -321,6 +335,10 @@ namespace time
 
             //Render_4600 viewSheet = new Render_4600(this.personInfo, sheet);
             //viewSheet.ShowDialog();
+        }
+
+        private void tsm_AddShortcut_Click(object sender, EventArgs e)
+        {
         }
     }
 }

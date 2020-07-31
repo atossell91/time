@@ -150,7 +150,9 @@
     </Compile>
     <Compile Include="WeekNumber.cs" />
     <Compile Include="WordParser.cs" />
+    <Compile Include="WorkingDirectory.cs" />
     <Compile Include="work_period.cs" />
+    <Compile Include="WshShellClass.cs" />
     <EmbeddedResource Include="ArrowNavigators.resx">
       <DependentUpon>ArrowNavigators.cs</DependentUpon>
     </EmbeddedResource>
