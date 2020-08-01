@@ -31,7 +31,7 @@ namespace time
 
         {
             int daysInMonth = DateTime.DaysInMonth(year, month);
-            Debug.WriteLine("ACTUAL DATE: " + periods[periods.Count - 1]);
+            //Debug.WriteLine("ACTUAL DATE: " + periods[periods.Count - 1]);
             for (int n =0; n < daysInMonth; ++n)
             {
                 DateTime day = new DateTime(year, month, n + 1);

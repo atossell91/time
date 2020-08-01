@@ -33,6 +33,9 @@ namespace time
             InitializeComponent();
             arrowNavigators1.RightArrowClicked += NextSheet;
             arrowNavigators1.LeftArrowClicked += LastSheet;
+
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Size = new Size(panel1.Width, panel1.Height);
         }
         public SheetViewer(List<Sheet> s) : this()
         {
@@ -158,35 +161,20 @@ namespace time
             }
             pictureBox1.Image = img;
         }
-        private void anchorPicureBox()
-        {
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.Location = new Point(0, 0);
-            pictureBox1.Size = new Size(panel1.Width, panel1.Height);
-            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom |
-                AnchorStyles.Left | AnchorStyles.Right;
-        }
-        private void fullSizePictureBox()
-        {
-            pictureBox1.Location = new Point(0, 0);
-            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
-        }
-        private void scaleImage()
-        {
-            float val = ((float)nud_ScaleFactor.Value) / 100;
 
-            pictureBox1.Scale(new SizeF(val, val));
+        private void changePicureBoxSize()
+        {
 
-            this.Refresh();
+        }
+        private void resizePictureBox(int percentage)
+        {
+
         }
         private void EnterViewMode()
         {
             Bitmap bmp = sheets[currentSheet].RenderSheet();
 
             setPictureBoxImage(bmp);
-
-            fullSizePictureBox();
 
             sheets[currentSheet].Hide();
 
@@ -220,6 +208,7 @@ namespace time
 
             if(rb.Checked)
             {
+                Debug.WriteLine("Entering view mode.");
                 EnterViewMode();
             }
         }

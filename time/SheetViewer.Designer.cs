@@ -32,8 +32,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.rb_ViewMode = new System.Windows.Forms.RadioButton();
             this.rb_EditMode = new System.Windows.Forms.RadioButton();
+            this.rb_ViewMode = new System.Windows.Forms.RadioButton();
             this.nud_ScaleFactor = new System.Windows.Forms.NumericUpDown();
             this.arrowNavigators1 = new time.ArrowNavigators();
             this.panel1.SuspendLayout();
@@ -69,10 +69,13 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(10, 10);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(368, 217);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Size = new System.Drawing.Size(320, 180);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -86,6 +89,17 @@
             this.panel2.Size = new System.Drawing.Size(122, 40);
             this.panel2.TabIndex = 3;
             // 
+            // rb_EditMode
+            // 
+            this.rb_EditMode.AutoSize = true;
+            this.rb_EditMode.Location = new System.Drawing.Point(3, 20);
+            this.rb_EditMode.Name = "rb_EditMode";
+            this.rb_EditMode.Size = new System.Drawing.Size(73, 17);
+            this.rb_EditMode.TabIndex = 4;
+            this.rb_EditMode.Text = "Edit Mode";
+            this.rb_EditMode.UseVisualStyleBackColor = true;
+            this.rb_EditMode.CheckedChanged += new System.EventHandler(this.Rb_EditMode_CheckedChanged);
+            // 
             // rb_ViewMode
             // 
             this.rb_ViewMode.AutoSize = true;
@@ -98,17 +112,6 @@
             this.rb_ViewMode.Text = "View Mode";
             this.rb_ViewMode.UseVisualStyleBackColor = true;
             this.rb_ViewMode.CheckedChanged += new System.EventHandler(this.Rb_ViewMode_CheckedChanged);
-            // 
-            // rb_EditMode
-            // 
-            this.rb_EditMode.AutoSize = true;
-            this.rb_EditMode.Location = new System.Drawing.Point(3, 20);
-            this.rb_EditMode.Name = "rb_EditMode";
-            this.rb_EditMode.Size = new System.Drawing.Size(73, 17);
-            this.rb_EditMode.TabIndex = 4;
-            this.rb_EditMode.Text = "Edit Mode";
-            this.rb_EditMode.UseVisualStyleBackColor = true;
-            this.rb_EditMode.CheckedChanged += new System.EventHandler(this.Rb_EditMode_CheckedChanged);
             // 
             // nud_ScaleFactor
             // 
