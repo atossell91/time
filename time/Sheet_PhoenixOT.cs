@@ -11,6 +11,8 @@ namespace time
 {
     public partial class Sheet_PhoenixOT : Sheet
     {
+        private List<TextBox> textboxes;
+
         private TextBox weekNo;
         private TextBox date;
         private TextBox name;
@@ -26,6 +28,8 @@ namespace time
         private const int STANDARD_FONT_SIZE = 18;
         private const int LARGE_FONT_SIZE = 26;
 
+        private const int ScaleSubtraction = 8;
+
         private TextBox createStandardTextBox(Point location, int fontSize)
         {// 18 and 26
             TextBox tb = new TextBox();
@@ -33,6 +37,7 @@ namespace time
             tb.Location = location;
             tb.Font = new Font("Arial", fontSize);
 
+            textboxes.Add(tb);
             this.Controls.Add(tb);
 
             return tb;
@@ -143,6 +148,8 @@ namespace time
         }
         public Sheet_PhoenixOT(string name, List<work_period> range)
         {
+            textboxes = new List<TextBox>();
+
             this.IsLandscape = true;
             this.PaperType = System.Drawing.Printing.PaperKind.Letter;
 
@@ -172,6 +179,19 @@ namespace time
 
             addDataToGrid(ref firstWeek, 0);
             addDataToGrid(ref secondWeek, 7);
+
+        }
+        public void scaleTextBoxFont(float scaleFactor)
+        {
+            scaleFactor /= 2;
+            foreach (TextBox t in textboxes)
+            {
+                t.Font = new Font(t.Font.FontFamily.Name, (int)(t.Font.Height * scaleFactor));
+            }
+        }
+
+        private void Paint(object sender, PaintEventArgs e)
+        {
         }
 
         private void setAllBorders(BorderStyle b)

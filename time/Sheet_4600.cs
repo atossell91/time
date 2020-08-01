@@ -26,7 +26,9 @@ namespace time
             //labels = new Dictionary<string, Label>();
             this.SizeMode = PictureBoxSizeMode.AutoSize;
             this.Location = new Point(0, 0);
+
             this.Image = time.Properties.Resources.blank4600;
+
             personInfo = pInfo;
             mainSheet = sheet;
 

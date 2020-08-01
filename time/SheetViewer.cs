@@ -25,8 +25,8 @@ namespace time
             {
                 panel1.Controls.Add(p);
                 p.Hide();
+                p.SizeMode = PictureBoxSizeMode.StretchImage;
             }
-            sheets[0].Show();
         }
         private SheetViewer()
         {
@@ -41,6 +41,8 @@ namespace time
             arrowNavigators1.MaxNavValue = this.sheets.Count;
             
             initSheets();
+
+            sheets[0].Show();
         }
         private void updateSheet()
         {
@@ -144,6 +146,99 @@ namespace time
             if (++printIndex < sheets.Count)
             {
                 e.HasMorePages = true;
+            }
+        }
+        private void setPictureBoxImage(Image img)
+        {
+            if (pictureBox1.Image != null)
+            {
+                Image i = pictureBox1.Image;
+                pictureBox1.Image = null;
+                i.Dispose();
+            }
+            pictureBox1.Image = img;
+        }
+        private void anchorPicureBox()
+        {
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Size = new Size(panel1.Width, panel1.Height);
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom |
+                AnchorStyles.Left | AnchorStyles.Right;
+        }
+        private void fullSizePictureBox()
+        {
+            pictureBox1.Location = new Point(0, 0);
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+        }
+        private void scaleImage()
+        {
+            float val = ((float)nud_ScaleFactor.Value) / 100;
+
+            pictureBox1.Scale(new SizeF(val, val));
+
+            this.Refresh();
+        }
+        private void EnterViewMode()
+        {
+            Bitmap bmp = sheets[currentSheet].RenderSheet();
+
+            setPictureBoxImage(bmp);
+
+            fullSizePictureBox();
+
+            sheets[currentSheet].Hide();
+
+            pictureBox1.Show();
+
+            nud_ScaleFactor.Show();
+        }
+        private void EnterEditMode()
+        {
+
+            pictureBox1.Hide();
+            sheets[currentSheet].Show();
+
+            nud_ScaleFactor.Hide();
+
+            setPictureBoxImage(null);
+        }
+
+        private void SheetViewer_Load(object sender, EventArgs e)
+        {
+            Bitmap bmp = sheets[currentSheet].RenderSheet();
+            sheets[currentSheet].Hide();
+            pictureBox1.Image = bmp;
+            pictureBox1.Show();
+            this.Refresh();
+        }
+
+        private void Rb_ViewMode_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+
+            if(rb.Checked)
+            {
+                EnterViewMode();
+            }
+        }
+
+        private void Rb_EditMode_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+
+            if (rb.Checked)
+            {
+                EnterEditMode();
+            }
+        }
+
+        private void Nud_ScaleFactor_ValueChanged(object sender, EventArgs e)
+        {
+            if (rb_EditMode.Checked)
+            {
+                return;
             }
         }
     }
