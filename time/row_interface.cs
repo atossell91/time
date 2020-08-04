@@ -17,6 +17,7 @@ namespace time
         public event KeyEventHandler VerticalArrowDown;
         public event EventHandler InputRowSelected;
         public event EventHandler NewEntryAdded;
+        public event MouseEventHandler MouseWheelScroll;
 
         public const int rowHeight = 50;
         public const int rowWidth = 1200;
@@ -43,12 +44,17 @@ namespace time
             currentControl.Add(rtb_Comment);
         }
 
+        public row_interface() : this(new work_period(DateTime.Now))
+        {
+        }
         public row_interface(work_period p)
         {
             ++RowID;
             this.Date = p.Date;
             InitializeComponent();
             this.MouseWheel += row_interface_MouseWheel;
+            nud_overtime.MouseWheel += nud_MouseWheel;
+            nud_premiums.MouseWheel += nud_MouseWheel;
             this.HorizontalArrowDown += Parent_KeyDown;
             currentControl = new List<Control>();
             initControlsList();
@@ -90,7 +96,7 @@ namespace time
             int weekNum = WeekNumber.GetWeekNumber(date);
             l_dayOfMonth.Text = date.Day.ToString();
 
-            if (date.Day == 1 || date.DayOfWeek == 0)
+            if (date.Day == 1 || date.DayOfWeek == 0 || (string)this.Tag == "debug")
             {
                 l_weekNum.Text = weekNum.ToString();
             }
@@ -313,6 +319,15 @@ namespace time
         {
             CheckBox cb = (CheckBox)sender;
             period.WashupTime = cb.Checked;
+
+            if (cb.Checked)
+            {
+                cb.BackColor = SystemColors.ControlDark;
+            }
+            else
+            {
+                cb.BackColor = Control.DefaultBackColor;
+            }
         }
 
         public int Location_DayOfMonth
@@ -757,6 +772,10 @@ namespace time
         private void row_interface_Validated(object sender, EventArgs e)
         {
             keyPressed = false;
+        }
+        private void nud_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ((HandledMouseEventArgs)e).Handled = true;
         }
     }
 }

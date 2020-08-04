@@ -51,11 +51,12 @@
             0,
             131072});
             this.nud_overtime.InterceptArrowKeys = false;
-            this.nud_overtime.Location = new System.Drawing.Point(510, 10);
+            this.nud_overtime.Location = new System.Drawing.Point(450, 10);
             this.nud_overtime.Name = "nud_overtime";
             this.nud_overtime.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.nud_overtime.Size = new System.Drawing.Size(71, 32);
             this.nud_overtime.TabIndex = 2;
+            this.nud_overtime.Tag = "Overtime";
             this.nud_overtime.ValueChanged += new System.EventHandler(this.nud_overtime_ValueChanged);
             this.nud_overtime.Enter += new System.EventHandler(this.NumericUpDown_Enter);
             this.nud_overtime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
@@ -70,23 +71,26 @@
             0,
             131072});
             this.nud_premiums.InterceptArrowKeys = false;
-            this.nud_premiums.Location = new System.Drawing.Point(610, 10);
+            this.nud_premiums.Location = new System.Drawing.Point(550, 10);
             this.nud_premiums.Name = "nud_premiums";
             this.nud_premiums.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.nud_premiums.Size = new System.Drawing.Size(71, 32);
             this.nud_premiums.TabIndex = 3;
+            this.nud_premiums.Tag = "Shift Premium";
             this.nud_premiums.ValueChanged += new System.EventHandler(this.nud_premiums_ValueChanged);
             this.nud_premiums.Enter += new System.EventHandler(this.NumericUpDown_Enter);
             this.nud_premiums.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
             // 
             // cb_Washup
             // 
-            this.cb_Washup.AutoSize = true;
-            this.cb_Washup.Location = new System.Drawing.Point(710, 20);
+            this.cb_Washup.BackColor = System.Drawing.SystemColors.Control;
+            this.cb_Washup.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.cb_Washup.Location = new System.Drawing.Point(660, 10);
             this.cb_Washup.Name = "cb_Washup";
-            this.cb_Washup.Size = new System.Drawing.Size(15, 14);
+            this.cb_Washup.Size = new System.Drawing.Size(40, 30);
             this.cb_Washup.TabIndex = 4;
-            this.cb_Washup.UseVisualStyleBackColor = true;
+            this.cb_Washup.Tag = "Washup Time";
+            this.cb_Washup.UseVisualStyleBackColor = false;
             this.cb_Washup.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             this.cb_Washup.Enter += new System.EventHandler(this.CheckBox_Enter);
             this.cb_Washup.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Child_KeyDown);
@@ -95,39 +99,43 @@
             // 
             this.l_dayOfMonth.AutoSize = true;
             this.l_dayOfMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.l_dayOfMonth.Location = new System.Drawing.Point(170, 10);
+            this.l_dayOfMonth.Location = new System.Drawing.Point(140, 10);
             this.l_dayOfMonth.Name = "l_dayOfMonth";
             this.l_dayOfMonth.Size = new System.Drawing.Size(38, 25);
             this.l_dayOfMonth.TabIndex = 5;
+            this.l_dayOfMonth.Tag = "Day of Month";
             this.l_dayOfMonth.Text = "00";
             // 
             // l_weekNum
             // 
             this.l_weekNum.AutoSize = true;
             this.l_weekNum.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.l_weekNum.Location = new System.Drawing.Point(230, 10);
+            this.l_weekNum.Location = new System.Drawing.Point(190, 10);
             this.l_weekNum.Name = "l_weekNum";
             this.l_weekNum.Size = new System.Drawing.Size(36, 25);
             this.l_weekNum.TabIndex = 6;
+            this.l_weekNum.Tag = "Week Number";
             this.l_weekNum.Text = "00";
             // 
             // l_DayOfWeek
             // 
             this.l_DayOfWeek.AutoSize = true;
             this.l_DayOfWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.l_DayOfWeek.Location = new System.Drawing.Point(20, 10);
+            this.l_DayOfWeek.Location = new System.Drawing.Point(0, 10);
             this.l_DayOfWeek.Name = "l_DayOfWeek";
             this.l_DayOfWeek.Size = new System.Drawing.Size(127, 26);
             this.l_DayOfWeek.TabIndex = 7;
+            this.l_DayOfWeek.Tag = "Day of Week";
             this.l_DayOfWeek.Text = "Wednesday";
             // 
             // rtb_Comment
             // 
             this.rtb_Comment.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.rtb_Comment.Location = new System.Drawing.Point(750, 10);
+            this.rtb_Comment.Location = new System.Drawing.Point(730, 10);
             this.rtb_Comment.Name = "rtb_Comment";
-            this.rtb_Comment.Size = new System.Drawing.Size(430, 30);
+            this.rtb_Comment.Size = new System.Drawing.Size(330, 30);
             this.rtb_Comment.TabIndex = 8;
+            this.rtb_Comment.Tag = "Comment";
             this.rtb_Comment.Text = "";
             this.rtb_Comment.TextChanged += new System.EventHandler(this.Rtb_Comment_TextChanged);
             this.rtb_Comment.Enter += new System.EventHandler(this.RichTextBox_Enter);
@@ -136,11 +144,12 @@
             // mtb_Start
             // 
             this.mtb_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.mtb_Start.Location = new System.Drawing.Point(310, 10);
+            this.mtb_Start.Location = new System.Drawing.Point(250, 10);
             this.mtb_Start.Mask = "00:00";
             this.mtb_Start.Name = "mtb_Start";
             this.mtb_Start.Size = new System.Drawing.Size(70, 32);
             this.mtb_Start.TabIndex = 9;
+            this.mtb_Start.Tag = "Start Time";
             this.mtb_Start.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_Start.ValidatingType = typeof(System.DateTime);
             this.mtb_Start.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
@@ -151,11 +160,12 @@
             // mtb_End
             // 
             this.mtb_End.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.mtb_End.Location = new System.Drawing.Point(410, 10);
+            this.mtb_End.Location = new System.Drawing.Point(350, 10);
             this.mtb_End.Mask = "00:00";
             this.mtb_End.Name = "mtb_End";
             this.mtb_End.Size = new System.Drawing.Size(70, 32);
             this.mtb_End.TabIndex = 10;
+            this.mtb_End.Tag = "End Time";
             this.mtb_End.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_End.ValidatingType = typeof(System.DateTime);
             this.mtb_End.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
@@ -177,7 +187,7 @@
             this.Controls.Add(this.nud_premiums);
             this.Controls.Add(this.nud_overtime);
             this.Name = "row_interface";
-            this.Size = new System.Drawing.Size(1200, 52);
+            this.Size = new System.Drawing.Size(1083, 52);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.row_interface_KeyDown);
             this.Leave += new System.EventHandler(this.control_Leave);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.row_interface_MouseMove);

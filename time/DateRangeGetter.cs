@@ -16,11 +16,20 @@ namespace time
         public DateTime RangeStartDate { get; private set; }
         public DateTime RangeEndDate { get; private set; }
 
+        public DateTime GetFirstDayOfMonth(DateTime now)
+        {
+            return new DateTime(now.Year, now.Month, 1);
+        }
+        public DateTime GetLastDayOfMonth(DateTime now)
+        {
+            int lastDay = DateTime.DaysInMonth(now.Year, now.Month);
+            return new DateTime(now.Year, now.Month, lastDay);
+        }
         public DateRangeGetter()
         {
             InitializeComponent();
-            dateTimePicker1.Value = DateTime.Today.AddDays(-14.0);
-            dateTimePicker2.Value = DateTime.Today;
+            dateTimePicker1.Value = GetFirstDayOfMonth(DateTime.Now);
+            dateTimePicker2.Value = GetLastDayOfMonth(DateTime.Now);
         }
 
         private void DateTimePicker1_ValueChanged(object sender, EventArgs e)

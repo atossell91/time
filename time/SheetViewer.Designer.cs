@@ -35,6 +35,7 @@
             this.rb_EditMode = new System.Windows.Forms.RadioButton();
             this.rb_ViewMode = new System.Windows.Forms.RadioButton();
             this.nud_ScaleFactor = new System.Windows.Forms.NumericUpDown();
+            this.button1 = new System.Windows.Forms.Button();
             this.arrowNavigators1 = new time.ArrowNavigators();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -66,15 +67,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(776, 377);
             this.panel1.TabIndex = 2;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseUp);
+            this.panel1.Resize += new System.EventHandler(this.panel1_Resize);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(10, 10);
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox1.Enabled = false;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(320, 180);
+            this.pictureBox1.Size = new System.Drawing.Size(150, 130);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -116,14 +120,20 @@
             // nud_ScaleFactor
             // 
             this.nud_ScaleFactor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.nud_ScaleFactor.Location = new System.Drawing.Point(579, 409);
+            this.nud_ScaleFactor.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nud_ScaleFactor.Location = new System.Drawing.Point(590, 410);
+            this.nud_ScaleFactor.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
             this.nud_ScaleFactor.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.nud_ScaleFactor.Name = "nud_ScaleFactor";
-            this.nud_ScaleFactor.Size = new System.Drawing.Size(61, 20);
+            this.nud_ScaleFactor.Size = new System.Drawing.Size(61, 22);
             this.nud_ScaleFactor.TabIndex = 4;
             this.nud_ScaleFactor.Value = new decimal(new int[] {
             100,
@@ -131,6 +141,18 @@
             0,
             0});
             this.nud_ScaleFactor.ValueChanged += new System.EventHandler(this.Nud_ScaleFactor_ValueChanged);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(500, 400);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 30);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // arrowNavigators1
             // 
@@ -148,6 +170,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.nud_ScaleFactor);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -155,6 +178,7 @@
             this.Controls.Add(this.b_Print);
             this.Name = "SheetViewer";
             this.Text = "SheetViewer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.SheetViewer_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -170,10 +194,11 @@
         private System.Windows.Forms.Button b_Print;
         private ArrowNavigators arrowNavigators1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.RadioButton rb_EditMode;
         private System.Windows.Forms.RadioButton rb_ViewMode;
         private System.Windows.Forms.NumericUpDown nud_ScaleFactor;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button button1;
     }
 }

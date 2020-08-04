@@ -54,6 +54,12 @@
       <DependentUpon>ArrowNavigators.cs</DependentUpon>
     </Compile>
     <Compile Include="Box.cs" />
+    <Compile Include="Comment_Creator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Comment_Creator.Designer.cs">
+      <DependentUpon>Comment_Creator.cs</DependentUpon>
+    </Compile>
     <Compile Include="DateAndInfoSplash.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,6 +160,9 @@
     <Compile Include="work_period.cs" />
     <EmbeddedResource Include="ArrowNavigators.resx">
       <DependentUpon>ArrowNavigators.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comment_Creator.resx">
+      <DependentUpon>Comment_Creator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DateAndInfoSplash.resx">
       <DependentUpon>DateAndInfoSplash.cs</DependentUpon>

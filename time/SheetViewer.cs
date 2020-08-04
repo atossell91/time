@@ -19,6 +19,10 @@ namespace time
 
         private int printIndex;
 
+        private bool mouseDown = false;
+        private int mouseX;
+        private int mouseY;
+
         private void initSheets()
         {
             foreach(PictureBox p in sheets)
@@ -33,6 +37,7 @@ namespace time
             InitializeComponent();
             arrowNavigators1.RightArrowClicked += NextSheet;
             arrowNavigators1.LeftArrowClicked += LastSheet;
+            panel1.MouseWheel += panel1_MouseWheel;
 
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Size = new Size(panel1.Width, panel1.Height);
@@ -56,7 +61,15 @@ namespace time
 
             sheets[this.currentSheet].Hide();
             this.currentSheet = arrowNavigators1.NavigationIndex - 1;
-            sheets[this.currentSheet].Show();
+
+            if(rb_EditMode.Checked)
+            {
+                EnterEditMode();
+            }
+            else
+            {
+                EnterViewMode();
+            }
         }
         private void NextSheet(object sender, EventArgs e)
         {
@@ -69,6 +82,21 @@ namespace time
         private void B_Print_Click(object sender, EventArgs e)
         {
             printPhysical();
+        }
+        private void setScrollBars()
+        {
+            if (rb_ViewMode.Checked)
+            {
+                panel1.AutoScroll = false;
+                panel1.HorizontalScroll.Enabled = true;
+                panel1.HorizontalScroll.Visible = true;
+                panel1.VerticalScroll.Enabled = true;
+                panel1.VerticalScroll.Visible = true;
+            }
+            else
+            {
+                panel1.AutoScroll = true;
+            }
         }
 
         //Printing methods
@@ -161,30 +189,71 @@ namespace time
             }
             pictureBox1.Image = img;
         }
-
-        private void changePicureBoxSize()
-        {
-
-        }
         private void resizePictureBox(int percentage)
         {
+            int height = this.pictureBox1.Image.Height * percentage / 100;
+            int width = this.pictureBox1.Image.Width * percentage / 100;
 
+            this.pictureBox1.Size = new Size(width, height);
+        }
+        private void fitToPictureBoxToPanel()
+        {
+            if (pictureBox1.Image == null)
+            {
+                return;
+            }
+
+            int scaleFactor;
+
+            Debug.WriteLine("Form Size: " + this.Size.ToString());
+            Debug.WriteLine("Panel1 Size: " + panel1.Size.ToString());
+            if (panel1.Width < panel1.Height)
+            {
+                scaleFactor = panel1.Width * 100 / pictureBox1.Image.Width;
+            }
+            else
+            {
+                scaleFactor = panel1.Height * 100 / pictureBox1.Image.Height;
+            }
+
+            nud_ScaleFactor.Value = scaleFactor;
+        }
+        private void offsetPictureBox()
+        {
+            int xOffset = 0;
+            if (pictureBox1.Width < panel1.Width)
+            {
+                int xDiff = panel1.Width - pictureBox1.Width;
+                xOffset = (xDiff / 2);
+            }
+            int yOffset = 0;
+            if (pictureBox1.Height < panel1.Height)
+            {
+                int yDiff = panel1.Height - pictureBox1.Height;
+                yOffset = (yDiff / 2);
+            }
+
+            pictureBox1.Location = new Point(xOffset, yOffset);
         }
         private void EnterViewMode()
         {
+            sheets[currentSheet].Show();
             Bitmap bmp = sheets[currentSheet].RenderSheet();
+            sheets[currentSheet].Hide();
 
             setPictureBoxImage(bmp);
 
-            sheets[currentSheet].Hide();
+
+            fitToPictureBoxToPanel();
+            offsetPictureBox();
 
             pictureBox1.Show();
+
 
             nud_ScaleFactor.Show();
         }
         private void EnterEditMode()
         {
-
             pictureBox1.Hide();
             sheets[currentSheet].Show();
 
@@ -192,14 +261,9 @@ namespace time
 
             setPictureBoxImage(null);
         }
-
         private void SheetViewer_Load(object sender, EventArgs e)
         {
-            Bitmap bmp = sheets[currentSheet].RenderSheet();
-            sheets[currentSheet].Hide();
-            pictureBox1.Image = bmp;
-            pictureBox1.Show();
-            this.Refresh();
+            EnterViewMode();
         }
 
         private void Rb_ViewMode_CheckedChanged(object sender, EventArgs e)
@@ -216,7 +280,6 @@ namespace time
         private void Rb_EditMode_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-
             if (rb.Checked)
             {
                 EnterEditMode();
@@ -229,6 +292,51 @@ namespace time
             {
                 return;
             }
+            resizePictureBox((int)nud_ScaleFactor.Value);
+            //offsetPictureBox();
+            panel1.Refresh();
+        }
+        private void panel1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            nud_ScaleFactor.Value += e.Delta / SystemInformation.MouseWheelScrollDelta;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            fitToPictureBoxToPanel();
+            offsetPictureBox();
+        }
+
+        private void panel1_Resize(object sender, EventArgs e)
+        {
+            if (rb_ViewMode.Checked)
+            {
+                fitToPictureBoxToPanel();
+            }
+        }
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.mouseDown = true;
+        }
+        private void moveBox(int xMove, int yMove)
+        {
+            int xPos = this.pictureBox1.Location.X + xMove;
+            int yPos = this.pictureBox1.Location.Y + yMove;
+
+            pictureBox1.Location = new Point(xPos, yPos);
+        }
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.mouseDown = false;
+        }
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.mouseDown)
+            {
+                moveBox(e.X - mouseX, e.Y - mouseY);
+            }
+            mouseX = e.X;
+            mouseY = e.Y;
         }
     }
 }

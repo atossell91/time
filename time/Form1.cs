@@ -20,7 +20,8 @@ namespace time
         private int currentYear;
         private int currentMonth;
         private readonly string filename;
-        private row_interface_group displayedRows;
+        //private row_interface_group displayedRows;
+        //private row_interface_group row_interface_group1;
         private PersonalInfo personInfo;
 
         private void loadFromFile(string filepath)
@@ -114,14 +115,19 @@ namespace time
             loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
             currentMonth = DateTime.Now.Month;
-            l_MonthName.Text = monthName(currentMonth);
+
+            row_interface_group1.Year = this.currentYear;
+            row_interface_group1.Month = this.currentMonth;
+            row_interface_group1.WorkPeriodData = wp;
             
+            /*
             displayedRows = new row_interface_group(currentYear, currentMonth, wp);
-            displayedRows.Location = new Point(10, 10);
-            displayedRows.Size = new Size(this.Width-50, this.Height-100);
+            displayedRows.Location = new Point(10, 40);
+            displayedRows.Size = new Size(this.Width-50, this.Height-130);
             displayedRows.BorderStyle = BorderStyle.Fixed3D;
             displayedRows.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
             Controls.Add(displayedRows);
+            */
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -154,8 +160,7 @@ namespace time
         private void changeMonth(int month)
         {
             currentMonth = month;
-            l_MonthName.Text = monthName(currentMonth);
-            displayedRows.changeMonth(currentMonth);
+            row_interface_group1.selectMonth(currentMonth);
         }
 
         private void b_April_Click(object sender, EventArgs e)
@@ -220,7 +225,7 @@ namespace time
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            displayedRows.ClearRow();
+            row_interface_group1.ClearRow();
         }
         private DateTime getRangeStart(DateTime date)
         {
@@ -343,6 +348,13 @@ namespace time
 
         private void tsm_AddShortcut_Click(object sender, EventArgs e)
         {
+        }
+
+        private void addCommentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Comment_Creator cc = new Comment_Creator(personInfo);
+            cc.ShowDialog();
+            cc.Dispose();
         }
     }
 }

@@ -14,12 +14,42 @@ namespace time
     public partial class row_interface_group : UserControl
     {
         private int year;
+        public int Year
+        {
+            get
+            {
+                return this.year;
+            }
+            set
+            {
+                this.year = value;
+                l_Year.Text = this.year.ToString();
+            }
+        }
         private int month;
+        public int Month
+        {
+            get
+            {
+                return this.month;
+            }
+            set
+            {
+                this.month = value;
+                cb_Month.SelectedIndex = this.month-1;
+            }
+        }
 
         private List<work_period> periods;
+        public List<work_period> WorkPeriodData
+        {
+            set
+            {
+                this.periods = value;
+                selectMonth(this.month);
+            }
+        }
         private List<row_interface> rowList;
-
-        private int firstRowID;
 
         private int maxHeaderHeight;
 
@@ -41,14 +71,12 @@ namespace time
                 int periodIndex = periods.BinarySearch(new work_period(day), work_period.CompareByDate());
                 if (periodIndex >= 0)
                 {
-                    Debug.WriteLine("Search succss");
                     work_period p = periods[periodIndex];
                     //periods.Add(p);
                     rowList.Add(new row_interface(p));
                 }
                 else
                 {
-                    Debug.WriteLine("Search fail");
                     periods.Add(new work_period(day));
                     rowList.Add(new row_interface(periods[periods.Count-1]));
                 }
@@ -68,7 +96,7 @@ namespace time
                 return;
             }
             selectedRow = 0;
-            rowList[selectedRow].selectedControl = 0;
+            rowList[selectedRow].selectedControl = 1;
 
             rowList[selectedRow].currentControl[rowList[selectedRow].selectedControl].Focus();
         }
@@ -153,25 +181,35 @@ namespace time
             Controls.Add(lh_Washup);
             checkHeaderHeight(lh_Washup);
         }
-        public row_interface_group(int year, int month, List<work_period> list)
+        private void autoCreateHeaders()
+        {
+            row_interface dummy = new row_interface(new work_period(DateTime.Now));
+
+            foreach (Control c in dummy.Controls)
+            {
+                Label l = new Label();
+                l.Location = new Point(c.Location.X, 0);
+                l.Font = new Font("Arial", 12);
+                l.Text = (string)c.Tag;
+                int height = l.Height;
+                l.AutoSize = false;
+                l.Size = new Size(c.Size.Width, height);
+                l.TextAlign = ContentAlignment.MiddleCenter;
+                this.Controls.Add(l);
+                checkHeaderHeight(l);
+            }
+        }
+        public row_interface_group()
         {
             InitializeComponent();
-            this.year = year;
-            this.month = month;
 
-            periods = list;
+            periods = new List<work_period>();
+
             rowList = new List<row_interface>();
-
-            createHeaders();
-            initRows();
-            selectFirstRow();
-
-            panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Size = this.Size;
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel1.Location = new Point(0, maxHeaderHeight);
+            rowList.Add(sample_row_inteface);
         }
-        public void changeMonth(int m)
+
+        public void selectMonth(int m)
         {
             month = m;
             foreach(row_interface r in rowList)
@@ -180,8 +218,8 @@ namespace time
                 r.Dispose();
             }
             rowList.Clear();
-            this.Refresh();
             initRows();
+            selectFirstRow();
         }
         /*public row_interface_group(List<work_period> days)
         {
@@ -226,11 +264,12 @@ namespace time
         }
         private void ControlVerticalArrowPressed(object sender, KeyEventArgs e)
         {
+            Debug.WriteLine("Row interface group, vertical arrow");
             if (e.KeyCode == Keys.Up)
             {
                 changeSelectedRow(-1);
             }
-            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Enter)
+            else if (e.KeyCode == Keys.Down/* || e.KeyCode == Keys.Enter*/)
             {
                 changeSelectedRow(1);
             }
@@ -242,6 +281,14 @@ namespace time
         public void ClearRow()
         {
             rowList[selectedRow].clearRowInterface();
+        }
+
+        private void cb_Month_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Changing selected index");
+            ComboBox cmb = (ComboBox)cb_Month;
+            selectMonth(cmb.SelectedIndex + 1);
+            //selectFirstRow();
         }
     }
 }
