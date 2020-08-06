@@ -28,12 +28,15 @@ namespace time
             {
                 return "";
             }
-            while(index < line.Length && isSeparator(line[index]))
+
+            string output = "";
+
+            if (isSeparator(line[index]))
             {
                 ++index;
             }
-            string output = "";
-            while(index < line.Length && !isSeparator(line[index]))
+
+            while (index < line.Length && !isSeparator(line[index]))
             {
                 output += line[index];
                 ++index;
@@ -47,15 +50,6 @@ namespace time
             {
                 return null;
             }
-            /*
-            if (index == line.Length)
-            {
-                return null;
-            }
-            else
-            {
-                return output;
-            }*/
         }
         public void ResetIndex()
         {

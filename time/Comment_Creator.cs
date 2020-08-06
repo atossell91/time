@@ -42,7 +42,11 @@ namespace time
             output[4] = textBox1.Text;
             output[5] = line_separator;
 
-            File.AppendAllLines(filename, output);
+            try
+            {
+                File.AppendAllLines(filename, output);
+            }
+            catch (Exception e) { }
         }
         private void setName(bool isAnnon)
         {

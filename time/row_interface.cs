@@ -211,7 +211,7 @@ namespace time
         {
             return (end.Subtract(start)).Subtract(lunchbreak);
         }
-        private bool isDayOff(DateTime d)
+        public static bool isDayOff(DateTime d)
         {
             return (d.DayOfWeek == DayOfWeek.Saturday ||
                 d.DayOfWeek == DayOfWeek.Sunday);
@@ -776,6 +776,15 @@ namespace time
         private void nud_MouseWheel(object sender, MouseEventArgs e)
         {
             ((HandledMouseEventArgs)e).Handled = true;
+        }
+        private void MaskedTextBox_Click(object sender, EventArgs e)
+        {
+            MaskedTextBox mtb = (MaskedTextBox)sender;
+            string blankTimeMask = "  :";
+            if (mtb.Text == blankTimeMask)
+            {
+                mtb.Select(0, 1000);
+            }
         }
     }
 }

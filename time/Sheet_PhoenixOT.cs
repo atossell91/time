@@ -193,7 +193,6 @@ namespace time
         private void Paint(object sender, PaintEventArgs e)
         {
         }
-
         private void setAllBorders(BorderStyle b)
         {
             weekNo.BorderStyle = b;

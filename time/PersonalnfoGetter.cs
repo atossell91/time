@@ -155,5 +155,17 @@ namespace time
                 mtb_WorkPhone.Text = this.Info.WorkPhoneNumber;
             }
         }
+
+        private void MaskedTextBox_Enter(object sender, EventArgs e)
+        {
+            MaskedTextBox mtb = (MaskedTextBox)sender;
+            mtb.Select(0, 0);
+
+        }
+        private void MaskedTextBox_Click(object sender, EventArgs e)
+        {
+            MaskedTextBox mtb = (MaskedTextBox)sender;
+            mtb.Select(0, 0);
+        }
     }
 }

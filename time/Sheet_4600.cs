@@ -159,6 +159,8 @@ namespace time
             createFixedLabel(this.personInfo.Group, dims4600.Group);
             createFixedLabel(this.personInfo.Level, dims4600.Level);
             createFixedLabel(this.personInfo.WorkAddress, dims4600.Establishment);
+            createFixedLabel("NO", dims4600.CompressedHours);
+            createFixedLabel("6011", dims4600.PayList);
         }
         private void fillPeriodCovered()
         {

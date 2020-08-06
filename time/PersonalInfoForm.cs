@@ -124,5 +124,20 @@ namespace time
             saveToFile(this.filename);
             this.Close();
         }
+
+        private void Mtb_PRI_Enter(object sender, EventArgs e)
+        {
+        }
+
+        private void Mtb_PRI_Click(object sender, EventArgs e)
+        {
+            MaskedTextBox mtb = (MaskedTextBox)sender;
+            MessageBox.Show("Entered");
+        }
+
+        private void Tb_givenNames_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("NAme selected");
+        }
     }
 }

@@ -88,6 +88,16 @@ namespace time
 
             splash.Dispose();
         }
+        private void logProgramUse()
+        {
+            string name = personInfo.GivenNames + " " + personInfo.Surname;
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            try
+            {
+                File.AppendAllText("usage_log.txt", date + "," + name + Environment.NewLine);
+            }
+            catch (Exception e) { }
+        }
         public Form1()
         {
             if (WorkingDirectory.RootDirectory() == "")
@@ -111,6 +121,8 @@ namespace time
             wp = new List<work_period>();
 
             promptForYear();
+            logProgramUse();
+
             filename = "data_" + currentYear + ".txt";
             loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
@@ -284,7 +296,7 @@ namespace time
 
             double washupHours = 0.167;
             string washupCode = "290";
-            string washupMessage = "Article 60 - Washup time";
+            string washupMessage = "Art 60 - Washup";
 
             List<data_4600> dataSheets = new List<data_4600>();
             dataSheets.Add(new data_4600());
@@ -295,8 +307,16 @@ namespace time
             {
                 if (p.WashupTime)
                 {
-                    dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
-                        washupCode, 0.0, washupHours, 0.0, 0.0, washupMessage);
+                    if (row_interface.isDayOff(p.Date))
+                    {
+                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
+                            washupCode, 0.0, 0.0, 0.0, washupHours, washupMessage + " Sat OT");
+                    }
+                    else
+                    {
+                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
+                            washupCode, 0.0, washupHours, 0.0, 0.0, washupMessage);
+                    }
                     ++rowCount;
 
                     if (rowCount > 15)

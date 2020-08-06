@@ -189,6 +189,8 @@
             this.mtb_HomePhone.Size = new System.Drawing.Size(150, 29);
             this.mtb_HomePhone.TabIndex = 9;
             this.mtb_HomePhone.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.mtb_HomePhone.Click += new System.EventHandler(this.MaskedTextBox_Click);
+            this.mtb_HomePhone.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_HomePhone.Validated += new System.EventHandler(this.mtb_HomePhone_Validated);
             // 
             // mtb_WorkPhone
@@ -200,6 +202,8 @@
             this.mtb_WorkPhone.Size = new System.Drawing.Size(150, 29);
             this.mtb_WorkPhone.TabIndex = 8;
             this.mtb_WorkPhone.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.mtb_WorkPhone.Click += new System.EventHandler(this.MaskedTextBox_Click);
+            this.mtb_WorkPhone.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_WorkPhone.Validated += new System.EventHandler(this.mtb_WorkPhone_Validated);
             // 
             // mtb_PRI
@@ -212,6 +216,8 @@
             this.mtb_PRI.TabIndex = 3;
             this.mtb_PRI.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_PRI.ValidatingType = typeof(int);
+            this.mtb_PRI.Click += new System.EventHandler(this.MaskedTextBox_Click);
+            this.mtb_PRI.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_PRI.Validated += new System.EventHandler(this.mtb_PRI_Validated);
             // 
             // tb_HomeAddress

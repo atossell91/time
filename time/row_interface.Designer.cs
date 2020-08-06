@@ -152,6 +152,7 @@
             this.mtb_Start.Tag = "Start Time";
             this.mtb_Start.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_Start.ValidatingType = typeof(System.DateTime);
+            this.mtb_Start.Click += new System.EventHandler(this.MaskedTextBox_Click);
             this.mtb_Start.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_Start.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
             this.mtb_Start.Leave += new System.EventHandler(this.control_Leave);
@@ -168,6 +169,7 @@
             this.mtb_End.Tag = "End Time";
             this.mtb_End.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_End.ValidatingType = typeof(System.DateTime);
+            this.mtb_End.Click += new System.EventHandler(this.MaskedTextBox_Click);
             this.mtb_End.Enter += new System.EventHandler(this.MaskedTextBox_Enter);
             this.mtb_End.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mtb_Times_KeyDown);
             this.mtb_End.Leave += new System.EventHandler(this.control_Leave);

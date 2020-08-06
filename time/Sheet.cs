@@ -13,8 +13,10 @@ namespace time
     {
         public PaperKind PaperType = PaperKind.Letter;
         public bool IsLandscape = false;
-
-        public virtual void PrepareForPrinting() { }
+        
+        public virtual void PrepareForPrinting()
+        {
+        }
         public virtual Bitmap RenderSheet()
         {
             if (this.Image == null)

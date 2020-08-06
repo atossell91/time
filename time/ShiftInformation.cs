@@ -18,7 +18,7 @@ namespace time
         public readonly static TimeSpan ExportsEndDayShift = new TimeSpan(15, 0, 0);
         public readonly static TimeSpan ExportsLateEndDayShift = new TimeSpan(17, 0, 0);
 
-        public readonly static TimeSpan RegularStartNightShift = new TimeSpan(16, 49, 0);
+        public readonly static TimeSpan RegularStartNightShift = new TimeSpan(16, 50, 0);
         public readonly static TimeSpan LateStartNightShift = new TimeSpan(17, 35, 0);
         public readonly static TimeSpan ExportsStartNightShift = new TimeSpan(19, 0, 0);
         public readonly static TimeSpan ExportsEndNightShift = new TimeSpan(3, 0, 0);

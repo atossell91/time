@@ -108,6 +108,7 @@ namespace time
             Rectangle r = new Rectangle(0, 0, currSheet.Width, currSheet.Height);
 
             this.sheets[this.currentSheet].Hide();
+            currSheet.PrepareForPrinting();
             currSheet.Show();
             currSheet.DrawToBitmap(bmp, r);
             currSheet.Hide();
@@ -139,10 +140,6 @@ namespace time
         }
         private void prepareSheetsForPrinting()
         {
-            foreach (Sheet s in sheets)
-            {
-                s.PrepareForPrinting();
-            }
         }
         private void printPhysical()
         {
@@ -160,8 +157,9 @@ namespace time
 
             if (pDiag.ShowDialog() == DialogResult.OK)
             {
-                prepareSheetsForPrinting();
+                EnterEditMode();
                 pd.Print();
+                this.Close();
             }
             /*PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Document = pd;

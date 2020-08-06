@@ -213,6 +213,8 @@
             this.mtb_PRI.TabIndex = 3;
             this.mtb_PRI.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.mtb_PRI.ValidatingType = typeof(int);
+            this.mtb_PRI.Click += new System.EventHandler(this.Mtb_PRI_Click);
+            this.mtb_PRI.Enter += new System.EventHandler(this.Mtb_PRI_Enter);
             this.mtb_PRI.Validated += new System.EventHandler(this.mtb_PRI_Validated);
             // 
             // tb_HomeAddress
@@ -267,6 +269,7 @@
             this.tb_givenNames.Name = "tb_givenNames";
             this.tb_givenNames.Size = new System.Drawing.Size(310, 29);
             this.tb_givenNames.TabIndex = 0;
+            this.tb_givenNames.Click += new System.EventHandler(this.Tb_givenNames_Click);
             this.tb_givenNames.TextChanged += new System.EventHandler(this.tb_givenNames_TextChanged);
             // 
             // dtp_DOB
