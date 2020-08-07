@@ -82,7 +82,7 @@ namespace time
 
             this.nud_overtime.Value = new decimal(p.Overtime.TotalHours);
             this.nud_premiums.Value = new decimal(p.ShiftPremiums.TotalHours);
-            this.cb_Washup.Checked = p.WashupTime < TimeSpan.Zero;
+            this.cb_Washup.Checked = p.WashupTime > TimeSpan.Zero;
             this.rtb_Comment.Text = p.Comment;
         }
         private void showNuds(bool flag)

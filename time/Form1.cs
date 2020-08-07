@@ -308,19 +308,40 @@ namespace time
             {
                 if (p.WashupTime > TimeSpan.Zero)
                 {
+                    double washupMins = ShiftInformation.WashupTimeAmount.TotalMinutes;
                     if (row_interface.isDayOff(p.Date))
                     {
-                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
-                            washupCode, 0.0, 0.0, 0.0, washupHours, washupMessage + " Sat OT");
+                        Double totalWashup = p.WashupTime.TotalMinutes;
+                        double washup15, washup20 = 0.0;
+
+                            washup15 = washupMins - totalWashup;
+                            washup20 = totalWashup;
+
+                        if (washup15 > 0.0)
+                        {
+                            dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(washup15), ShiftInformation.LunchLength,
+                                washupCode, 0.0, washup15 / 60.0, 0.0, 0.0, washupMessage + " Wknd OT");
+                        }
+
+                        if(washup20 > 0.0)
+                        {
+                            dataSheets[sheetCount].FillNewRow(p.EndTime.AddMinutes(washup15), p.EndTime.AddMinutes(washup15 + washup20), ShiftInformation.LunchLength,
+                                washupCode, 0.0, 0.0, 0.0, washup20/60.0, washupMessage + " Wknd OT");
+                        }
+
+                        if (washup15 > 0.0 && washup20 > 0.0)
+                        {
+                            ++rowCount;
+                        }
                     }
                     else
                     {
-                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(10), ShiftInformation.LunchLength,
-                            washupCode, 0.0, washupHours, 0.0, 0.0, washupMessage);
+                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(washupMins), ShiftInformation.LunchLength,
+                            washupCode, 0.0, p.WashupTime.TotalMinutes/60.0, 0.0, 0.0, washupMessage);
                     }
                     ++rowCount;
 
-                    if (rowCount > 15)
+                    if (rowCount > 15) //Might not fill last row. The row management should be handled elsewhere
                     {
                         rowCount = 0;
                         ++sheetCount;
