@@ -31,5 +31,88 @@ namespace time
 
         public readonly static TimeSpan HourInterval = new TimeSpan(0, 15, 0);
         public readonly static TimeSpan HourIntervalCutoff = new TimeSpan(0, 7, 0);
+
+        public static DateTime CombineDateAndTime(DateTime date, TimeSpan time)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
+        }
+        public static TimeSpan LockTimeToInterval(TimeSpan time)
+        {
+            long totalTime = time.Ticks;
+            long increment = HourInterval.Ticks;
+            long cut = HourIntervalCutoff.Ticks;
+
+            long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
+            return new TimeSpan(correctedTime);
+        }
+
+        public static TimeSpan CalcHoursWorked(DateTime start, DateTime end, TimeSpan lunch)
+        {
+            return (end.Subtract(start)).Subtract(lunch);
+        }
+        public static TimeSpan CalcShiftPremium(DateTime start, DateTime end, Func<DateTime, bool> isDayOff)
+        {
+            if (start.Date == DateTime.MinValue ||
+                end.Date == DateTime.MinValue ||
+                isDayOff(start))
+            {
+                return TimeSpan.Zero;
+            }
+
+            TimeSpan hoursWorked = CalcHoursWorked(start, end, LunchLength);
+            TimeSpan halfPoint = new TimeSpan(hoursWorked.Ticks / 2);
+
+            if (start.TimeOfDay >= NightShiftCutoff)
+            {
+                return CalcHoursWorked(start, end, LunchLength);
+            }
+            else if (start.TimeOfDay.Add(halfPoint) > NightShiftCutoff)
+            {
+                return CalcHoursWorked(CombineDateAndTime(start, NightShiftCutoff),
+                    end, LunchLength);
+            }
+
+            return TimeSpan.Zero;
+        }
+        public static TimeSpan CalcWashupTime(DateTime start, DateTime end, TimeSpan lunch)
+        {
+            TimeSpan washup = CalcHoursWorked(start, end.AddMinutes(WashupTimeAmount.TotalMinutes), lunch).Subtract(ShiftLength);
+
+            if (washup < TimeSpan.Zero)
+            {
+                return TimeSpan.Zero;
+            }
+            else if (washup > WashupTimeAmount)
+            {
+                return WashupTimeAmount;
+            }
+            else
+            {
+                return washup;
+            }
+        }
+        public static TimeSpan CalcOvertime(DateTime start, DateTime end, Func<DateTime, bool> isDayOff)
+        {
+
+            if (start.Date == DateTime.MinValue.Date || end.Date == DateTime.MinValue.Date)
+            {
+                return TimeSpan.Zero;
+            }
+
+            TimeSpan hoursWorked = CalcHoursWorked(start, end, LunchLength);
+
+            if (hoursWorked > ShiftLength && !isDayOff(start))
+            {
+                return hoursWorked.Subtract(ShiftLength);
+            }
+            else if (hoursWorked > ShiftLength)
+            {
+                return hoursWorked;
+            }
+            else
+            {
+                return TimeSpan.Zero;
+            }
+        }
     }
 }

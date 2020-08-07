@@ -32,6 +32,7 @@ namespace time
             }
 
             string[] lines = System.IO.File.ReadAllLines(filepath);
+            Fixer_Functions.SAVEBACKUPFILE(filepath, lines, "washup_data_type");
 
             foreach (string line in lines)
             {
@@ -305,7 +306,7 @@ namespace time
             int sheetCount = 0;
             foreach (work_period p in periodCovered)
             {
-                if (p.WashupTime)
+                if (p.WashupTime > TimeSpan.Zero)
                 {
                     if (row_interface.isDayOff(p.Date))
                     {

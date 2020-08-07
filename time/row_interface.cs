@@ -82,7 +82,7 @@ namespace time
 
             this.nud_overtime.Value = new decimal(p.Overtime.TotalHours);
             this.nud_premiums.Value = new decimal(p.ShiftPremiums.TotalHours);
-            this.cb_Washup.Checked = p.WashupTime;
+            this.cb_Washup.Checked = p.WashupTime < TimeSpan.Zero;
             this.rtb_Comment.Text = p.Comment;
         }
         private void showNuds(bool flag)
@@ -141,10 +141,6 @@ namespace time
             //*/
         }
 
-        private DateTime combineDateAndTime(DateTime date, TimeSpan time)
-        {
-            return new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
-        }
         private void changeStartTime(DateTime t)
         {
             period.StartTime = t;
@@ -181,10 +177,10 @@ namespace time
             period.ShiftPremiums = t;
             nud_premiums.Value = new decimal(period.ShiftPremiums.Hours);
         }
-        private void changeWashupTime(bool t)
+        private void changeWashupTime(TimeSpan t)
         {
             period.WashupTime = t;
-            cb_Washup.Checked = t;
+            cb_Washup.Checked = period.WashupTime > TimeSpan.Zero;
         }
         private void changeComment(string txt)
         {
@@ -197,7 +193,7 @@ namespace time
             changeEndTime(DateTime.MinValue);
             changeOvertime(TimeSpan.Zero);
             changePremiums(TimeSpan.Zero);
-            changeWashupTime(false);
+            changeWashupTime(TimeSpan.Zero);
             changeComment("");
         }
         private TimeSpan decimalToTimeSpan(double num)
@@ -207,10 +203,6 @@ namespace time
 
             return new TimeSpan(hours, minutes, 0);
         }
-        private TimeSpan calcHoursWorked(DateTime start, DateTime end, TimeSpan lunchbreak)
-        {
-            return (end.Subtract(start)).Subtract(lunchbreak);
-        }
         public static bool isDayOff(DateTime d)
         {
             return (d.DayOfWeek == DayOfWeek.Saturday ||
@@ -218,80 +210,11 @@ namespace time
         }
         private TimeSpan calcOvertime()
         {
-            DateTime start = period.StartTime;
-            DateTime end = period.EndTime;
-
-            if (start.Date == DateTime.MinValue.Date || end.Date == DateTime.MinValue.Date)
-            {
-                return TimeSpan.Zero;
-            }
-
-            TimeSpan hoursWorked = calcHoursWorked(start, end, ShiftInformation.LunchLength);
-
-            if (hoursWorked > ShiftInformation.ShiftLength && !isDayOff(Date))
-            {
-                return hoursWorked.Subtract(ShiftInformation.ShiftLength);
-            }
-            else if (hoursWorked > ShiftInformation.ShiftLength)
-            {
-                return hoursWorked;
-            }
-            else
-            {
-                return TimeSpan.Zero;
-            }
-        }
-        private TimeSpan lockToInterval(TimeSpan time, TimeSpan interval,TimeSpan cutoff)
-        {
-            long totalTime = time.Ticks;
-            long increment = interval.Ticks;
-            long cut = cutoff.Ticks;
-
-            long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
-            return new TimeSpan(correctedTime);
-        }
-        private TimeSpan calcOvertime(TimeSpan interval, TimeSpan cutoff)
-        {
-            return lockToInterval(calcOvertime(), interval, cutoff);
+            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcOvertime(period.StartTime, period.EndTime, isDayOff));
         }
         private TimeSpan calcShiftPremium()
         {
-
-            DateTime start = period.StartTime;
-            DateTime end = period.EndTime;
-
-            if (start.Date == DateTime.MinValue ||
-                end.Date == DateTime.MinValue ||
-                isDayOff(Date))
-            {
-                return TimeSpan.Zero;
-            }
-
-            TimeSpan hoursWorked = calcHoursWorked(start, end, ShiftInformation.LunchLength);
-            TimeSpan halfPoint = new TimeSpan(hoursWorked.Ticks / 2);
-
-            if (start.TimeOfDay >= ShiftInformation.NightShiftCutoff)
-            {
-                return calcHoursWorked(start, end, ShiftInformation.LunchLength);
-            }
-            else if (start.TimeOfDay.Add(halfPoint) > ShiftInformation.NightShiftCutoff)
-            {
-                return calcHoursWorked(combineDateAndTime(period.StartTime, ShiftInformation.NightShiftCutoff),
-                    end, ShiftInformation.LunchLength);
-            }
-
-            return TimeSpan.Zero;
-        }
-        private TimeSpan calcShiftPremium(TimeSpan interval, TimeSpan cutoff)
-        {
-            return lockToInterval(calcShiftPremium(), interval, cutoff);
-        }
-        private bool calcWashupTime()
-        {
-            return calcHoursWorked(period.StartTime, period.EndTime, ShiftInformation.LunchLength) >= ShiftInformation.ShiftLength
-                && period.EndTime.TimeOfDay != ShiftInformation.ExportsEndDayShift
-                && period.EndTime.TimeOfDay != ShiftInformation.ExportsLateEndDayShift
-                && period.EndTime.TimeOfDay != ShiftInformation.ExportsEndNightShift;
+            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime, isDayOff));
         }
         private void nud_overtime_ValueChanged(object sender, EventArgs e)
         {
@@ -318,7 +241,7 @@ namespace time
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
-            period.WashupTime = cb.Checked;
+            //period.WashupTime = cb.Checked;
 
             if (cb.Checked)
             {
@@ -507,7 +430,7 @@ namespace time
             {
                 return false;
             }
-            changeStartTime(combineDateAndTime(period.Date, guessStartTime(period.EndTime)));
+            changeStartTime(ShiftInformation.CombineDateAndTime(period.Date, guessStartTime(period.EndTime)));
             return true;
         }
         private void checkEndTime()
@@ -539,11 +462,16 @@ namespace time
         }
         private void updateOvertime()
         {
-            nud_overtime.Value = new Decimal(calcOvertime(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+            nud_overtime.Value = new Decimal(calcOvertime().TotalHours);
         }
         private void updateShiftPremiums()
         {
-            nud_premiums.Value = new Decimal(calcShiftPremium(ShiftInformation.HourInterval, ShiftInformation.HourIntervalCutoff).TotalHours);
+            nud_premiums.Value = new Decimal(calcShiftPremium().TotalHours);
+        }
+        private void updateWashup()
+        {
+            period.WashupTime = ShiftInformation.CalcWashupTime(period.StartTime, period.EndTime, ShiftInformation.LunchLength);
+            cb_Washup.Checked = period.WashupTime > TimeSpan.Zero;
         }
         private void mtb_Start_Validating(object sender, CancelEventArgs e)
         {
@@ -561,7 +489,7 @@ namespace time
                 }
                 Debug.WriteLine("TS:" + ts.ToString());
                 mtb.Text = ts.ToString();
-                changeStartTime(combineDateAndTime(Date, ts));
+                changeStartTime(ShiftInformation.CombineDateAndTime(Date, ts));
             }
             else
             {
@@ -570,7 +498,7 @@ namespace time
             checkTimes();
             updateOvertime();
             updateShiftPremiums();
-            cb_Washup.Checked = calcWashupTime();
+            updateWashup();
         }
         private void mtb_End_Validating(object sender, CancelEventArgs e) //NEED TO ENSURE CHANGES TO OT, PREMIUMS AND WASHUP ARE REFLECTED IN DATASOURCE!!!
         {
@@ -586,13 +514,13 @@ namespace time
                 {
                     return;
                 }
-                changeEndTime(combineDateAndTime(Date, ts));
+                changeEndTime(ShiftInformation.CombineDateAndTime(Date, ts));
                 tryAutoSetStartTime();
                 checkEndTime();
                 checkTimes();
                 updateOvertime();
                 updateShiftPremiums();
-                cb_Washup.Checked = calcWashupTime();
+                updateWashup();
             }
         }
         private void MaskedTextBox_Enter(object sender, EventArgs e)

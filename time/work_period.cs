@@ -75,9 +75,9 @@ namespace time
             }
         }
 
-        private bool washupTime;
+        private TimeSpan washupTime;
         
-        public bool WashupTime
+        public TimeSpan WashupTime
         {
             get
             {
@@ -101,7 +101,7 @@ namespace time
                 this.comment = value;
             }
         }
-       
+
         /*
         //Booleans determining whether a field is modifiable or not. If true, the field
         // can be modified with it's setter.
@@ -129,10 +129,10 @@ namespace time
             this.endTime = DateTime.MinValue;
             this.overtime = TimeSpan.Zero;
             this.shiftPremiums = TimeSpan.Zero;
-            this.WashupTime = false;
+            this.WashupTime = TimeSpan.Zero;
         }
         private work_period(DateTime d, DateTime s, DateTime e,
-            TimeSpan o, TimeSpan sp, bool w, string com)
+            TimeSpan o, TimeSpan sp, TimeSpan w, string com)
         {
             this.Date = d;
             this.StartTime = s;
@@ -151,17 +151,20 @@ namespace time
             DateTime end;
             TimeSpan ot;
             TimeSpan premium;
-            bool wash;
+            TimeSpan wash = TimeSpan.Zero; //Leave unitialized after removing fixer function
             string comment;
 
-            string str = "";
             if (DateTime.TryParse(scanner.NextWord(), out fixedDate) &&
                 DateTime.TryParse(scanner.NextWord(), out start) &&
                 DateTime.TryParse(scanner.NextWord(), out end) &&
                 TimeSpan.TryParse(scanner.NextWord(), out ot) &&
-                TimeSpan.TryParse(scanner.NextWord(), out premium) &&
-                bool.TryParse((str = scanner.NextWord()), out wash))
+                TimeSpan.TryParse(scanner.NextWord(), out premium) 
+                //&& TimeSpan.TryParse((str = scanner.NextWord()), out wash) //Uncomment after deleting fixer function
+                )
             {
+
+                Fixer_Functions._CORRECT_WASHUP(start, end, ref wash, scanner.NextWord()); //Fixer function. Delete once all save data is up-to-date
+
                 comment = scanner.NextWord();
                 result = new work_period(fixedDate, start, end, ot, premium, wash, comment);
                 return true;

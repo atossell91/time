@@ -79,6 +79,7 @@
       <DependentUpon>date_name_getter.cs</DependentUpon>
     </Compile>
     <Compile Include="dims4600.cs" />
+    <Compile Include="Fixer_Functions.cs" />
     <Compile Include="Number_Getter.cs">
       <SubType>Form</SubType>
     </Compile>
