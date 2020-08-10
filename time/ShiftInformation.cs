@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,10 @@ namespace time
             return new TimeSpan(correctedTime);
         }
 
+        public static bool IsDayOff(DateTime d)
+        {
+            return d.DayOfWeek == DayOfWeek.Sunday;
+        }
         public static TimeSpan CalcHoursWorked(DateTime start, DateTime end, TimeSpan lunch)
         {
             return (end.Subtract(start)).Subtract(lunch);
@@ -105,7 +110,7 @@ namespace time
             {
                 return hoursWorked.Subtract(ShiftLength);
             }
-            else if (hoursWorked > ShiftLength)
+            else if (isDayOff(start))
             {
                 return hoursWorked;
             }

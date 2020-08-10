@@ -23,7 +23,12 @@ namespace time
         private TextBox[,] firstWeek;
         private TextBox[,] secondWeek;
 
-        private List<work_period> range;
+        //private List<work_period> codes;
+        private List<PremiumCode> codes;
+        private DateTime startDate;
+        private PersonalInfo pInfo;
+
+        public readonly static string[] ValidCodes = {"055", "260" };
 
         private const int STANDARD_FONT_SIZE = 18;
         private const int LARGE_FONT_SIZE = 26;
@@ -44,21 +49,21 @@ namespace time
         }
         private void FillDateAndWeek()
         {
-            if (range == null || range.Count == 0)
+            if (codes == null || codes.Count == 0)
             {
                 return;
             }
 
-            DateTime start = range[0].Date;
-            DateTime end = range[range.Count - 1].Date;
+            DateTime start = this.startDate;
+            //DateTime end = this.startDate.AddDays(14.0);
 
             int startWeek = WeekNumber.GetWeekNumber(start);
-            int endWeek = WeekNumber.GetWeekNumber(end);
+            int endWeek = startWeek + 1;
 
             weekNo.Text = startWeek.ToString() + " & " + endWeek.ToString();
 
             string dateFormat = "yyyy-MM-dd";
-            date.Text = start.ToString(dateFormat) + " - " + end.ToString(dateFormat);
+            date.Text = start.ToString(dateFormat) + " - " + start.AddDays(13.0).ToString(dateFormat);
         }
         private void FillName(string str_name)
         {
@@ -67,7 +72,7 @@ namespace time
 
             name.Text = str_name;
         }
-        private void fillDateRow(ref TextBox[] row, Point startPoint, int rangeStart)
+        private void fillDateRow(ref TextBox[] row, Point startPoint, DateTime startDate)
         {
             Size cellSize = PhoenixOTSheetDims.CellSize;
             int count = 7;
@@ -85,7 +90,7 @@ namespace time
                 row[n] = createStandardTextBox(startPoint, STANDARD_FONT_SIZE-4);
                 TextBox tb = row[n];
                 PageTools.CentreTextBox(tb, new Box(p1, p2));
-                tb.Text = range[n + rangeStart].Date.DayOfWeek.ToString() + ", " + range[n + rangeStart].Date.ToString("MMMM dd");
+                tb.Text = startDate.AddDays(n).ToString("dddd, MMMM dd");
             }
         }
         private void FillIndividualDates()
@@ -96,14 +101,14 @@ namespace time
             secondWeekDates = new TextBox[count];
             Size cellSize = PhoenixOTSheetDims.CellSize;
 
-            if (range.Count > count * 2)
+            if (codes.Count > count * 2)
             {
-                Debug.WriteLine("Range (" + range.Count + ") exceeds column count");
+                Debug.WriteLine("Range (" + codes.Count + ") exceeds column count");
                 return;
             }
 
-            fillDateRow(ref firstWeekDates, PhoenixOTSheetDims.TableOneDatesStart, 0);
-            fillDateRow(ref secondWeekDates, PhoenixOTSheetDims.TableTwoDatesStart, 7);
+            fillDateRow(ref firstWeekDates, PhoenixOTSheetDims.TableOneDatesStart, this.startDate);
+            fillDateRow(ref secondWeekDates, PhoenixOTSheetDims.TableTwoDatesStart, this.startDate.AddDays(7.0));
         }
         private void CreateLabelGrid(ref TextBox[,] week, Point GridStart, Size CellSize,
             int NumColumns, int NumRows, int BorderSize)
@@ -125,29 +130,63 @@ namespace time
                 }
             }
         }
-        private void addDataToGrid(ref TextBox[,] grid, int rangeStartIndex)
+        private int findFirstDateInstance(DateTime d, List<PremiumCode> c)
         {
+            int index = c.BinarySearch(new PremiumCode(String.Empty, d.Date), PremiumCode.compareByStartDate());
+            Debug.WriteLine("INDEX: " + index);
+
+            if (index < 0)
+            {
+                return index;
+            }
+
+            for (; index > 0 && c[index-1].StartDate.Date == d.Date; --index) ;
+            Debug.WriteLine("FINAL INDEX: " + index);
+
+            return index;
+        }
+        private bool isValidCode(PremiumCode c)
+        {
+            return Array.FindIndex(ValidCodes, (x) => x == c.Code) >= 0;
+        }
+        private List<PremiumCode> GetPremiumCodes(DateTime d)
+        {
+            List<PremiumCode> outputCodes = new List<PremiumCode>();
+            codes.Sort(PremiumCode.compareByStartDateAndCode());
+
+            int index = findFirstDateInstance(d.Date, codes);
+            for (int m = index; m >= 0 && m < codes.Count && codes[m].StartDate.Date == d.Date; ++m)
+            {
+                if (isValidCode(codes[m]))
+                {
+                    outputCodes.Add(codes[m]);
+                }
+            }
+            return outputCodes;
+        }
+        private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate)
+        {
+            DateTime d = tableStartDate;
             for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
             {
                 int row = 0;
-                Debug.WriteLine("RangeStart: " + rangeStartIndex + " n: " + n);
-                double prems = range[rangeStartIndex + n / 2].ShiftPremiums.TotalHours;
-                double ot = range[rangeStartIndex + n / 2].Overtime.TotalHours;
-                if (prems > 0)
+                List<PremiumCode> pcodes = GetPremiumCodes(d);
+                Debug.WriteLine(d.ToString() + ", number of codes: " + pcodes.Count);
+
+                foreach (PremiumCode c in pcodes)
                 {
-                    grid[row, n].Text = prems.ToString();
-                    grid[row, n + 1].Text = "055";
+                    grid[row, n].Text = c.Hours.TotalHours.ToString();
+                    grid[row, n + 1].Text = c.Code;
                     ++row;
                 }
-                if (ot > 0)
-                {
-                    grid[row, n].Text = ot.ToString();
-                    grid[row, n + 1].Text = "260";
-                }
+                d = d.AddDays(1.0);
             }
         }
-        public Sheet_PhoenixOT(string name, List<work_period> range)
+        public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate)
         {
+            this.pInfo = info;
+            this.startDate = startDate;
+
             textboxes = new List<TextBox>();
 
             this.IsLandscape = true;
@@ -157,7 +196,7 @@ namespace time
             this.SizeMode = PictureBoxSizeMode.AutoSize;
             this.Location = new Point(0, 0);
 
-            this.range = range;
+            this.codes = range;
 
             //InitializeComponent();
 
@@ -168,7 +207,7 @@ namespace time
             PageTools.CentreTextBox(date, PhoenixOTSheetDims.GlobalDate);
 
             FillDateAndWeek();
-            FillName(name);
+            FillName(pInfo.GivenNames + " " + pInfo.Surname);
 
             FillIndividualDates();
 
@@ -177,8 +216,8 @@ namespace time
             CreateLabelGrid(ref secondWeek, PhoenixOTSheetDims.TableTwoStart, PhoenixOTSheetDims.CellSize,
                 PhoenixOTSheetDims.ColumnsPerGrid, PhoenixOTSheetDims.RowsPerGrid, PhoenixOTSheetDims.BorderWidth);
 
-            addDataToGrid(ref firstWeek, 0);
-            addDataToGrid(ref secondWeek, 7);
+            addDataToGrid(ref firstWeek, startDate);
+            addDataToGrid(ref secondWeek, startDate.AddDays(7.0));
 
         }
         public void scaleTextBoxFont(float scaleFactor)

@@ -18,6 +18,8 @@ namespace time
         public static readonly Point TableOneDatesStart = new Point(226, 291);
         public static readonly Point TableTwoDatesStart = new Point(226, 685);
 
+        public static readonly int DayWidth = CellSize.Width * 2 + BorderWidth * 2;
+
         public static readonly Point TableOneStart = new Point(226, 372);
         public static readonly Point TableTwoStart = new Point(226, 763);
 

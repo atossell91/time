@@ -279,10 +279,17 @@ namespace time
             //DateTime date = DateTime.Now;
 
             DateTime rangeStart = getRangeStart(date);
-            List<work_period> DayRange = getRange(rangeStart, 14);
+            List<work_period> DayRange = getRange(rangeStart.AddDays(-1.0), 15);
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
-            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(name, DayRange);
+            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange);
+
+            Debug.WriteLine(outCodes.Count + " codes found.");
+            foreach(PremiumCode c in outCodes)
+            {
+                Debug.WriteLine(c.ToString());
+            }
+           Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart);
             List<Sheet> sheets = new List<Sheet>();
             sheets.Add(sheet);
 

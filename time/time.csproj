@@ -54,6 +54,7 @@
       <DependentUpon>ArrowNavigators.cs</DependentUpon>
     </Compile>
     <Compile Include="Box.cs" />
+    <Compile Include="CodeChecker.cs" />
     <Compile Include="Comment_Creator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +113,7 @@
       <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
     </Compile>
     <Compile Include="PhoenixOTSheetDims.cs" />
+    <Compile Include="PremiumCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PersonalInfo.cs" />
