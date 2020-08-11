@@ -55,10 +55,34 @@ namespace time
         public string Code { get; private set; }
         public DateTime StartDate = DateTime.MinValue;
         public DateTime EndDate = DateTime.MinValue;
-        public TimeSpan Hours = TimeSpan.Zero;
+
+        public TimeSpan[] hours;
+        public const int HOURS_ARR_SIZE = 4;
+
+        enum HoursMultiplier
+        {
+            X100, X150, X175, X200
+        }
+        void SetArrayHours(TimeSpan hrs, HoursMultiplier index)
+        {
+            hours[(int)index] = hrs;
+        }
+
+        public TimeSpan Hours
+        {
+            get
+            {
+                return hours.Aggregate((x, y) => x + y);
+            }
+            set
+            {
+                hours[(int)HoursMultiplier.X150] = value;
+            }
+        }
 
         public PremiumCode(string code, DateTime start)
         {
+            this.hours = new TimeSpan[HOURS_ARR_SIZE];
             this.Code = code;
             this.StartDate = start;
         }

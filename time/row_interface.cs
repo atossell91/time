@@ -245,10 +245,12 @@ namespace time
 
             if (cb.Checked)
             {
+                changeWashupTime(ShiftInformation.CalcWashupTime(this.period.StartTime, this.period.EndTime, ShiftInformation.LunchLength));
                 cb.BackColor = SystemColors.ControlDark;
             }
             else
             {
+                changeWashupTime(TimeSpan.Zero);
                 cb.BackColor = Control.DefaultBackColor;
             }
         }
