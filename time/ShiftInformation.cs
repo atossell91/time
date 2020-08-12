@@ -49,7 +49,11 @@ namespace time
 
         public static bool IsDayOff(DateTime d)
         {
-            return d.DayOfWeek == DayOfWeek.Sunday;
+            return d.DayOfWeek == DayOfWeek.Saturday || IsStatOrSunday(d);
+        }
+        public static bool IsStatOrSunday(DateTime d)
+        {
+
         }
         public static TimeSpan CalcHoursWorked(DateTime start, DateTime end, TimeSpan lunch)
         {
@@ -81,6 +85,10 @@ namespace time
         }
         public static TimeSpan CalcWashupTime(DateTime start, DateTime end, TimeSpan lunch)
         {
+            if (IsDayOff(start))
+            {
+                return ShiftInformation.WashupTimeAmount;
+            }
             TimeSpan washup = CalcHoursWorked(start, end.AddMinutes(WashupTimeAmount.TotalMinutes), lunch).Subtract(ShiftLength);
 
             if (washup < TimeSpan.Zero)

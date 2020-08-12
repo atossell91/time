@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace time
         public static List<PremiumCode> CheckCodes(List<work_period> inputPeriods)
         {
             List<PremiumCode> outputCodes = new List<PremiumCode>();
+
             foreach (Code_Interface code in CodeChecker.ComputableCodes)
             {
                 outputCodes.AddRange(code.GenerateCodes(inputPeriods));
@@ -29,16 +31,11 @@ namespace time
         {
             public readonly static string DEFAULT_CODE = "260";
 
-            private List<PremiumCode> outputCodes = new List<PremiumCode>();
+            //private List<PremiumCode> outputCodes = new List<PremiumCode>();
 
-            public Code260()
+            private void findAndAddHours(PremiumCode pc, List<PremiumCode> outputCodes)
             {
-                this.outputCodes = new List<PremiumCode>();
-            }
-
-            private void findAndAddHours(PremiumCode pc)
-            {
-                //outputCodes.Sort(PremiumCode.compareByStartDate());
+                outputCodes.Sort(PremiumCode.compareByStartDate());
                 int index = outputCodes.BinarySearch(pc, PremiumCode.compareByStartDate());
                 
                 if (index >= 0)
@@ -53,7 +50,7 @@ namespace time
             }
             public List<PremiumCode> GenerateCodes(List<work_period> wp)
             {
-
+                List<PremiumCode> outputCodes = new List<PremiumCode>();
                 for (int n = 0; n < wp.Count; ++n)
                 {
                     work_period p = wp[n];
@@ -70,15 +67,17 @@ namespace time
                         p.EndTime.Date == nextDay.Date)
                     {
                         pc.Hours = p.Overtime - p.EndTime.TimeOfDay;
+                        Debug.WriteLine("SAT HOURS: " + pc.Hours.TotalHours);
                         PremiumCode holidayOT = new PremiumCode(DEFAULT_CODE, nextDay);
                         holidayOT.Hours = p.EndTime.TimeOfDay;
-                        findAndAddHours(holidayOT);
+                        Debug.WriteLine("SUN HOURS: " + holidayOT.Hours.TotalHours);
+                        findAndAddHours(holidayOT, outputCodes);
                     }
                     else
                     {
                         pc.Hours = p.Overtime;
                     }
-                    findAndAddHours(pc);
+                    findAndAddHours(pc, outputCodes);
                 }
 
                 return outputCodes;
@@ -106,8 +105,22 @@ namespace time
         }
         public class Code290 : Code_Interface
         {
+            public readonly static string DEFAULT_CODE = "290";
             public List<PremiumCode> GenerateCodes(List<work_period> wp)
             {
+                for (int n =0; n < wp.Count; ++n)
+                {
+                    work_period p = wp[n];
+                    
+                    if (p.WashupTime <= TimeSpan.Zero)
+                    {
+                        continue;
+                    }
+
+                    DateTime nextDay = p.Date.AddDays(1.0);
+
+
+                }
                 return new List<PremiumCode>();
             }
         }

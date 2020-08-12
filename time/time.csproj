@@ -151,6 +151,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ShiftInformation.cs" />
+    <Compile Include="StatHoliday.cs" />
     <Compile Include="TimeEntry.cs">
       <SubType>UserControl</SubType>
     </Compile>

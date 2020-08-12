@@ -280,6 +280,7 @@ namespace time
 
             DateTime rangeStart = getRangeStart(date);
             List<work_period> DayRange = getRange(rangeStart.AddDays(-1.0), 15);
+
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
             List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange);
