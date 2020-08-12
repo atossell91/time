@@ -46,24 +46,21 @@ namespace time
             long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);
         }
-
-        public static bool IsDayOff(DateTime d)
+        public static bool IsRestDay(DateTime d)
         {
-            return d.DayOfWeek == DayOfWeek.Saturday || IsStatOrSunday(d);
-        }
-        public static bool IsStatOrSunday(DateTime d)
-        {
-
+            return (d.DayOfWeek == DayOfWeek.Saturday ||
+                d.DayOfWeek == DayOfWeek.Sunday);
         }
         public static TimeSpan CalcHoursWorked(DateTime start, DateTime end, TimeSpan lunch)
         {
             return (end.Subtract(start)).Subtract(lunch);
         }
-        public static TimeSpan CalcShiftPremium(DateTime start, DateTime end, Func<DateTime, bool> isDayOff)
+        public static TimeSpan CalcShiftPremium(DateTime start, DateTime end)
         {
             if (start.Date == DateTime.MinValue ||
                 end.Date == DateTime.MinValue ||
-                isDayOff(start))
+                IsRestDay(start) ||
+                StatHoliday.IsStatDay(start))
             {
                 return TimeSpan.Zero;
             }
@@ -85,7 +82,8 @@ namespace time
         }
         public static TimeSpan CalcWashupTime(DateTime start, DateTime end, TimeSpan lunch)
         {
-            if (IsDayOff(start))
+            if (ShiftInformation.IsRestDay(start) ||
+                StatHoliday.IsStatDay(start))
             {
                 return ShiftInformation.WashupTimeAmount;
             }
@@ -104,7 +102,7 @@ namespace time
                 return washup;
             }
         }
-        public static TimeSpan CalcOvertime(DateTime start, DateTime end, Func<DateTime, bool> isDayOff)
+        public static TimeSpan CalcOvertime(DateTime start, DateTime end)
         {
 
             if (start.Date == DateTime.MinValue.Date || end.Date == DateTime.MinValue.Date)
@@ -114,11 +112,11 @@ namespace time
 
             TimeSpan hoursWorked = CalcHoursWorked(start, end, LunchLength);
 
-            if (hoursWorked > ShiftLength && !isDayOff(start))
+            if (hoursWorked > ShiftLength && (IsRestDay(start) || StatHoliday.IsStatDay(start)))
             {
                 return hoursWorked.Subtract(ShiftLength);
             }
-            else if (isDayOff(start))
+            else if (IsRestDay(start) || StatHoliday.IsStatDay(start))
             {
                 return hoursWorked;
             }

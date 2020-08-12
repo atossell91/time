@@ -59,11 +59,11 @@ namespace time
         public TimeSpan[] hours;
         public const int HOURS_ARR_SIZE = 4;
 
-        enum HoursMultiplier
+        public enum HoursMultiplier
         {
             X100, X150, X175, X200
         }
-        void SetArrayHours(TimeSpan hrs, HoursMultiplier index)
+        public void SetArrayHours(TimeSpan hrs, HoursMultiplier index)
         {
             hours[(int)index] = hrs;
         }

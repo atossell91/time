@@ -203,18 +203,13 @@ namespace time
 
             return new TimeSpan(hours, minutes, 0);
         }
-        public static bool isDayOff(DateTime d)
-        {
-            return (d.DayOfWeek == DayOfWeek.Saturday ||
-                d.DayOfWeek == DayOfWeek.Sunday);
-        }
         private TimeSpan calcOvertime()
         {
-            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcOvertime(period.StartTime, period.EndTime, isDayOff));
+            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcOvertime(period.StartTime, period.EndTime));
         }
         private TimeSpan calcShiftPremium()
         {
-            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime, isDayOff));
+            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime));
         }
         private void nud_overtime_ValueChanged(object sender, EventArgs e)
         {

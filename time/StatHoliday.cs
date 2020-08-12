@@ -122,10 +122,6 @@ namespace time
 
         public static DateTime AdjustHolidayDate(DateTime hol)
         {
-            if (hol.Date == BoxingDay(hol.Year).Date)
-            {
-                return AdjustHolidayDate(ChristmasDay(hol.Year)).AddDays(1.0);
-            }
 
             DateTime adjustedDate = hol;
 
@@ -138,7 +134,13 @@ namespace time
                 adjustedDate = hol.AddDays(1.0);
             }
 
-            return hol;
+            if (hol.Date == BoxingDay(hol.Year) &&
+                adjustedDate == AdjustHolidayDate(ChristmasDay(hol.Year)))
+            {
+                return adjustedDate.AddDays(1.0);
+            }
+
+            return adjustedDate;
         }
 
         public static List<DateTime> GetAllHolidays(int yr)
@@ -158,6 +160,12 @@ namespace time
             hols.Add(AdjustHolidayDate(BoxingDay(yr)));
 
             return hols;
+        }
+        public static bool IsStatDay(DateTime d)
+        {
+            List<DateTime> stats = GetAllHolidays(d.Year);
+
+            return stats.Exists((x) => d.Date == x.Date);
         }
     }
 }

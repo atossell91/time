@@ -63,7 +63,7 @@ namespace time
                     {
                         continue;
                     }
-                    else if (ShiftInformation.IsDayOff(nextDay) &&
+                    else if ((nextDay.DayOfWeek == DayOfWeek.Sunday || StatHoliday.IsStatDay(nextDay)) &&
                         p.EndTime.Date == nextDay.Date)
                     {
                         pc.Hours = p.Overtime - p.EndTime.TimeOfDay;
@@ -108,6 +108,8 @@ namespace time
             public readonly static string DEFAULT_CODE = "290";
             public List<PremiumCode> GenerateCodes(List<work_period> wp)
             {
+                List<PremiumCode> outputCodes = new List<PremiumCode>();
+
                 for (int n =0; n < wp.Count; ++n)
                 {
                     work_period p = wp[n];
@@ -120,8 +122,21 @@ namespace time
                     DateTime nextDay = p.Date.AddDays(1.0);
 
 
+                    DateTime washupEnd = p.EndTime.Add(ShiftInformation.WashupTimeAmount);
+
+                    if((nextDay.DayOfWeek == DayOfWeek.Sunday || StatHoliday.IsStatDay(nextDay)) && 
+                        washupEnd.Date == nextDay.Date)
+                    {
+                        DateTime start = new DateTime(washupEnd.Year, washupEnd.Month, washupEnd.Day,
+                            0, 0, 0);
+
+                        PremiumCode doubleWash = new PremiumCode(DEFAULT_CODE, start);
+                        doubleWash.EndDate = washupEnd;
+                        doubleWash.SetArrayHours(washupEnd.TimeOfDay, PremiumCode.HoursMultiplier.X200);
+                    }
+
                 }
-                return new List<PremiumCode>();
+                return outputCodes;
             }
         }
     }
