@@ -162,6 +162,12 @@
     <Compile Include="WordParser.cs" />
     <Compile Include="WorkingDirectory.cs" />
     <Compile Include="work_period.cs" />
+    <Compile Include="Yearly_Holiday_Viewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Yearly_Holiday_Viewer.Designer.cs">
+      <DependentUpon>Yearly_Holiday_Viewer.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ArrowNavigators.resx">
       <DependentUpon>ArrowNavigators.cs</DependentUpon>
     </EmbeddedResource>
@@ -216,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TimeEntry.resx">
       <DependentUpon>TimeEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Yearly_Holiday_Viewer.resx">
+      <DependentUpon>Yearly_Holiday_Viewer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

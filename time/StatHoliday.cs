@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,7 @@ namespace time
         public static DateTime VictoriaDay(int year)
         {
             DateTime day = new DateTime(year, 5, 24);
-            for (;
-                day.DayOfWeek != DayOfWeek.Monday; day.AddDays(-1.0));
+            for (;day.DayOfWeek != DayOfWeek.Monday; day = day.AddDays(-1.0));
 
             return day;
         }
@@ -32,7 +32,7 @@ namespace time
         {
             DateTime d = new DateTime(year, 09, 01);
 
-            for (; d.DayOfWeek != DayOfWeek.Monday; d.AddDays(1.0)) ;
+            for (; d.DayOfWeek != DayOfWeek.Monday; d = d.AddDays(1.0)) ;
 
             return d;
         }
@@ -41,7 +41,7 @@ namespace time
             DateTime day = new DateTime(year, 10, 1);
 
             int monCount = 0;
-            for (; monCount < 2 && day.Day < DateTime.DaysInMonth(year, 10); day.AddDays(1.0))
+            for (; monCount < 2 && day.Day < DateTime.DaysInMonth(year, 10); day = day.AddDays(1.0))
             {
                 if (day.DayOfWeek == DayOfWeek.Monday)
                 {
@@ -68,7 +68,7 @@ namespace time
             public int day;
             public int month;
 
-            public monthDay(int d, int m)
+            public monthDay(int m, int d)
             {
                 day = d;
                 month = m;
@@ -111,7 +111,7 @@ namespace time
             DateTime easter = Easter(year);
 
             DateTime date = easter.AddDays(1.0);
-            for (; date.DayOfWeek != DayOfWeek.Sunday; date.AddDays(1.0)) ;
+            for (; date.DayOfWeek != DayOfWeek.Sunday; date = date.AddDays(1.0)) ;
 
             return date;
         }

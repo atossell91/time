@@ -66,7 +66,9 @@ namespace time
         {
             wp.Sort(work_period.CompareByDate());
             Debug.WriteLine("Saving " + wp.Count + " records.");
-            System.IO.File.WriteAllLines(MainDir.DirectoryPath + "\\" + filename, getDataToSave());
+
+            string outputfile = MainDir.DirectoryPath + "\\" + filename;
+            System.IO.File.WriteAllLines(outputfile, getDataToSave());
         }
         private int getFiscalYear(int yr)
         {
@@ -124,15 +126,18 @@ namespace time
             promptForYear();
             logProgramUse();
 
-            filename = "data_" + currentYear + ".txt";
+            this.filename = "data_" + this.currentYear.ToString() + ".txt";
             loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
             currentMonth = DateTime.Now.Month;
 
             row_interface_group1.Year = this.currentYear;
+
             row_interface_group1.Month = this.currentMonth;
+
             row_interface_group1.WorkPeriodData = wp;
-            
+
+
             /*
             displayedRows = new row_interface_group(currentYear, currentMonth, wp);
             displayedRows.Location = new Point(10, 40);
@@ -145,7 +150,6 @@ namespace time
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -317,7 +321,7 @@ namespace time
                 if (p.WashupTime > TimeSpan.Zero)
                 {
                     double washupMins = ShiftInformation.WashupTimeAmount.TotalMinutes;
-                    if (row_interface.isDayOff(p.Date))
+                    if (ShiftInformation.IsRestDay(p.Date) || StatHoliday.IsStatDay(p.Date))
                     {
                         Double totalWashup = p.WashupTime.TotalMinutes;
                         double washup15, washup20 = 0.0;
@@ -405,6 +409,12 @@ namespace time
             Comment_Creator cc = new Comment_Creator(personInfo);
             cc.ShowDialog();
             cc.Dispose();
+        }
+
+        private void viewStatuatoryHolidaysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Yearly_Holiday_Viewer yhv = new Yearly_Holiday_Viewer(this.currentYear);
+            yhv.ShowDialog();
         }
     }
 }

@@ -35,6 +35,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.addCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.row_interface_group1 = new time.row_interface_group();
+            this.viewStatuatoryHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,7 +85,8 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addCommentToolStripMenuItem});
+            this.addCommentToolStripMenuItem,
+            this.viewStatuatoryHolidaysToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
             this.toolStripMenuItem1.Text = "Settings";
@@ -92,7 +94,7 @@
             // addCommentToolStripMenuItem
             // 
             this.addCommentToolStripMenuItem.Name = "addCommentToolStripMenuItem";
-            this.addCommentToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.addCommentToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.addCommentToolStripMenuItem.Text = "Add Comment";
             this.addCommentToolStripMenuItem.Click += new System.EventHandler(this.addCommentToolStripMenuItem_Click);
             // 
@@ -100,9 +102,18 @@
             // 
             this.row_interface_group1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.row_interface_group1.Location = new System.Drawing.Point(16, 30);
+            this.row_interface_group1.Month = 0;
             this.row_interface_group1.Name = "row_interface_group1";
             this.row_interface_group1.Size = new System.Drawing.Size(1127, 491);
             this.row_interface_group1.TabIndex = 17;
+            this.row_interface_group1.Year = 0;
+            // 
+            // viewStatuatoryHolidaysToolStripMenuItem
+            // 
+            this.viewStatuatoryHolidaysToolStripMenuItem.Name = "viewStatuatoryHolidaysToolStripMenuItem";
+            this.viewStatuatoryHolidaysToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.viewStatuatoryHolidaysToolStripMenuItem.Text = "View Statuatory Holidays";
+            this.viewStatuatoryHolidaysToolStripMenuItem.Click += new System.EventHandler(this.viewStatuatoryHolidaysToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -135,6 +146,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem addCommentToolStripMenuItem;
         private row_interface_group row_interface_group1;
+        private System.Windows.Forms.ToolStripMenuItem viewStatuatoryHolidaysToolStripMenuItem;
     }
 }
 

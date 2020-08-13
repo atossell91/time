@@ -69,6 +69,7 @@ namespace time
                 //Check if work period exists already
                 //  Init row with period if it exists already, or create a new period
                 int periodIndex = periods.BinarySearch(new work_period(day), work_period.CompareByDate());
+
                 if (periodIndex >= 0)
                 {
                     work_period p = periods[periodIndex];
@@ -211,15 +212,21 @@ namespace time
 
         public void selectMonth(int m)
         {
+            Debug.WriteLine("Selecting the month");
             month = m;
             foreach(row_interface r in rowList)
             {
                 Controls.Remove(r);
                 r.Dispose();
             }
+
             rowList.Clear();
+
+            Debug.WriteLine("initializing new rows");
             initRows();
+
             selectFirstRow();
+            Debug.WriteLine("Done selecting the month");
         }
         /*public row_interface_group(List<work_period> days)
         {

@@ -190,6 +190,7 @@ namespace time
             textboxes = new List<TextBox>();
 
             this.IsLandscape = true;
+            Debug.WriteLine("PAPER TYPE: " + this.PaperType.ToString());
             this.PaperType = System.Drawing.Printing.PaperKind.Letter;
 
             this.Image = time.Properties.Resources.Phoenix_Inspectors_Weekly_OT_Template_With_Blank_Form;

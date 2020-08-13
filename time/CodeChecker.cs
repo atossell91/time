@@ -59,25 +59,34 @@ namespace time
 
                     PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.Date);
 
+                    Debug.WriteLine(p.Date);
+                    Debug.WriteLine("IS STAT: " + StatHoliday.IsStatDay(nextDay));
+                    Debug.WriteLine("OVERFLOW:" + (p.EndTime.Date == nextDay.Date).ToString());
+
                     if (p.Overtime <= TimeSpan.Zero)
                     {
                         continue;
                     }
-                    else if ((nextDay.DayOfWeek == DayOfWeek.Sunday || StatHoliday.IsStatDay(nextDay)) &&
+                    else if ((nextDay.DayOfWeek == DayOfWeek.Sunday) &&
                         p.EndTime.Date == nextDay.Date)
                     {
-                        pc.Hours = p.Overtime - p.EndTime.TimeOfDay;
-                        Debug.WriteLine("SAT HOURS: " + pc.Hours.TotalHours);
+                        DateTime otStartTime = p.StartTime + ShiftInformation.ShiftLength;
+                        TimeSpan regOT = nextDay.Date - otStartTime;
+                        pc.Hours = ShiftInformation.LockTimeToInterval(regOT > TimeSpan.Zero? regOT : TimeSpan.Zero);
+
                         PremiumCode holidayOT = new PremiumCode(DEFAULT_CODE, nextDay);
-                        holidayOT.Hours = p.EndTime.TimeOfDay;
-                        Debug.WriteLine("SUN HOURS: " + holidayOT.Hours.TotalHours);
+                        holidayOT.Hours = ShiftInformation.LockTimeToInterval(p.EndTime.TimeOfDay);
                         findAndAddHours(holidayOT, outputCodes);
                     }
                     else
                     {
                         pc.Hours = p.Overtime;
                     }
-                    findAndAddHours(pc, outputCodes);
+
+                    if (pc.Hours > TimeSpan.Zero)
+                    {
+                        findAndAddHours(pc, outputCodes);
+                    }
                 }
 
                 return outputCodes;

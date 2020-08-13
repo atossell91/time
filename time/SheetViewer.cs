@@ -145,6 +145,7 @@ namespace time
         {
             printIndex = 0;
             PrinterSettings ps = new PrinterSettings();
+
             ps.DefaultPageSettings.PaperSize = GetPaperSize(ps, this.sheets[0].PaperType);
             ps.DefaultPageSettings.Landscape = this.sheets[0].IsLandscape;
             ps.DefaultPageSettings.Margins = GetMargins(ps);
