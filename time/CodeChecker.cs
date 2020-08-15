@@ -10,7 +10,7 @@ namespace time
     class CodeChecker
     {
         private static List<Code_Interface> ComputableCodes = 
-            new List<Code_Interface>{new Code260(), new Code055()};
+            new List<Code_Interface>{new Code260(), new Code055(), new Code290()};
         public static List<PremiumCode> CheckCodes(List<work_period> inputPeriods)
         {
             List<PremiumCode> outputCodes = new List<PremiumCode>();
@@ -59,10 +59,6 @@ namespace time
 
                     PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.Date);
 
-                    Debug.WriteLine(p.Date);
-                    Debug.WriteLine("IS STAT: " + StatHoliday.IsStatDay(nextDay));
-                    Debug.WriteLine("OVERFLOW:" + (p.EndTime.Date == nextDay.Date).ToString());
-
                     if (p.Overtime <= TimeSpan.Zero)
                     {
                         continue;
@@ -70,9 +66,9 @@ namespace time
                     else if ((nextDay.DayOfWeek == DayOfWeek.Sunday) &&
                         p.EndTime.Date == nextDay.Date)
                     {
-                        DateTime otStartTime = p.StartTime + ShiftInformation.ShiftLength;
-                        TimeSpan regOT = nextDay.Date - otStartTime;
-                        pc.Hours = ShiftInformation.LockTimeToInterval(regOT > TimeSpan.Zero? regOT : TimeSpan.Zero);
+                        pc.Hours = ShiftInformation.LockTimeToInterval(
+                            ShiftInformation.CalcOvertime(p.StartTime,
+                            new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 0, 0, 0)));
 
                         PremiumCode holidayOT = new PremiumCode(DEFAULT_CODE, nextDay);
                         holidayOT.Hours = ShiftInformation.LockTimeToInterval(p.EndTime.TimeOfDay);
@@ -117,35 +113,52 @@ namespace time
             public readonly static string DEFAULT_CODE = "290";
             public List<PremiumCode> GenerateCodes(List<work_period> wp)
             {
-                List<PremiumCode> outputCodes = new List<PremiumCode>();
+                List<PremiumCode> outputcodes = new List<PremiumCode>();
 
-                for (int n =0; n < wp.Count; ++n)
+                foreach (work_period p in wp)
                 {
-                    work_period p = wp[n];
-                    
                     if (p.WashupTime <= TimeSpan.Zero)
                     {
                         continue;
                     }
 
-                    DateTime nextDay = p.Date.AddDays(1.0);
-
-
                     DateTime washupEnd = p.EndTime.Add(ShiftInformation.WashupTimeAmount);
 
-                    if((nextDay.DayOfWeek == DayOfWeek.Sunday || StatHoliday.IsStatDay(nextDay)) && 
-                        washupEnd.Date == nextDay.Date)
+                    if (p.Overtime > ShiftInformation.ShiftLength) // 7.5 Hrs of OT or more
                     {
-                        DateTime start = new DateTime(washupEnd.Year, washupEnd.Month, washupEnd.Day,
+                        PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.EndTime);
+                        pc.EndDate = washupEnd;
+                        pc.SetArrayHours(p.WashupTime, PremiumCode.HoursMultiplier.X200);
+
+                        outputcodes.Add(pc);
+                    }
+                    else if (washupEnd.DayOfWeek == DayOfWeek.Sunday) // Shift ends on a sunday
+                    {
+                        DateTime cutoff = new DateTime(washupEnd.Year, washupEnd.Month, washupEnd.Day,
                             0, 0, 0);
 
-                        PremiumCode doubleWash = new PremiumCode(DEFAULT_CODE, start);
-                        doubleWash.EndDate = washupEnd;
-                        doubleWash.SetArrayHours(washupEnd.TimeOfDay, PremiumCode.HoursMultiplier.X200);
-                    }
+                        PremiumCode x15= new PremiumCode(DEFAULT_CODE, p.EndTime);
+                        x15.EndDate = cutoff;
+                        x15.SetArrayHours(cutoff - p.EndTime, PremiumCode.HoursMultiplier.X150);
+                        outputcodes.Add(x15);
 
+                        PremiumCode x20 = new PremiumCode(DEFAULT_CODE, cutoff);
+                        x20.EndDate = washupEnd;
+                        x20.SetArrayHours(washupEnd - cutoff, PremiumCode.HoursMultiplier.X200);
+                        outputcodes.Add(x20);
+                    }
+                    else //Usual case
+                    {
+                        PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.EndTime);
+                        pc.EndDate = washupEnd;
+                        pc.SetArrayHours(p.WashupTime, PremiumCode.HoursMultiplier.X150);
+
+                        outputcodes.Add(pc);
+                    }
                 }
-                return outputCodes;
+
+                Debug.WriteLine("290 COUNT: " + outputcodes.Count);
+                return outputcodes;
             }
         }
     }

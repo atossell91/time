@@ -314,6 +314,32 @@ namespace time
             List<data_4600> dataSheets = new List<data_4600>();
             dataSheets.Add(new data_4600());
 
+            List<PremiumCode> codes = new List<PremiumCode>(
+                CodeChecker.CheckCodes(wp).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
+                );
+
+            int rowCount = 0;
+            int sheetCount = 1;
+            foreach(PremiumCode c in codes)
+            {
+                if (rowCount > 15)
+                {
+                    dataSheets.Add(new data_4600());
+                    ++sheetCount;
+                    rowCount = 0;
+                }
+
+                dataSheets[sheetCount - 1].FillNewRow(
+                    c.StartDate, c.EndDate, ShiftInformation.LunchLength, washupCode,
+                    c.GetArrayHours(PremiumCode.HoursMultiplier.X100).TotalHours,
+                    c.GetArrayHours(PremiumCode.HoursMultiplier.X150).TotalHours,
+                    c.GetArrayHours(PremiumCode.HoursMultiplier.X175).TotalHours,
+                    c.GetArrayHours(PremiumCode.HoursMultiplier.X200).TotalHours,
+                    washupMessage);
+
+                ++rowCount;
+            }
+            /*
             int rowCount = 0;
             int sheetCount = 0;
             foreach (work_period p in periodCovered)
@@ -361,7 +387,7 @@ namespace time
                     }
                 }
             }
-
+            */
             //Getting number of leave hours from user
             double totalHours = 0.0;
             foreach (data_4600 d4 in dataSheets)

@@ -67,6 +67,10 @@ namespace time
         {
             hours[(int)index] = hrs;
         }
+        public TimeSpan GetArrayHours(HoursMultiplier index)
+        {
+            return hours[(int)index];
+        }
 
         public TimeSpan Hours
         {

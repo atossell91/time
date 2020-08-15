@@ -101,11 +101,12 @@ namespace time
             secondWeekDates = new TextBox[count];
             Size cellSize = PhoenixOTSheetDims.CellSize;
 
+            /*
             if (codes.Count > count * 2)
             {
                 Debug.WriteLine("Range (" + codes.Count + ") exceeds column count");
                 return;
-            }
+            }*/
 
             fillDateRow(ref firstWeekDates, PhoenixOTSheetDims.TableOneDatesStart, this.startDate);
             fillDateRow(ref secondWeekDates, PhoenixOTSheetDims.TableTwoDatesStart, this.startDate.AddDays(7.0));

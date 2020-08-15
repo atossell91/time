@@ -112,7 +112,7 @@ namespace time
 
             TimeSpan hoursWorked = CalcHoursWorked(start, end, LunchLength);
 
-            if (hoursWorked > ShiftLength && (!IsRestDay(start) || !StatHoliday.IsStatDay(start)))
+            if (hoursWorked > ShiftLength && !IsRestDay(start) && !StatHoliday.IsStatDay(start))
             {
                 return hoursWorked.Subtract(ShiftLength);
             }
