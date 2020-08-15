@@ -47,8 +47,12 @@ namespace time
                 {
                     ++monCount;
                 }
+                if (monCount == 2)
+                {
+                    return day;
+                }
             }
-            return day;
+            return new DateTime(1991, 9, 10);
         }
         public static DateTime RemembranceDay(int year)
         {

@@ -34,6 +34,9 @@ namespace time
 
         private bool keyPressed = false;
 
+        private readonly Color weekDayColor = Color.Transparent;
+        private readonly Color sundayColor = Color.LightGray;
+
         private void initControlsList()
         {
             currentControl.Add(mtb_Start);
@@ -84,6 +87,15 @@ namespace time
             this.nud_premiums.Value = new decimal(p.ShiftPremiums.TotalHours);
             this.cb_Washup.Checked = p.WashupTime > TimeSpan.Zero;
             this.rtb_Comment.Text = p.Comment;
+
+            if (p.Date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                this.BackColor = this.sundayColor;
+            }
+            else
+            {
+                this.BackColor = this.weekDayColor;
+            }
         }
         private void showNuds(bool flag)
         {
@@ -121,9 +133,13 @@ namespace time
             {
                 this.BackColor = Color.LightBlue;
             }
+            else if (this.period.Date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                this.BackColor = this.sundayColor;
+            }
             else
             {
-                this.BackColor = Color.Transparent;
+                this.BackColor = this.weekDayColor;
             }
         }
         private void row_interface_MouseMove(object sender, MouseEventArgs e)

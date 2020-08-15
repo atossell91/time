@@ -81,7 +81,14 @@
       <DependentUpon>date_name_getter.cs</DependentUpon>
     </Compile>
     <Compile Include="dims4600.cs" />
+    <Compile Include="dimsPAR.cs" />
     <Compile Include="Fixer_Functions.cs" />
+    <Compile Include="GetLeaveOrCashHours.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetLeaveOrCashHours.Designer.cs">
+      <DependentUpon>GetLeaveOrCashHours.cs</DependentUpon>
+    </Compile>
     <Compile Include="Number_Getter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +155,9 @@
     <Compile Include="Sheet_4600.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Sheet_PAR.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Sheet_PhoenixOT.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -183,6 +193,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="date_name_getter.resx">
       <DependentUpon>date_name_getter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetLeaveOrCashHours.resx">
+      <DependentUpon>GetLeaveOrCashHours.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Number_Getter.resx">
       <DependentUpon>Number_Getter.cs</DependentUpon>
@@ -243,6 +256,7 @@
   <ItemGroup>
     <Content Include="blank4600.png" />
     <Content Include="Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
+    <Resource Include="Resources\PAR.png" />
     <None Include="Resources\blank4600.png" />
     <Resource Include="Resources\Phoenix Inspectors Weekly OT Template.With Blank Form.png" />
   </ItemGroup>

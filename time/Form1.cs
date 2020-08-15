@@ -361,7 +361,47 @@ namespace time
                     }
                 }
             }
-            //DateTime d = new DateTime(2020, 07, 24, 7, 9, 0);
+
+            //Getting number of leave hours from user
+            double totalHours = 0.0;
+            foreach (data_4600 d4 in dataSheets)
+            {
+                totalHours += d4.GetCashHours();
+                totalHours += d4.GetLeaveHours();
+            }
+
+            double requestedLeave = 0.0;
+            Debug.WriteLine("TOTAL HOURS: " + totalHours);
+            GetLeaveOrCashHours loc = new GetLeaveOrCashHours(totalHours, 0.0);
+            if (loc.ShowDialog() == DialogResult.OK)
+            {
+                requestedLeave = loc.LeaveHours;
+            }
+
+            loc.Dispose();
+
+            foreach(data_4600 d4 in dataSheets)
+            {
+                double avHours = d4.GetCashHours() + d4.GetLeaveHours();
+                if (avHours >= requestedLeave)
+                {
+                    d4.RequestLeaveHours(requestedLeave);
+                    requestedLeave = 0.0;
+                }
+                else
+                {
+                    d4.RequestLeaveHours(avHours);
+                    requestedLeave -= avHours;
+                }
+                
+                if(requestedLeave <= 0)
+                {
+                    break;
+                }
+            }
+            //End getting number of leave hours from user
+
+
             return dataSheets;
         }
         private void Button2_Click(object sender, EventArgs e)
@@ -387,7 +427,7 @@ namespace time
 
             List<data_4600> dataSheets = createWashup4600(d1, d2);
             List <Sheet> wash = new List<Sheet>();
-            //wash.Add(new Sheet_4600(this.personInfo, sheet));
+
             foreach (data_4600 d in dataSheets)
             {
                 wash.Add(new Sheet_4600(this.personInfo, d));
@@ -415,25 +455,6 @@ namespace time
         {
             Yearly_Holiday_Viewer yhv = new Yearly_Holiday_Viewer(this.currentYear);
             yhv.ShowDialog();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-            double[] date = {260, 2020, 08, 14 };
-            DateTreeNode dtn = new DateTreeNode(date, 0, date.Length - 1);
-
-            date = new double[] {2020, 08, 15 };
-            dtn.Add(date, 0, date.Length - 1);
-            date = new double[] {2020, 08, 16 };
-            dtn.Add(date, 0, date.Length - 1);
-            date = new double[] {2020, 08, 17 };
-            dtn.Add(date, 0, date.Length - 1);
-            date = new double[] { 2020, 09, 10 };
-            dtn.Add(date, 0, date.Length - 1);
-            date = new double[] { 2020, 09, 11 };
-            dtn.Add(date, 0, date.Length - 1);
-            dtn.ReadArray();
         }
     }
 }

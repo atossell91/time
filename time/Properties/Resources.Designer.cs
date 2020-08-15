@@ -73,6 +73,16 @@ namespace time.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PAR {
+            get {
+                object obj = ResourceManager.GetObject("PAR", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Phoenix_Inspectors_Weekly_OT_Template_With_Blank_Form {
             get {
                 object obj = ResourceManager.GetObject("Phoenix Inspectors Weekly OT Template.With Blank Form", resourceCulture);
