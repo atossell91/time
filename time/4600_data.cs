@@ -329,5 +329,14 @@ namespace time
             codeSums.adjustTotalHours(leave);
         }
 
+        public void exportRowInformation()
+        {
+            double[] date = { 2020, 08, 14 };
+            DateTreeNode dtn = new DateTreeNode(date, 0, date.Length - 1);
+            
+            date = new double[]{ 2020, 08, 15};
+            dtn.Add(date, 0, date.Length - 1);
+        }
+
     }
 }

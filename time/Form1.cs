@@ -416,5 +416,24 @@ namespace time
             Yearly_Holiday_Viewer yhv = new Yearly_Holiday_Viewer(this.currentYear);
             yhv.ShowDialog();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            double[] date = {260, 2020, 08, 14 };
+            DateTreeNode dtn = new DateTreeNode(date, 0, date.Length - 1);
+
+            date = new double[] {2020, 08, 15 };
+            dtn.Add(date, 0, date.Length - 1);
+            date = new double[] {2020, 08, 16 };
+            dtn.Add(date, 0, date.Length - 1);
+            date = new double[] {2020, 08, 17 };
+            dtn.Add(date, 0, date.Length - 1);
+            date = new double[] { 2020, 09, 10 };
+            dtn.Add(date, 0, date.Length - 1);
+            date = new double[] { 2020, 09, 11 };
+            dtn.Add(date, 0, date.Length - 1);
+            dtn.ReadArray();
+        }
     }
 }

@@ -34,8 +34,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.addCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.row_interface_group1 = new time.row_interface_group();
             this.viewStatuatoryHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.row_interface_group1 = new time.row_interface_group();
+            this.button4 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,6 +99,13 @@
             this.addCommentToolStripMenuItem.Text = "Add Comment";
             this.addCommentToolStripMenuItem.Click += new System.EventHandler(this.addCommentToolStripMenuItem_Click);
             // 
+            // viewStatuatoryHolidaysToolStripMenuItem
+            // 
+            this.viewStatuatoryHolidaysToolStripMenuItem.Name = "viewStatuatoryHolidaysToolStripMenuItem";
+            this.viewStatuatoryHolidaysToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.viewStatuatoryHolidaysToolStripMenuItem.Text = "View Statuatory Holidays";
+            this.viewStatuatoryHolidaysToolStripMenuItem.Click += new System.EventHandler(this.viewStatuatoryHolidaysToolStripMenuItem_Click);
+            // 
             // row_interface_group1
             // 
             this.row_interface_group1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -108,18 +116,22 @@
             this.row_interface_group1.TabIndex = 17;
             this.row_interface_group1.Year = 0;
             // 
-            // viewStatuatoryHolidaysToolStripMenuItem
+            // button4
             // 
-            this.viewStatuatoryHolidaysToolStripMenuItem.Name = "viewStatuatoryHolidaysToolStripMenuItem";
-            this.viewStatuatoryHolidaysToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.viewStatuatoryHolidaysToolStripMenuItem.Text = "View Statuatory Holidays";
-            this.viewStatuatoryHolidaysToolStripMenuItem.Click += new System.EventHandler(this.viewStatuatoryHolidaysToolStripMenuItem_Click);
+            this.button4.Location = new System.Drawing.Point(170, 530);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 18;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1164, 562);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.row_interface_group1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -147,6 +159,7 @@
         private System.Windows.Forms.ToolStripMenuItem addCommentToolStripMenuItem;
         private row_interface_group row_interface_group1;
         private System.Windows.Forms.ToolStripMenuItem viewStatuatoryHolidaysToolStripMenuItem;
+        private System.Windows.Forms.Button button4;
     }
 }
 

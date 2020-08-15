@@ -73,6 +73,7 @@
     <Compile Include="DateRangeGetter.Designer.cs">
       <DependentUpon>DateRangeGetter.cs</DependentUpon>
     </Compile>
+    <Compile Include="DateTreeNode.cs" />
     <Compile Include="date_name_getter.cs">
       <SubType>Form</SubType>
     </Compile>
