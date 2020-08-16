@@ -144,24 +144,27 @@ namespace time
         private void printPhysical()
         {
             printIndex = 0;
-            PrinterSettings ps = new PrinterSettings();
-
-            ps.DefaultPageSettings.PaperSize = GetPaperSize(ps, this.sheets[0].PaperType);
-            ps.DefaultPageSettings.Landscape = this.sheets[0].IsLandscape;
-            ps.DefaultPageSettings.Margins = GetMargins(ps);
-
-            PrintDocument pd = new PrintDocument();
-            pd.PrintPage += printAllSheets;
-            pd.PrinterSettings = ps;
 
             PrintDialog pDiag = new PrintDialog();
 
             if (pDiag.ShowDialog() == DialogResult.OK)
             {
+                PrinterSettings ps = pDiag.PrinterSettings;
+
+                ps.DefaultPageSettings.PaperSize = GetPaperSize(ps, this.sheets[0].PaperType);
+                ps.DefaultPageSettings.Landscape = this.sheets[0].IsLandscape;
+                ps.DefaultPageSettings.Margins = GetMargins(ps);
+
+                PrintDocument pd = new PrintDocument();
+                pd.PrintPage += printAllSheets;
+                pd.PrinterSettings = ps;
+
                 EnterEditMode();
                 pd.Print();
-                this.Close();
             }
+
+            pDiag.Dispose();
+            this.Close();
             /*PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Document = pd;
             ppd.ShowDialog();*/

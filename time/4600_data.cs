@@ -329,14 +329,18 @@ namespace time
             codeSums.adjustTotalHours(leave);
         }
 
-        public void exportRowInformation()
+        public string[] exportRowInformation()
         {
-            double[] date = { 2020, 08, 14 };
-            DateTreeNode dtn = new DateTreeNode(date, 0, date.Length - 1);
-            
-            date = new double[]{ 2020, 08, 15};
-            dtn.Add(date, 0, date.Length - 1);
+            List<string> list = new List<string>();
+            foreach (overtimeRow r in OvertimeRows)
+            {
+                list.Add(r.StartDate + "|" + r.EndDate +
+                    "|" + r.X100Hours.ToString() +
+                    "|" + r.X150Hours.ToString() + 
+                    "|" + r.X175Hours.ToString() +
+                    "|" + r.X200Hours.ToString());
+            }
+            return list.ToArray();
         }
-
     }
 }

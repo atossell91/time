@@ -122,9 +122,12 @@ namespace time
                         continue;
                     }
 
-                    DateTime washupEnd = p.EndTime.Add(ShiftInformation.WashupTimeAmount);
 
-                    if (p.Overtime > ShiftInformation.ShiftLength) // 7.5 Hrs of OT or more
+                    TimeSpan washup = ShiftInformation.CalcWashupTime(p.StartTime, p.EndTime, ShiftInformation.LunchLength);
+                    DateTime washupEnd = p.EndTime + washup;
+                    TimeSpan ot = ShiftInformation.CalcOvertime(p.StartTime, p.EndTime);
+
+                    if (ot >= ShiftInformation.ShiftLength) // 7.5 Hrs of OT or more
                     {
                         PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.EndTime);
                         pc.EndDate = washupEnd;
@@ -132,12 +135,20 @@ namespace time
 
                         outputcodes.Add(pc);
                     }
-                    else if (washupEnd.DayOfWeek == DayOfWeek.Sunday) // Shift ends on a sunday
+                    else if (p.EndTime.DayOfWeek == DayOfWeek.Sunday &&
+                        washupEnd.DayOfWeek == DayOfWeek.Sunday) // Shift ends on a sunday
+                    {
+                        PremiumCode x20 = new PremiumCode(DEFAULT_CODE, p.EndTime);
+                        x20.EndDate = washupEnd;
+                        x20.SetArrayHours(p.WashupTime, PremiumCode.HoursMultiplier.X200);
+                        outputcodes.Add(x20);
+                    }
+                    else if (washupEnd.DayOfWeek == DayOfWeek.Sunday)
                     {
                         DateTime cutoff = new DateTime(washupEnd.Year, washupEnd.Month, washupEnd.Day,
                             0, 0, 0);
 
-                        PremiumCode x15= new PremiumCode(DEFAULT_CODE, p.EndTime);
+                        PremiumCode x15 = new PremiumCode(DEFAULT_CODE, p.EndTime);
                         x15.EndDate = cutoff;
                         x15.SetArrayHours(cutoff - p.EndTime, PremiumCode.HoursMultiplier.X150);
                         outputcodes.Add(x15);
@@ -157,7 +168,6 @@ namespace time
                     }
                 }
 
-                Debug.WriteLine("290 COUNT: " + outputcodes.Count);
                 return outputcodes;
             }
         }

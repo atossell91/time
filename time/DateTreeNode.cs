@@ -10,9 +10,16 @@ namespace time
     class DateTreeNode
     {
         List<DateTreeNode> Nodes;
-        double Number = -1.0;
+        int Number = -1;
 
-        public DateTreeNode(IEnumerable<double> nums, int p, int q)
+        public IEnumerable<object> Objects;
+
+        public DateTreeNode()
+        {
+            this.Number = 0;
+            this.Nodes = new List<DateTreeNode>();
+        }
+        private DateTreeNode(IEnumerable<int> nums, int p, int q, IEnumerable<Object> obj)
         {
             if (p > q)
             {
@@ -22,13 +29,18 @@ namespace time
             this.Number = nums.ElementAt(p);
             this.Nodes = new List<DateTreeNode>();
 
+            if (p == q && this.Number == nums.ElementAt(q))
+            {
+                this.Objects = obj;
+            }
+
             if (p < q)
             {
-                this.Nodes.Add(new DateTreeNode(nums, p + 1, q));
+                this.Nodes.Add(new DateTreeNode(nums, p+1, q, obj));
             }
         }
 
-        public void Add(IEnumerable<double> nums, int p, int q)
+        public void Add(IEnumerable<int> nums, int p, int q, IEnumerable<object> obj)
         {
             if (p > q)
             {
@@ -38,23 +50,50 @@ namespace time
             double element = nums.ElementAt(p);
             int index = Nodes.FindIndex((x) => x.Number == element);
 
-            if(index < 0)
+            if (p == q && this.Number == nums.ElementAt(q))
             {
-                Nodes.Add(new DateTreeNode(nums,p,q));
+                this.Objects = obj;
+            }
+
+
+            if (index < 0)
+            {
+                Nodes.Add(new DateTreeNode(nums,p,q,obj));
             }
             else
             {
-                Nodes[index].Add(nums, p + 1, q);
+                Nodes[index].Add(nums, p + 1, q,obj);
             }
         }
-        public void ReadArray()
+        public string OutputTree()
         {
+            string output = "";
 
-            Debug.WriteLine(this.Number);
-            foreach(DateTreeNode n in Nodes)
+            output += " " + this.Number;
+            if (this.Objects != null)
             {
-                n.ReadArray();
+                foreach (Object o in Objects)
+                {
+                    output += " " + o.ToString();
+                }
             }
+
+            if (Nodes.Count > 0)
+            {
+                output += "!";
+            }
+
+            foreach (DateTreeNode n in Nodes)
+            {
+                output += n.OutputTree();
+            }
+
+            if (Nodes.Count > 0)
+            {
+                output += "i";
+            }
+
+            return output;
         }
     }
 }

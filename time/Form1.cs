@@ -301,21 +301,57 @@ namespace time
             SheetViewer sv = new SheetViewer(sheets);
             sv.ShowDialog();
         }
+        private void setWashupLeaveHours(List<data_4600> dataSheets)
+        {
+            double totalHours = 0.0;
+            foreach (data_4600 d4 in dataSheets)
+            {
+                totalHours += d4.GetCashHours();
+                totalHours += d4.GetLeaveHours();
+            }
+
+            double requestedLeave = 0.0;
+            GetLeaveOrCashHours loc = new GetLeaveOrCashHours(totalHours, 0.0);
+            if (loc.ShowDialog() == DialogResult.OK)
+            {
+                requestedLeave = loc.LeaveHours;
+            }
+
+            loc.Dispose();
+
+            foreach (data_4600 d4 in dataSheets)
+            {
+                double avHours = d4.GetCashHours() + d4.GetLeaveHours();
+                if (avHours >= requestedLeave)
+                {
+                    d4.RequestLeaveHours(requestedLeave);
+                    requestedLeave = 0.0;
+                }
+                else
+                {
+                    d4.RequestLeaveHours(avHours);
+                    requestedLeave -= avHours;
+                }
+
+                if (requestedLeave <= 0)
+                {
+                    break;
+                }
+            }
+        }
         private List<data_4600> createWashup4600(DateTime d1, DateTime d2)
         {
             int days = (int)d2.Subtract(d1).TotalDays +1; //Added one to correct for last day not appearing
+
             List<work_period> periodCovered = getRange(d1, days);
 
-
-            double washupHours = 0.167;
-            string washupCode = "290";
             string washupMessage = "Art 60 - Washup";
 
             List<data_4600> dataSheets = new List<data_4600>();
             dataSheets.Add(new data_4600());
 
             List<PremiumCode> codes = new List<PremiumCode>(
-                CodeChecker.CheckCodes(wp).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
+                CodeChecker.CheckCodes(periodCovered).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
                 );
 
             int rowCount = 0;
@@ -330,7 +366,7 @@ namespace time
                 }
 
                 dataSheets[sheetCount - 1].FillNewRow(
-                    c.StartDate, c.EndDate, ShiftInformation.LunchLength, washupCode,
+                    c.StartDate, c.EndDate, ShiftInformation.LunchLength, CodeChecker.Code290.DEFAULT_CODE,
                     c.GetArrayHours(PremiumCode.HoursMultiplier.X100).TotalHours,
                     c.GetArrayHours(PremiumCode.HoursMultiplier.X150).TotalHours,
                     c.GetArrayHours(PremiumCode.HoursMultiplier.X175).TotalHours,
@@ -339,94 +375,16 @@ namespace time
 
                 ++rowCount;
             }
-            /*
-            int rowCount = 0;
-            int sheetCount = 0;
-            foreach (work_period p in periodCovered)
-            {
-                if (p.WashupTime > TimeSpan.Zero)
-                {
-                    double washupMins = ShiftInformation.WashupTimeAmount.TotalMinutes;
-                    if (ShiftInformation.IsRestDay(p.Date) || StatHoliday.IsStatDay(p.Date))
-                    {
-                        Double totalWashup = p.WashupTime.TotalMinutes;
-                        double washup15, washup20 = 0.0;
 
-                            washup15 = washupMins - totalWashup;
-                            washup20 = totalWashup;
-
-                        if (washup15 > 0.0)
-                        {
-                            dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(washup15), ShiftInformation.LunchLength,
-                                washupCode, 0.0, washup15 / 60.0, 0.0, 0.0, washupMessage + " Wknd OT");
-                        }
-
-                        if(washup20 > 0.0)
-                        {
-                            dataSheets[sheetCount].FillNewRow(p.EndTime.AddMinutes(washup15), p.EndTime.AddMinutes(washup15 + washup20), ShiftInformation.LunchLength,
-                                washupCode, 0.0, 0.0, 0.0, washup20/60.0, washupMessage + " Wknd OT");
-                        }
-
-                        if (washup15 > 0.0 && washup20 > 0.0)
-                        {
-                            ++rowCount;
-                        }
-                    }
-                    else
-                    {
-                        dataSheets[sheetCount].FillNewRow(p.EndTime, p.EndTime.AddMinutes(washupMins), ShiftInformation.LunchLength,
-                            washupCode, 0.0, p.WashupTime.TotalMinutes/60.0, 0.0, 0.0, washupMessage);
-                    }
-                    ++rowCount;
-
-                    if (rowCount > 15) //Might not fill last row. The row management should be handled elsewhere
-                    {
-                        rowCount = 0;
-                        ++sheetCount;
-                        dataSheets.Add(new data_4600());
-                    }
-                }
-            }
-            */
-            //Getting number of leave hours from user
-            double totalHours = 0.0;
-            foreach (data_4600 d4 in dataSheets)
-            {
-                totalHours += d4.GetCashHours();
-                totalHours += d4.GetLeaveHours();
-            }
-
-            double requestedLeave = 0.0;
-            Debug.WriteLine("TOTAL HOURS: " + totalHours);
-            GetLeaveOrCashHours loc = new GetLeaveOrCashHours(totalHours, 0.0);
-            if (loc.ShowDialog() == DialogResult.OK)
-            {
-                requestedLeave = loc.LeaveHours;
-            }
-
-            loc.Dispose();
+            setWashupLeaveHours(dataSheets);
 
             foreach(data_4600 d4 in dataSheets)
             {
-                double avHours = d4.GetCashHours() + d4.GetLeaveHours();
-                if (avHours >= requestedLeave)
+                foreach(string line in d4.exportRowInformation())
                 {
-                    d4.RequestLeaveHours(requestedLeave);
-                    requestedLeave = 0.0;
-                }
-                else
-                {
-                    d4.RequestLeaveHours(avHours);
-                    requestedLeave -= avHours;
-                }
-                
-                if(requestedLeave <= 0)
-                {
-                    break;
+                    Debug.WriteLine(line);
                 }
             }
-            //End getting number of leave hours from user
-
 
             return dataSheets;
         }
@@ -443,6 +401,10 @@ namespace time
 
         private void Button3_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Hi " + personInfo.GivenNames + "."+  Environment.NewLine + "The washup 4600 has a bug in it that causes strange" +
+                " values to appear for weekends." +Environment.NewLine + "I know what causes it, but the fix is a little tricky. I'll have " +
+                "it fixed ASAP!" + Environment.NewLine + "Huge thanks for using my program, you wonderful human!" + Environment.NewLine + "Anthony",
+                "Wild CATERPIE appeared!");
             DateRangeGetter drg = new DateRangeGetter();
             drg.ShowDialog();
 

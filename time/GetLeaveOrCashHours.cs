@@ -51,7 +51,6 @@ namespace time
             {
                 this.leaveHours = value;
 
-                Debug.WriteLine("AUTOSET: " + this.autoSettingLeave);
                 this.nud_LeaveHours.Value = new Decimal(this.leaveHours);
 
                 if (!this.autoSettingLeave)
@@ -70,7 +69,7 @@ namespace time
             InitializeComponent();
             this.AvailableHours = cashHours + leaveHours;
 
-            l_AvailableHours.Text = this.AvailableHours.ToString();
+            l_AvailableHours.Text = this.AvailableHours.ToString("N3");
 
             this.CashHours = cashHours;
             this.LeaveHours = leaveHours;
