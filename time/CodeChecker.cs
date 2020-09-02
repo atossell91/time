@@ -117,11 +117,12 @@ namespace time
 
                 foreach (work_period p in wp)
                 {
-                    if (p.WashupTime <= TimeSpan.Zero)
+                    if (p.WashupTime <= TimeSpan.Zero ||
+                        p.StartTime == DateTime.MinValue ||
+                        p.EndTime == DateTime.MinValue)
                     {
                         continue;
                     }
-
 
                     TimeSpan washup = ShiftInformation.CalcWashupTime(p.StartTime, p.EndTime, ShiftInformation.LunchLength);
                     DateTime washupEnd = p.EndTime + washup;

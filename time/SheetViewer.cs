@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace time
 {
@@ -339,6 +340,16 @@ namespace time
             }
             mouseX = e.X;
             mouseY = e.Y;
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            List<string> output = new List<string>();
+            foreach (Sheet s in this.sheets)
+            {
+                output.AddRange(s.ExportData());
+            }
+            File.WriteAllLines("test_output.txt", output);
         }
     }
 }

@@ -101,6 +101,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="OvertimeInformation.cs" />
     <Compile Include="PageTools.cs" />
     <Compile Include="PersonalInfoForm.cs">
       <SubType>Form</SubType>
@@ -153,6 +154,9 @@
       <DependentUpon>SheetViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sheet_4600.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Sheet_OT.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Sheet_PAR.cs">

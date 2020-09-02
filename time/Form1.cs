@@ -345,8 +345,6 @@ namespace time
 
             List<work_period> periodCovered = getRange(d1, days);
 
-            string washupMessage = "Art 60 - Washup";
-
             List<data_4600> dataSheets = new List<data_4600>();
             dataSheets.Add(new data_4600());
 
@@ -363,6 +361,18 @@ namespace time
                     dataSheets.Add(new data_4600());
                     ++sheetCount;
                     rowCount = 0;
+                }
+
+                string washupMessage;
+
+                if (c.StartDate.DayOfWeek == DayOfWeek.Saturday ||
+                    c.StartDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    washupMessage = "Art 60 - Washup - Wknd OT";
+                }
+                else
+                {
+                    washupMessage = "Art 60 - Washup";
                 }
 
                 dataSheets[sheetCount - 1].FillNewRow(
@@ -388,7 +398,7 @@ namespace time
 
             return dataSheets;
         }
-        private void Button2_Click(object sender, EventArgs e)
+        private void b_ViewTime_Click(object sender, EventArgs e)
         {
             Number_Getter numGet = new Number_Getter(0, 53, WeekNumber.GetWeekNumber(DateTime.Now));
             numGet.ShowDialog();
@@ -399,12 +409,8 @@ namespace time
             outputToTimesheet(date);
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void b_ViewWashup_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hi " + personInfo.GivenNames + "."+  Environment.NewLine + "The washup 4600 has a bug in it that causes strange" +
-                " values to appear for weekends." +Environment.NewLine + "I know what causes it, but the fix is a little tricky. I'll have " +
-                "it fixed ASAP!" + Environment.NewLine + "Huge thanks for using my program, you wonderful human!" + Environment.NewLine + "Anthony",
-                "Wild CATERPIE appeared!");
             DateRangeGetter drg = new DateRangeGetter();
             drg.ShowDialog();
 

@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.b_ViewWeeks = new System.Windows.Forms.Button();
+            this.b_ViewWashup = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.addCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,27 +50,27 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // button2
+            // b_ViewWeeks
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(996, 531);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "View Weeks";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.b_ViewWeeks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_ViewWeeks.Location = new System.Drawing.Point(996, 531);
+            this.b_ViewWeeks.Name = "b_ViewWeeks";
+            this.b_ViewWeeks.Size = new System.Drawing.Size(75, 23);
+            this.b_ViewWeeks.TabIndex = 14;
+            this.b_ViewWeeks.Text = "View Weeks";
+            this.b_ViewWeeks.UseVisualStyleBackColor = true;
+            this.b_ViewWeeks.Click += new System.EventHandler(this.b_ViewTime_Click);
             // 
-            // button3
+            // b_ViewWashup
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(10, 531);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(85, 23);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "View Washup";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            this.b_ViewWashup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.b_ViewWashup.Location = new System.Drawing.Point(10, 531);
+            this.b_ViewWashup.Name = "b_ViewWashup";
+            this.b_ViewWashup.Size = new System.Drawing.Size(85, 23);
+            this.b_ViewWashup.TabIndex = 15;
+            this.b_ViewWashup.Text = "View Washup";
+            this.b_ViewWashup.UseVisualStyleBackColor = true;
+            this.b_ViewWashup.Click += new System.EventHandler(this.b_ViewWashup_Click);
             // 
             // menuStrip1
             // 
@@ -121,8 +121,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1164, 562);
             this.Controls.Add(this.row_interface_group1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.b_ViewWashup);
+            this.Controls.Add(this.b_ViewWeeks);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -140,8 +140,8 @@
 
         #endregion
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button b_ViewWeeks;
+        private System.Windows.Forms.Button b_ViewWashup;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem addCommentToolStripMenuItem;

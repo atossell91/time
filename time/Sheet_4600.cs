@@ -233,5 +233,9 @@ namespace time
         public void addPersonalInfo()
         {
         }
+        public override string[] ExportData()
+        {
+            return this.mainSheet.exportRowInformation();
+        }
     }
 }

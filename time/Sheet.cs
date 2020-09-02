@@ -30,5 +30,9 @@ namespace time
 
             return bmp;
         }
+        public virtual string[] ExportData()
+        {
+            return null;
+        }
     }
 }

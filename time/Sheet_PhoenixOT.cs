@@ -258,5 +258,14 @@ namespace time
         {
             setAllBorders(BorderStyle.None);
         }
+        public override string[] ExportData()
+        {
+            List<string> output = new List<string>();
+            foreach (PremiumCode c in this.codes)
+            {
+                output.Add(c.ToString());
+            }
+            return output.ToArray();
+        }
     }
 }
