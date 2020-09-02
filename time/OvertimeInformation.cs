@@ -13,7 +13,7 @@ namespace time
             public string code = "";
             public string hours = "";
         }
-        private class day
+        public class day
         {
             public DateTime date = DateTime.MinValue;
             public const int ROWS_PER_DAY = 8;
@@ -63,9 +63,9 @@ namespace time
                 }
             }
 
-            public day GetDay(DayOfWeek day)
+            public day GetDay(int dayIndex)
             {
-                return this.days[(int)day];
+                return this.days[dayIndex];
             }
         }
 
@@ -85,15 +85,37 @@ namespace time
             initWeeks(start);
         }
 
-        public void SetCode(string code, string hours, int weekIndex, int dayIndex, int codeRowIndex)
+        private day getDayFromDate(DateTime d, DateTime start)
         {
-            codeRow c = weeks[weekIndex].days[dayIndex].codes[codeRowIndex];
-            c.code = code;
-            c.hours = hours;
+            int numDays = (int)d.Subtract(start).TotalDays;
+
+            if (numDays < 0 || numDays >= MAX_WEEKS * week.DAYS_PER_WEEK)
+            {
+                return null;
+            }
+
+            int index = numDays % week.DAYS_PER_WEEK;
+            int weekNum = (int)(numDays/week.DAYS_PER_WEEK);
+
+            return this.weeks[weekNum].days[index];
         }
-        public codeRow GetCodeRow(string code, string hours, int weekIndex, int dayIndex, int codeRowIndex)
+        public void SetCode(string code, string hours, DateTime day, DateTime start, int codeRowIndex)
         {
-            return weeks[weekIndex].days[dayIndex].codes[codeRowIndex];
+            codeRow[] c = getDayFromDate(day, start).codes;
+            codeRow cr = c[codeRowIndex];
+
+            cr.hours = hours;
+            cr.code = code;
+        }
+        public day GetDay(int weekNum, int dayIndex)
+        {
+            if (dayIndex >= week.DAYS_PER_WEEK ||
+                weekNum >= MAX_WEEKS)
+            {
+                return null;
+            }
+
+            return weeks[weekNum].days[dayIndex];
         }
     }
 }
