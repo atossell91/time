@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,14 @@ namespace time
         {
             public string code = "";
             public string hours = "";
+
+            public bool IsEmpty()
+            {
+                return String.IsNullOrEmpty(this.code) &&
+                    String.IsNullOrWhiteSpace(this.code) &&
+                    String.IsNullOrEmpty(this.hours) &&
+                    String.IsNullOrWhiteSpace(this.hours);
+            }
         }
         public class day
         {
@@ -49,8 +58,22 @@ namespace time
             {
                 return this.codes;
             }
+            public void AddCode(string code, string hours)
+            {
+                if (rowCount >= ROWS_PER_DAY)
+                {
+                    Debug.WriteLine("Max rows exceeded");
+                    return;
+                }
+
+                codeRow c = this.codes[rowCount];
+                c.code = code;
+                c.hours = hours;
+
+                ++rowCount;
+            }
         }
-        private class week
+        public class week
         {
             public const int DAYS_PER_WEEK = 7;
             public day[] days = new day[DAYS_PER_WEEK];
@@ -69,8 +92,11 @@ namespace time
             }
         }
 
-        private const int MAX_WEEKS = 2;
+        public const int MAX_WEEKS = 2;
         week[] weeks = new week[MAX_WEEKS];
+
+        public readonly DateTime StartDate;
+        public readonly DateTime EndDate;
 
         private void initWeeks(DateTime start)
         {
@@ -79,15 +105,18 @@ namespace time
                 weeks[n] = new week(start.AddDays(week.DAYS_PER_WEEK));
             }
         }
-        public OvertimeInformation()
+        public OvertimeInformation(DateTime start)
         {
-            DateTime start = new DateTime(2020, 9, 6);
+            start = new DateTime(2020, 9, 6); // delete later
+            this.StartDate = start;
+            this.EndDate = start.AddDays(MAX_WEEKS * week.DAYS_PER_WEEK);
+
             initWeeks(start);
         }
 
-        private day getDayFromDate(DateTime d, DateTime start)
+        public day getDayFromDate(DateTime d)
         {
-            int numDays = (int)d.Subtract(start).TotalDays;
+            int numDays = (int)d.Subtract(StartDate).TotalDays;
 
             if (numDays < 0 || numDays >= MAX_WEEKS * week.DAYS_PER_WEEK)
             {
@@ -101,7 +130,7 @@ namespace time
         }
         public void SetCode(string code, string hours, DateTime day, DateTime start, int codeRowIndex)
         {
-            codeRow[] c = getDayFromDate(day, start).codes;
+            codeRow[] c = getDayFromDate(day).codes;
             codeRow cr = c[codeRowIndex];
 
             cr.hours = hours;

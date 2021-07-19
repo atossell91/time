@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="dims4600.cs" />
     <Compile Include="dimsPAR.cs" />
+    <Compile Include="dimsPhoenixOT.cs" />
     <Compile Include="Fixer_Functions.cs" />
     <Compile Include="GetLeaveOrCashHours.cs">
       <SubType>Form</SubType>

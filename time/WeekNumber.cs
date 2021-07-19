@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace time
 {
@@ -117,6 +118,14 @@ namespace time
 
             int num = weekNumber - 2;
 
+            DateTime prevYearStart = new DateTime(year - 1, YearStartMonth, 1);
+            DateTime prevYearEnd = new DateTime(year - 1, 12, 31);
+            int weekCutoff = (int)(prevYearEnd.Subtract(prevYearStart).TotalDays / weekLen);
+
+            if (weekNumber > weekCutoff)
+            {
+                year -= 1;
+            }
             DateTime start = NextSunday(new DateTime(year, YearStartMonth, 1));
 
             DateTime weekStartDate = start.AddDays(num * 7);

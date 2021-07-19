@@ -23,6 +23,7 @@ namespace time
         //private row_interface_group displayedRows;
         //private row_interface_group row_interface_group1;
         private PersonalInfo personInfo;
+        private bool splitSunday = false;
 
         private void loadFromFile(string filepath)
         {
@@ -278,6 +279,22 @@ namespace time
 
             return outputRange;
         }
+        private OvertimeInformation createOvertimeDataSheet(List<PremiumCode> codes, DateTime startDate)
+        {
+            OvertimeInformation oti = new OvertimeInformation(startDate);
+
+            foreach(PremiumCode c in codes)
+            {
+                OvertimeInformation.day day = oti.getDayFromDate(c.StartDate);
+
+                if (day != null)
+                {
+                    day.AddCode(c.Code, c.Hours.TotalHours.ToString());
+                }
+            }
+
+            return oti;
+        }
         private void outputToTimesheet(DateTime date)
         {
             //DateTime date = DateTime.Now;
@@ -287,14 +304,12 @@ namespace time
 
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
-            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange);
+            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, splitSunday);
+            createOvertimeDataSheet(outCodes, date);
 
             Debug.WriteLine(outCodes.Count + " codes found.");
-            foreach(PremiumCode c in outCodes)
-            {
-                Debug.WriteLine(c.ToString());
-            }
-           Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart);
+
+            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart);
             List<Sheet> sheets = new List<Sheet>();
             sheets.Add(sheet);
 
@@ -349,7 +364,7 @@ namespace time
             dataSheets.Add(new data_4600());
 
             List<PremiumCode> codes = new List<PremiumCode>(
-                CodeChecker.CheckCodes(periodCovered).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
+                CodeChecker.CheckCodes(periodCovered, splitSunday).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
                 );
 
             int rowCount = 0;

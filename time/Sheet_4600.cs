@@ -161,6 +161,7 @@ namespace time
             createFixedLabel(this.personInfo.WorkAddress, dims4600.Establishment);
             createFixedLabel("NO", dims4600.CompressedHours);
             createFixedLabel("6011", dims4600.PayList);
+            createFixedLabel(this.personInfo.HomeAddress, dims4600.homeAddress);
         }
         private void fillPeriodCovered()
         {

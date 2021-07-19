@@ -19,6 +19,7 @@ namespace time
         public readonly static Box Establishment = new Box(811, 294, 1647, 360);
         public readonly static Box CompressedHours = new Box(1113, 221, 1305, 270);
         public readonly static Box PayList = new Box(1309, 230, 1448, 270);
+        public readonly static Box homeAddress = new Box(812, 364, 1646, 452);
 
         public readonly static int StandardBorderWidth = 4;
         public readonly static int CodeBorder = 4;
