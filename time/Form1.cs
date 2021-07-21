@@ -405,6 +405,21 @@ namespace time
         }
         private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
+            DateTime day = e.Period.Date;
+            if (day < DateTime.Now.AddDays(-35))
+            {
+                return;
+            }
+            
+            //Assume that the array is sorted by date -- may need to sort here
+            int ind = wp.FindIndex((a) =>
+            {
+                return a.Date == day;
+            });
+            if (ind > 0)
+            {
+                Debug.WriteLine("Day before is: " + wp[ind-1].Date.ToString());
+            }
         }
     }
 }
