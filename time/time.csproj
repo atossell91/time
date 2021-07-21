@@ -133,6 +133,7 @@
     <Compile Include="Render_4600.Designer.cs">
       <DependentUpon>Render_4600.cs</DependentUpon>
     </Compile>
+    <Compile Include="RowInterfaceEventArgs.cs" />
     <Compile Include="row_interface.cs">
       <SubType>UserControl</SubType>
     </Compile>

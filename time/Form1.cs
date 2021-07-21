@@ -132,6 +132,8 @@ namespace time
 
             currentMonth = DateTime.Now.Month;
 
+            row_interface_group1.LeaveTimeBox += onLeaveTimeBox;
+
             row_interface_group1.Year = this.currentYear;
 
             row_interface_group1.Month = this.currentMonth;
@@ -179,66 +181,6 @@ namespace time
         {
             currentMonth = month;
             row_interface_group1.selectMonth(currentMonth);
-        }
-
-        private void b_April_Click(object sender, EventArgs e)
-        {
-            changeMonth(4);
-        }
-
-        private void b_May_Click(object sender, EventArgs e)
-        {
-            changeMonth(5);
-        }
-
-        private void b_June_Click(object sender, EventArgs e)
-        {
-            changeMonth(6);
-        }
-
-        private void b_July_Click(object sender, EventArgs e)
-        {
-            changeMonth(7);
-        }
-
-        private void b_August_Click(object sender, EventArgs e)
-        {
-            changeMonth(8);
-        }
-
-        private void b_September_Click(object sender, EventArgs e)
-        {
-            changeMonth(9);
-        }
-
-        private void b_October_Click(object sender, EventArgs e)
-        {
-            changeMonth(10);
-        }
-
-        private void b_November_Click(object sender, EventArgs e)
-        {
-            changeMonth(11);
-        }
-
-        private void b_December_Click(object sender, EventArgs e)
-        {
-            changeMonth(12);
-        }
-
-        private void b_January_Click(object sender, EventArgs e)
-        {
-            changeMonth(1);
-        }
-
-        private void b_February_Click(object sender, EventArgs e)
-        {
-            changeMonth(2);
-        }
-
-        private void b_March_Click(object sender, EventArgs e)
-        {
-            changeMonth(3);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -423,7 +365,6 @@ namespace time
 
             outputToTimesheet(date);
         }
-
         private void b_ViewWashup_Click(object sender, EventArgs e)
         {
             DateRangeGetter drg = new DateRangeGetter();
@@ -448,22 +389,22 @@ namespace time
             //Render_4600 viewSheet = new Render_4600(this.personInfo, sheet);
             //viewSheet.ShowDialog();
         }
-
         private void tsm_AddShortcut_Click(object sender, EventArgs e)
         {
         }
-
         private void addCommentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Comment_Creator cc = new Comment_Creator(personInfo);
             cc.ShowDialog();
             cc.Dispose();
         }
-
         private void viewStatuatoryHolidaysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Yearly_Holiday_Viewer yhv = new Yearly_Holiday_Viewer(this.currentYear);
             yhv.ShowDialog();
+        }
+        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        {
         }
     }
 }

@@ -13,6 +13,7 @@ namespace time
 {
     public partial class row_interface_group : UserControl
     {
+        public event RowInterfaceEvent LeaveTimeBox;
         private int year;
         public int Year
         {
@@ -87,6 +88,7 @@ namespace time
                 rowList[n].Location = new Point(0, n * row_interface.rowHeight);
                 rowList[n].VerticalArrowDown += ControlVerticalArrowPressed;
                 rowList[n].InputRowSelected += inputRowSelected;
+                rowList[n].LeaveTimeBoxEvent += onLeaveTimeBox;
                 panel1.Controls.Add(rowList[n]);
             }
         }
@@ -289,13 +291,16 @@ namespace time
         {
             rowList[selectedRow].clearRowInterface();
         }
-
         private void cb_Month_SelectedIndexChanged(object sender, EventArgs e)
         {
             Debug.WriteLine("Changing selected index");
             ComboBox cmb = (ComboBox)cb_Month;
             selectMonth(cmb.SelectedIndex + 1);
             //selectFirstRow();
+        }
+        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        {
+            LeaveTimeBox?.Invoke(sender, e);
         }
     }
 }

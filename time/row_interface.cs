@@ -19,6 +19,9 @@ namespace time
         public event EventHandler NewEntryAdded;
         public event MouseEventHandler MouseWheelScroll;
 
+        public delegate void RowInterfaceEvent(object sender, RowInterfaceEventArgs e);
+        public event RowInterfaceEvent LeaveTimeBoxEvent;
+
         public const int rowHeight = 50;
         public const int rowWidth = 1200;
 
@@ -708,6 +711,8 @@ namespace time
 
         private void control_Leave(object sender, EventArgs e)
         {
+            RowInterfaceEventArgs ev = new RowInterfaceEventArgs(period);
+            LeaveTimeBoxEvent?.Invoke(this, ev);
         }
 
         private void row_interface_Validated(object sender, EventArgs e)
