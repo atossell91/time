@@ -180,67 +180,6 @@ namespace time
             currentMonth = month;
             row_interface_group1.selectMonth(currentMonth);
         }
-
-        private void b_April_Click(object sender, EventArgs e)
-        {
-            changeMonth(4);
-        }
-
-        private void b_May_Click(object sender, EventArgs e)
-        {
-            changeMonth(5);
-        }
-
-        private void b_June_Click(object sender, EventArgs e)
-        {
-            changeMonth(6);
-        }
-
-        private void b_July_Click(object sender, EventArgs e)
-        {
-            changeMonth(7);
-        }
-
-        private void b_August_Click(object sender, EventArgs e)
-        {
-            changeMonth(8);
-        }
-
-        private void b_September_Click(object sender, EventArgs e)
-        {
-            changeMonth(9);
-        }
-
-        private void b_October_Click(object sender, EventArgs e)
-        {
-            changeMonth(10);
-        }
-
-        private void b_November_Click(object sender, EventArgs e)
-        {
-            changeMonth(11);
-        }
-
-        private void b_December_Click(object sender, EventArgs e)
-        {
-            changeMonth(12);
-        }
-
-        private void b_January_Click(object sender, EventArgs e)
-        {
-            changeMonth(1);
-        }
-
-        private void b_February_Click(object sender, EventArgs e)
-        {
-            changeMonth(2);
-        }
-
-        private void b_March_Click(object sender, EventArgs e)
-        {
-            changeMonth(3);
-        }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             row_interface_group1.ClearRow();
@@ -305,7 +244,7 @@ namespace time
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
             List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, splitSunday);
-            createOvertimeDataSheet(outCodes, date);
+            //createOvertimeDataSheet(outCodes, date);
 
             Debug.WriteLine(outCodes.Count + " codes found.");
 
