@@ -88,6 +88,30 @@ namespace time
                 this.washupTime = value;
             }
         }
+        private TimeSpan cumulativeMins;
+        public TimeSpan CumulativeMins
+        {
+            get
+            {
+                return this.cumulativeMins;
+            }
+            set
+            {
+                this.cumulativeMins = value;
+            }
+        }
+        private bool addCumulativeOT;
+        public bool AddCumulativeOT
+        {
+            get
+            {
+                return this.addCumulativeOT;
+            }
+            set
+            {
+                this.addCumulativeOT = value;
+            }
+        }
 
         private string comment;
         public string Comment
@@ -130,9 +154,11 @@ namespace time
             this.overtime = TimeSpan.Zero;
             this.shiftPremiums = TimeSpan.Zero;
             this.WashupTime = TimeSpan.Zero;
+            this.cumulativeMins = TimeSpan.Zero;
+            this.addCumulativeOT = false;
         }
         private work_period(DateTime d, DateTime s, DateTime e,
-            TimeSpan o, TimeSpan sp, TimeSpan w, string com)
+            TimeSpan o, TimeSpan sp, TimeSpan w, TimeSpan cm, bool cot, string com)
         {
             this.Date = d;
             this.StartTime = s;
@@ -140,6 +166,8 @@ namespace time
             this.Overtime = o;
             this.ShiftPremiums = sp;
             this.WashupTime = w;
+            this.CumulativeMins = cm;
+            this.AddCumulativeOT = cot;
             this.Comment = com;
         }
         public static bool TryParse(string s, out work_period result)
@@ -152,6 +180,8 @@ namespace time
             TimeSpan ot;
             TimeSpan premium;
             TimeSpan wash;
+            TimeSpan cmMins;
+            bool cmOT;
             string comment;
 
             bool check = true;
@@ -162,7 +192,19 @@ namespace time
             check = TimeSpan.TryParse(scanner.NextWord(), out ot) ? check : false;
             check = TimeSpan.TryParse(scanner.NextWord(), out premium) ? check : false;
             check = TimeSpan.TryParse(scanner.NextWord(), out wash) ? check : false;
-            comment = scanner.NextWord();
+
+            string str = scanner.NextWord();
+
+            if(TimeSpan.TryParse(str, out cmMins) && bool.TryParse(scanner.NextWord(), out cmOT))
+            {
+                comment = scanner.NextWord();
+            }
+            else
+            {
+                comment = str;
+                cmMins = TimeSpan.Zero;
+                cmOT = false;
+            }
 
             if (!check)
             {
@@ -171,7 +213,8 @@ namespace time
                 return false;
             }
 
-            work_period period = new work_period(fixedDate, start, end, ot, premium, wash, comment);
+            //Need another constructor to handle extra mins
+            work_period period = new work_period(fixedDate, start, end, ot, premium, wash, cmMins, cmOT, comment);
 
             result = period;
             return true;
@@ -185,6 +228,8 @@ namespace time
                 Overtime.ToString() + s +
                 ShiftPremiums.ToString() + s +
                 WashupTime.ToString() + s +
+                CumulativeMins.ToString() + s +
+                AddCumulativeOT.ToString() + s +
                 Comment;
         }
     }
