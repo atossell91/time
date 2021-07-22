@@ -103,6 +103,15 @@ namespace time
             }
             catch (Exception e) { }
         }
+        public string dataFileNameFromYear(int year)
+        {
+            return "data_" + year.ToString() + ".txt";
+        }
+        public List<work_period> loadPeriodsByYear(int year)
+        {
+            string filename = dataFileNameFromYear(year);
+            return loadFromFile(MainDir.DirectoryPath + "\\" + filename);
+        }
         public Form1()
         {
             if (WorkingDirectory.RootDirectory() == "")
@@ -128,7 +137,7 @@ namespace time
             promptForYear();
             logProgramUse();
 
-            this.filename = "data_" + this.currentYear.ToString() + ".txt";
+            this.filename = dataFileNameFromYear(this.currentYear);
             wp = loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
             currentMonth = DateTime.Now.Month;
@@ -404,24 +413,57 @@ namespace time
             Yearly_Holiday_Viewer yhv = new Yearly_Holiday_Viewer(this.currentYear);
             yhv.ShowDialog();
         }
+        private work_period searchForPrevDay(List<work_period> days, DateTime start)
+        {
+            int startInd = days.FindIndex((a) =>
+            {
+                return a.Date == start;
+            });
+            for (int n = startInd -1; n > 0; --n)
+            {
+                if (days[n].StartTime != DateTime.MinValue && days[n].EndTime != DateTime.MinValue)
+                {
+                    return days[n];
+                }
+            }
+            return null;
+        }
+        private TimeSpan findCarryMins(List<work_period> startData, DateTime day, int dayCutOff) {
+
+            TimeSpan carry;
+            //Assume that the array is sorted by date -- may need to sort here
+            work_period prevDay = searchForPrevDay(startData, day);
+            if (prevDay == null)
+            {
+                List<work_period> prevYr = loadPeriodsByYear(day.Year - 1);
+                prevDay = searchForPrevDay(prevYr, new DateTime(this.currentYear - 1, 12, 31));
+                //if this is also null, then assume 00:00 carry minutes
+            }
+
+            if (prevDay == null || prevDay.Date < DateTime.Now.AddDays(-dayCutOff))
+            {
+                carry = TimeSpan.Zero;
+            }
+            else
+            {
+                carry = prevDay.CumulativeMins;
+            }
+            return TimeSpan.Zero;
+        }
         private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
             int dayCutOff = 35;
-            DateTime day = e.Period.Date;
+            work_period p = e.Period;
+            DateTime day = p.Date;
             if (day < DateTime.Now.AddDays(-dayCutOff))
             {
                 return;
             }
-            
-            //Assume that the array is sorted by date -- may need to sort here
-            int ind = wp.FindIndex((a) =>
-            {
-                return a.Date == day;
-            });
-            if (ind > 0)
-            {
-                Debug.WriteLine("Day before is: " + wp[ind-1].Date.ToString());
-            }
+
+            //Calculate cumulative minutes
+            TimeSpan actualOT = ShiftInformation.CalcOvertime(p.StartTime, p.EndTime);
+            TimeSpan lockedOT = ShiftInformation.LockTimeToInterval(actualOT);
+            TimeSpan diff = actualOT - lockedOT;
         }
     }
 }
