@@ -151,30 +151,30 @@ namespace time
             DateTime end;
             TimeSpan ot;
             TimeSpan premium;
-            TimeSpan wash = TimeSpan.Zero; //Leave unitialized after removing fixer function
+            TimeSpan wash;
             string comment;
 
-            if (DateTime.TryParse(scanner.NextWord(), out fixedDate) &&
-                DateTime.TryParse(scanner.NextWord(), out start) &&
-                DateTime.TryParse(scanner.NextWord(), out end) &&
-                TimeSpan.TryParse(scanner.NextWord(), out ot) &&
-                TimeSpan.TryParse(scanner.NextWord(), out premium) 
-                //&& TimeSpan.TryParse((str = scanner.NextWord()), out wash) //Uncomment after deleting fixer function
-                )
-            {
+            bool check = true;
 
-                Fixer_Functions._CORRECT_WASHUP(start, end, ref wash, scanner.NextWord()); //Fixer function. Delete once all save data is up-to-date
+            check = DateTime.TryParse(scanner.NextWord(), out fixedDate) ? check : false;
+            check = DateTime.TryParse(scanner.NextWord(), out start) ? check : false;
+            check = DateTime.TryParse(scanner.NextWord(), out end) ? check : false;
+            check = TimeSpan.TryParse(scanner.NextWord(), out ot) ? check : false;
+            check = TimeSpan.TryParse(scanner.NextWord(), out premium) ? check : false;
+            check = TimeSpan.TryParse(scanner.NextWord(), out wash) ? check : false;
+            comment = scanner.NextWord();
 
-                comment = scanner.NextWord();
-                result = new work_period(fixedDate, start, end, ot, premium, wash, comment);
-                return true;
-            }
-            else
+            if (!check)
             {
                 Debug.WriteLine("Parse Fail");
                 result = null;
                 return false;
             }
+
+            work_period period = new work_period(fixedDate, start, end, ot, premium, wash, comment);
+
+            result = period;
+            return true;
         }
         public override string ToString()
         {

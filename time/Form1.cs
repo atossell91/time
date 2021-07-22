@@ -25,22 +25,22 @@ namespace time
         private PersonalInfo personInfo;
         private bool splitSunday = false;
 
-        private void loadFromFile(string filepath)
+        private List<work_period> loadFromFile(string filepath)
         {
             if (!System.IO.File.Exists(filepath))
             {
-                return;
+                return null;
             }
 
+            List<work_period> p = new List<work_period>();
             string[] lines = System.IO.File.ReadAllLines(filepath);
-            Fixer_Functions.SAVEBACKUPFILE(filepath, lines, "washup_data_type");
 
             foreach (string line in lines)
             {
                 work_period period;
                 if (work_period.TryParse(line, out period))
                 {
-                    wp.Add(period);
+                    p.Add(period);
                 }
                 else
                 {
@@ -48,8 +48,9 @@ namespace time
                 }
             }
 
-            wp.Sort(work_period.CompareByDate());
+            p.Sort(work_period.CompareByDate());
             //sortWorkPeriods(compareWorkPeriodDates);
+            return p;
         }
         private List<string> getDataToSave()
         {
@@ -128,7 +129,7 @@ namespace time
             logProgramUse();
 
             this.filename = "data_" + this.currentYear.ToString() + ".txt";
-            loadFromFile(MainDir.DirectoryPath + "\\" + filename);
+            wp = loadFromFile(MainDir.DirectoryPath + "\\" + filename);
 
             currentMonth = DateTime.Now.Month;
 
@@ -405,8 +406,9 @@ namespace time
         }
         private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
+            int dayCutOff = 35;
             DateTime day = e.Period.Date;
-            if (day < DateTime.Now.AddDays(-35))
+            if (day < DateTime.Now.AddDays(-dayCutOff))
             {
                 return;
             }
