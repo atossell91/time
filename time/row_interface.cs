@@ -515,10 +515,12 @@ namespace time
             updateOvertime();
             updateShiftPremiums();
             updateWashup();
+
+            RowInterfaceEventArgs ev = new RowInterfaceEventArgs(period);
+            LeaveTimeBoxEvent?.Invoke(this, ev);
         }
         private void mtb_End_Validating(object sender, CancelEventArgs e) //NEED TO ENSURE CHANGES TO OT, PREMIUMS AND WASHUP ARE REFLECTED IN DATASOURCE!!!
         {
-            Debug.WriteLine("Validating start input");
             MaskedTextBox mtb = (MaskedTextBox)sender;
 
             mtb.Text = checkMinuteValue(mtb);
@@ -537,6 +539,9 @@ namespace time
                 updateOvertime();
                 updateShiftPremiums();
                 updateWashup();
+
+                RowInterfaceEventArgs ev = new RowInterfaceEventArgs(period);
+                LeaveTimeBoxEvent?.Invoke(this, ev);
             }
         }
         private void MaskedTextBox_Enter(object sender, EventArgs e)
@@ -711,8 +716,8 @@ namespace time
 
         private void control_Leave(object sender, EventArgs e)
         {
-            RowInterfaceEventArgs ev = new RowInterfaceEventArgs(period);
-            LeaveTimeBoxEvent?.Invoke(this, ev);
+            //RowInterfaceEventArgs ev = new RowInterfaceEventArgs(period);
+            //LeaveTimeBoxEvent?.Invoke(this, ev);
         }
 
         private void row_interface_Validated(object sender, EventArgs e)

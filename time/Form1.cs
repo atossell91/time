@@ -29,7 +29,7 @@ namespace time
         {
             if (!System.IO.File.Exists(filepath))
             {
-                return null;
+                return new List<work_period>();
             }
 
             List<work_period> p = new List<work_period>();
@@ -261,7 +261,7 @@ namespace time
 
             Debug.WriteLine(outCodes.Count + " codes found.");
 
-            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart);
+            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart, wp);
             List<Sheet> sheets = new List<Sheet>();
             sheets.Add(sheet);
 
@@ -428,27 +428,36 @@ namespace time
             }
             return null;
         }
-        private TimeSpan findCarryMins(List<work_period> startData, DateTime day, int dayCutOff) {
+        private TimeSpan findCarryMins(List<work_period> startData, DateTime day, int dayCutOff)
+        {
+            DateTime cutDate = DateTime.Now.AddDays(-dayCutOff);
 
-            TimeSpan carry;
             //Assume that the array is sorted by date -- may need to sort here
             work_period prevDay = searchForPrevDay(startData, day);
-            if (prevDay == null)
+            if (prevDay != null)
             {
-                List<work_period> prevYr = loadPeriodsByYear(day.Year - 1);
-                prevDay = searchForPrevDay(prevYr, new DateTime(this.currentYear - 1, 12, 31));
-                //if this is also null, then assume 00:00 carry minutes
+                if (prevDay.Date >= cutDate)
+                {
+                    return prevDay.CumulativeMins;
+                }
+                else
+                {
+                    return TimeSpan.Zero;
+                }
             }
 
-            if (prevDay == null || prevDay.Date < DateTime.Now.AddDays(-dayCutOff))
+            List<work_period> prevYr = loadPeriodsByYear(day.Year - 1);
+            //Search for day in previous year
+            prevDay = searchForPrevDay(prevYr, new DateTime(this.currentYear - 1, 12, 31));
+
+            if (prevDay == null || prevDay.Date < cutDate)
             {
-                carry = TimeSpan.Zero;
+                return TimeSpan.Zero;
             }
             else
             {
-                carry = prevDay.CumulativeMins;
+                return prevDay.CumulativeMins;
             }
-            return TimeSpan.Zero;
         }
         private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
@@ -461,9 +470,22 @@ namespace time
             }
 
             //Calculate cumulative minutes
-            TimeSpan actualOT = ShiftInformation.CalcOvertime(p.StartTime, p.EndTime);
-            TimeSpan lockedOT = ShiftInformation.LockTimeToInterval(actualOT);
-            TimeSpan diff = actualOT - lockedOT;
+            TimeSpan diff = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
+
+            diff = diff < TimeSpan.Zero ? TimeSpan.Zero : diff;
+
+            TimeSpan cumulMins = diff.Add(findCarryMins(wp, p.Date, 35));
+            
+            if (cumulMins.TotalMinutes >= 15)
+            {
+                e.Period.AddCumulativeOT = true;
+                cumulMins = cumulMins.Subtract(new TimeSpan(0, 15, 0));
+            }
+            else
+            {
+                e.Period.AddCumulativeOT = false;
+            }
+            e.Period.CumulativeMins = cumulMins;
         }
     }
 }

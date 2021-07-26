@@ -23,15 +23,16 @@ namespace time
         private TextBox[,] firstWeek;
         private TextBox[,] secondWeek;
 
-        //private List<work_period> codes;
+        private List<work_period> workPeriods;
         private List<PremiumCode> codes;
         private DateTime startDate;
         private PersonalInfo pInfo;
 
-        public readonly static string[] ValidCodes = {"055", "260" };
+        public readonly static string[] ValidCodes = {"055", "260", CodeChecker.Extra260.DEFAULT_CODE};
 
         private const int STANDARD_FONT_SIZE = 18;
         private const int LARGE_FONT_SIZE = 26;
+        private const int SMALL_FONT_SIZE = 10;
 
         private const int ScaleSubtraction = 8;
 
@@ -168,11 +169,12 @@ namespace time
         private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate)
         {
             DateTime d = tableStartDate;
+            int ind = workPeriods.FindIndex((a) => { return a.Date.Date == d.Date; });
             for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
             {
+                work_period p = workPeriods[ind];
                 int row = 0;
                 List<PremiumCode> pcodes = GetPremiumCodes(d);
-                Debug.WriteLine(d.ToString() + ", number of codes: " + pcodes.Count);
 
                 foreach (PremiumCode c in pcodes)
                 {
@@ -181,12 +183,25 @@ namespace time
                     ++row;
                 }
                 d = d.AddDays(1.0);
+
+                //Need to add cumulative minutes here, but not treat it like a pcode
+                TimeSpan cumulMins = p != null ? p.CumulativeMins : TimeSpan.Zero;
+                grid[PhoenixOTSheetDims.RowsPerGrid - 2, n].Text = 
+                    "+" + ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime).TotalMinutes.ToString();
+                grid[PhoenixOTSheetDims.RowsPerGrid - 2, n + 1].Text = "Extra mins";
+                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
+                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n].Text = cumulMins.TotalMinutes.ToString();
+                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n+1].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
+                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n+1].Text = "Total mins";
+                ++ind;
             }
         }
-        public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate)
+        public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate, List<work_period> wpData)
         {
             this.pInfo = info;
             this.startDate = startDate;
+
+            workPeriods = wpData;
 
             textboxes = new List<TextBox>();
 

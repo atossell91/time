@@ -125,5 +125,18 @@ namespace time
                 return TimeSpan.Zero;
             }
         }
+        public static TimeSpan CalcExtraTime(DateTime start, DateTime end)
+        {
+            TimeSpan totalTime = CalcHoursWorked(start, end, LunchLength);
+
+            if (totalTime <= ShiftLength)
+            {
+                return TimeSpan.Zero;
+            }
+
+            TimeSpan lockedTime = LockTimeToInterval(totalTime);
+
+            return totalTime.Subtract(lockedTime);
+        }
     }
 }
