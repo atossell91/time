@@ -64,7 +64,8 @@ namespace time
                         continue;
                     }
                     else if ((nextDay.DayOfWeek == DayOfWeek.Sunday) &&
-                        p.EndTime.Date == nextDay.Date)
+                        p.EndTime.Date == nextDay.Date &&
+                        splitSunday)
                     {
                         pc.Hours = ShiftInformation.LockTimeToInterval(
                             ShiftInformation.CalcOvertime(p.StartTime,

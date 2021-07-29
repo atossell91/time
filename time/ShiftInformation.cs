@@ -136,7 +136,9 @@ namespace time
 
             TimeSpan lockedTime = LockTimeToInterval(totalTime);
 
-            return totalTime.Subtract(lockedTime);
+            TimeSpan diff = totalTime.Subtract(lockedTime);
+            diff = diff > TimeSpan.Zero ? diff : TimeSpan.Zero;
+            return diff;
         }
     }
 }
