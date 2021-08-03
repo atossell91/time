@@ -58,6 +58,8 @@ namespace time
 
         public event KeyEventHandler KeyDownEvent;
         private void initRows()
+
+
         {
             int daysInMonth = DateTime.DaysInMonth(year, month);
             //Debug.WriteLine("ACTUAL DATE: " + periods[periods.Count - 1]);
@@ -212,6 +214,7 @@ namespace time
 
         public void selectMonth(int m)
         {
+            Debug.WriteLine("Selecting the month");
             month = m;
             foreach(row_interface r in rowList)
             {
@@ -221,10 +224,11 @@ namespace time
 
             rowList.Clear();
 
-            //periods = new List<work_period>();
+            Debug.WriteLine("initializing new rows");
             initRows();
 
             selectFirstRow();
+            Debug.WriteLine("Done selecting the month");
         }
         /*public row_interface_group(List<work_period> days)
         {
@@ -269,6 +273,7 @@ namespace time
         }
         private void ControlVerticalArrowPressed(object sender, KeyEventArgs e)
         {
+            Debug.WriteLine("Row interface group, vertical arrow");
             if (e.KeyCode == Keys.Up)
             {
                 changeSelectedRow(-1);
@@ -288,6 +293,7 @@ namespace time
         }
         private void cb_Month_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Debug.WriteLine("Changing selected index");
             ComboBox cmb = (ComboBox)cb_Month;
             selectMonth(cmb.SelectedIndex + 1);
             //selectFirstRow();

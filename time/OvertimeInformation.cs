@@ -54,6 +54,10 @@ namespace time
                 c.code = code;
                 c.hours = hours;
             }
+            public codeRow[] GetAllCodes()
+            {
+                return this.codes;
+            }
             public void AddCode(string code, string hours)
             {
                 if (rowCount >= ROWS_PER_DAY)

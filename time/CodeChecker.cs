@@ -10,7 +10,7 @@ namespace time
     class CodeChecker
     {
         private static List<Code_Interface> ComputableCodes = 
-            new List<Code_Interface>{new Code260(), new Code055(), new Code290(), new Extra260()};
+            new List<Code_Interface>{new Code260(), new Code055(), new Code290()};
         public static List<PremiumCode> CheckCodes(List<work_period> inputPeriods, bool splitSunday)
         {
             List<PremiumCode> outputCodes = new List<PremiumCode>();
@@ -171,24 +171,6 @@ namespace time
                 }
 
                 return outputcodes;
-            }
-        }
-        public class Extra260 : Code_Interface
-        {
-            public readonly static string DEFAULT_CODE = "260*";
-            public List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday)
-            {
-                List<PremiumCode> li = new List<PremiumCode>();
-                foreach (work_period p in wp)
-                {
-                    if (p.AddCumulativeOT)
-                    {
-                        PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.Date);
-                        pc.Hours = new TimeSpan(0, 15, 0);
-                        li.Add(pc);
-                    }
-                }
-                return li;
             }
         }
     }
