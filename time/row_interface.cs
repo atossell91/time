@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace time
 {
@@ -42,6 +43,7 @@ namespace time
 
         private void initControlsList()
         {
+            currentControl.Add(comboBox1);
             currentControl.Add(mtb_Start);
             currentControl.Add(mtb_End);
             //currentControl.Add(nud_overtime);
@@ -731,6 +733,41 @@ namespace time
             {
                 mtb.Select(0, 1000);
             }
+        }
+
+        private void ComboBox1_Validating(object sender, CancelEventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            if (!Regex.IsMatch(cb.Text, @"^$|^(([1-9][012]{0,1})|([mMcCeEfF]))[aAbB]$"))
+            {
+                MessageBox.Show("Invalid input. Use dropdown to see valid inputs", "Invalid Input",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                e.Cancel = true;
+            }
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void ComboBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                //Child_KeyDown(sender, e);
+                raiseVerticalArrowEvent(e);
+                MessageBox.Show("Fat girls are sexy");
+            }
+            else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+                raiseHorizontalArrowEvent(e);
+            }
+        }
+
+        private void ComboBox1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
         }
     }
 }

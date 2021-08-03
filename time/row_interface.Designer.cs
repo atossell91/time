@@ -37,6 +37,7 @@
             this.rtb_Comment = new System.Windows.Forms.RichTextBox();
             this.mtb_Start = new System.Windows.Forms.MaskedTextBox();
             this.mtb_End = new System.Windows.Forms.MaskedTextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.nud_overtime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_premiums)).BeginInit();
             this.SuspendLayout();
@@ -51,7 +52,7 @@
             0,
             131072});
             this.nud_overtime.InterceptArrowKeys = false;
-            this.nud_overtime.Location = new System.Drawing.Point(450, 10);
+            this.nud_overtime.Location = new System.Drawing.Point(531, 10);
             this.nud_overtime.Name = "nud_overtime";
             this.nud_overtime.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.nud_overtime.Size = new System.Drawing.Size(71, 32);
@@ -71,7 +72,7 @@
             0,
             131072});
             this.nud_premiums.InterceptArrowKeys = false;
-            this.nud_premiums.Location = new System.Drawing.Point(550, 10);
+            this.nud_premiums.Location = new System.Drawing.Point(625, 10);
             this.nud_premiums.Name = "nud_premiums";
             this.nud_premiums.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.nud_premiums.Size = new System.Drawing.Size(71, 32);
@@ -85,7 +86,7 @@
             // 
             this.cb_Washup.BackColor = System.Drawing.SystemColors.Control;
             this.cb_Washup.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cb_Washup.Location = new System.Drawing.Point(660, 10);
+            this.cb_Washup.Location = new System.Drawing.Point(714, 10);
             this.cb_Washup.Name = "cb_Washup";
             this.cb_Washup.Size = new System.Drawing.Size(40, 30);
             this.cb_Washup.TabIndex = 4;
@@ -131,7 +132,7 @@
             // rtb_Comment
             // 
             this.rtb_Comment.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.rtb_Comment.Location = new System.Drawing.Point(730, 10);
+            this.rtb_Comment.Location = new System.Drawing.Point(784, 10);
             this.rtb_Comment.Name = "rtb_Comment";
             this.rtb_Comment.Size = new System.Drawing.Size(330, 30);
             this.rtb_Comment.TabIndex = 8;
@@ -144,7 +145,7 @@
             // mtb_Start
             // 
             this.mtb_Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.mtb_Start.Location = new System.Drawing.Point(250, 10);
+            this.mtb_Start.Location = new System.Drawing.Point(341, 9);
             this.mtb_Start.Mask = "00:00";
             this.mtb_Start.Name = "mtb_Start";
             this.mtb_Start.Size = new System.Drawing.Size(70, 32);
@@ -161,7 +162,7 @@
             // mtb_End
             // 
             this.mtb_End.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.mtb_End.Location = new System.Drawing.Point(350, 10);
+            this.mtb_End.Location = new System.Drawing.Point(435, 9);
             this.mtb_End.Mask = "00:00";
             this.mtb_End.Name = "mtb_End";
             this.mtb_End.Size = new System.Drawing.Size(70, 32);
@@ -175,10 +176,57 @@
             this.mtb_End.Leave += new System.EventHandler(this.control_Leave);
             this.mtb_End.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_End_Validating);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.comboBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.Items.AddRange(new object[] {
+            "1A",
+            "2A",
+            "3A",
+            "4A",
+            "5A",
+            "6A",
+            "7A",
+            "8A",
+            "9A",
+            "10A",
+            "11A",
+            "MA",
+            "EA",
+            "CA",
+            "FA",
+            "1B",
+            "2B",
+            "3B",
+            "4B",
+            "5B",
+            "6B",
+            "7B",
+            "8B",
+            "9B",
+            "10B",
+            "11B",
+            "12B",
+            "MB",
+            "EB",
+            "CB",
+            "FB"});
+            this.comboBox1.Location = new System.Drawing.Point(247, 9);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(68, 33);
+            this.comboBox1.TabIndex = 11;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ComboBox1_KeyDown);
+            this.comboBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ComboBox1_PreviewKeyDown);
+            this.comboBox1.Validating += new System.ComponentModel.CancelEventHandler(this.ComboBox1_Validating);
+            // 
             // row_interface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.mtb_End);
             this.Controls.Add(this.mtb_Start);
             this.Controls.Add(this.rtb_Comment);
@@ -189,7 +237,7 @@
             this.Controls.Add(this.nud_premiums);
             this.Controls.Add(this.nud_overtime);
             this.Name = "row_interface";
-            this.Size = new System.Drawing.Size(1083, 52);
+            this.Size = new System.Drawing.Size(1133, 52);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.row_interface_KeyDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.row_interface_MouseMove);
             this.Validated += new System.EventHandler(this.row_interface_Validated);
@@ -210,5 +258,6 @@
         private System.Windows.Forms.RichTextBox rtb_Comment;
         private System.Windows.Forms.MaskedTextBox mtb_Start;
         private System.Windows.Forms.MaskedTextBox mtb_End;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
