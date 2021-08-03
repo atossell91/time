@@ -23,7 +23,7 @@ namespace time
         //private row_interface_group displayedRows;
         //private row_interface_group row_interface_group1;
         private PersonalInfo personInfo;
-        private bool splitSunday = true;
+        private bool splitSunday = false;
 
         private List<work_period> loadFromFile(string filepath)
         {
@@ -163,16 +163,6 @@ namespace time
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (DateTime.Now < new DateTime(2021, 08, 16))
-            {
-                Debug.WriteLine("Calculting from July 12 (+35 days) - Delete after July 16th");
-                int index = wp.FindIndex((a) => { return a.Date.Date == new DateTime(2021, 07, 12).Date; });
-                for (int n = index; n < wp.Count && n < index + 35; ++n)
-                {
-                    calcCumulativeMins(wp[n]);
-                }
-                // DELETE THIS ENTIRE CONDITIONAL BLOCK
-            }
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -469,47 +459,33 @@ namespace time
                 return prevDay.CumulativeMins;
             }
         }
-        private void calcCumulativeMins(work_period p)
+        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
+            int dayCutOff = 35;
+            work_period p = e.Period;
+            DateTime day = p.Date;
+            if (day < DateTime.Now.AddDays(-dayCutOff))
+            {
+                return;
+            }
+
             //Calculate cumulative minutes
             TimeSpan diff = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
 
             diff = diff < TimeSpan.Zero ? TimeSpan.Zero : diff;
 
-            TimeSpan carryMins = findCarryMins(wp, p.Date, 35);
-            TimeSpan cumulMins = diff.Add(carryMins);
-
+            TimeSpan cumulMins = diff.Add(findCarryMins(wp, p.Date, 35));
+            
             if (cumulMins.TotalMinutes >= 15)
             {
-                p.AddCumulativeOT = true;
+                e.Period.AddCumulativeOT = true;
                 cumulMins = cumulMins.Subtract(new TimeSpan(0, 15, 0));
             }
             else
             {
-                p.AddCumulativeOT = false;
+                e.Period.AddCumulativeOT = false;
             }
-            p.CumulativeMins = cumulMins;
-        }
-        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
-        {
-            int dayCutOff = 35;
-
-            //Find index of period in wp array
-            int ind = wp.FindIndex((a)=> { return a.Date == e.Period.Date; });
-            if (ind < 0)
-            {
-                return;
-            }
-
-            //Iterate over the next ~35 days, ensuring the cumulative times are correct
-            for (int n =0;
-                n < dayCutOff &&
-                e.Period.Date >= DateTime.Now.AddDays(-dayCutOff) &&
-                ind + n < wp.Count;
-                ++n)
-            {
-                calcCumulativeMins(wp[ind + n]);
-            }
+            e.Period.CumulativeMins = cumulMins;
         }
     }
 }
