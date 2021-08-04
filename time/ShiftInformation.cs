@@ -37,11 +37,11 @@ namespace time
         {
             return new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
         }
-        public static TimeSpan LockTimeToInterval(TimeSpan time)
+        public static TimeSpan LockTimeToInterval(TimeSpan time, bool roundUp)
         {
             long totalTime = time.Ticks;
             long increment = HourInterval.Ticks;
-            long cut = HourIntervalCutoff.Ticks;
+            long cut = roundUp ? HourIntervalCutoff.Ticks : 0;
 
             long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);
@@ -134,7 +134,7 @@ namespace time
                 return TimeSpan.Zero;
             }
 
-            TimeSpan lockedTime = LockTimeToInterval(totalTime);
+            TimeSpan lockedTime = LockTimeToInterval(totalTime, false);
 
             return totalTime.Subtract(lockedTime);
         }

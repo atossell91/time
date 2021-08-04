@@ -224,11 +224,13 @@ namespace time
         }
         private TimeSpan calcOvertime()
         {
-            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcOvertime(period.StartTime, period.EndTime));
+            return ShiftInformation.LockTimeToInterval(
+                ShiftInformation.CalcOvertime(period.StartTime, period.EndTime), false);
         }
         private TimeSpan calcShiftPremium()
         {
-            return ShiftInformation.LockTimeToInterval(ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime));
+            return ShiftInformation.LockTimeToInterval(
+                ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime), false);
         }
         private void nud_overtime_ValueChanged(object sender, EventArgs e)
         {
