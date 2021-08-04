@@ -39,9 +39,13 @@ namespace time
         }
         public static TimeSpan LockTimeToInterval(TimeSpan time)
         {
+            return LockTimeToInterval(time, false);
+        }
+        public static TimeSpan LockTimeToInterval(TimeSpan time, bool roundUp)
+        {
             long totalTime = time.Ticks;
             long increment = HourInterval.Ticks;
-            long cut = HourIntervalCutoff.Ticks;
+            long cut = roundUp ? HourIntervalCutoff.Ticks : 0;
 
             long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);

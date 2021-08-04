@@ -41,6 +41,7 @@
             this.l_Year = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.sample_row_inteface = new time.row_interface();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,7 +91,7 @@
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(270, 50);
+            this.label4.Location = new System.Drawing.Point(360, 50);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 40);
             this.label4.TabIndex = 3;
@@ -100,7 +101,7 @@
             // label5
             // 
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(370, 50);
+            this.label5.Location = new System.Drawing.Point(453, 50);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(60, 40);
             this.label5.TabIndex = 5;
@@ -110,7 +111,7 @@
             // label6
             // 
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(450, 50);
+            this.label6.Location = new System.Drawing.Point(535, 50);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 40);
             this.label6.TabIndex = 6;
@@ -120,7 +121,7 @@
             // label7
             // 
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(550, 50);
+            this.label7.Location = new System.Drawing.Point(624, 50);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(81, 40);
             this.label7.TabIndex = 7;
@@ -173,7 +174,7 @@
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(650, 50);
+            this.label9.Location = new System.Drawing.Point(709, 50);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(81, 40);
             this.label9.TabIndex = 11;
@@ -182,15 +183,27 @@
             // 
             // sample_row_inteface
             // 
+            this.sample_row_inteface.BackColor = System.Drawing.Color.Transparent;
             this.sample_row_inteface.Location = new System.Drawing.Point(10, 10);
             this.sample_row_inteface.Name = "sample_row_inteface";
             this.sample_row_inteface.Size = new System.Drawing.Size(1083, 52);
             this.sample_row_inteface.TabIndex = 0;
             // 
+            // label10
+            // 
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(267, 50);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(65, 40);
+            this.label10.TabIndex = 12;
+            this.label10.Text = "Position";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // row_interface_group
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.l_Year);
             this.Controls.Add(this.cb_Month);
@@ -226,5 +239,6 @@
         private System.Windows.Forms.ComboBox cb_Month;
         private System.Windows.Forms.Label l_Year;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
     }
 }

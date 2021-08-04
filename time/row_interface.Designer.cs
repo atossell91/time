@@ -37,7 +37,7 @@
             this.rtb_Comment = new System.Windows.Forms.RichTextBox();
             this.mtb_Start = new System.Windows.Forms.MaskedTextBox();
             this.mtb_End = new System.Windows.Forms.MaskedTextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nud_overtime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_premiums)).BeginInit();
             this.SuspendLayout();
@@ -176,57 +176,23 @@
             this.mtb_End.Leave += new System.EventHandler(this.control_Leave);
             this.mtb_End.Validating += new System.ComponentModel.CancelEventHandler(this.mtb_End_Validating);
             // 
-            // comboBox1
+            // textBox1
             // 
-            this.comboBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
-            this.comboBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.Items.AddRange(new object[] {
-            "1A",
-            "2A",
-            "3A",
-            "4A",
-            "5A",
-            "6A",
-            "7A",
-            "8A",
-            "9A",
-            "10A",
-            "11A",
-            "MA",
-            "EA",
-            "CA",
-            "FA",
-            "1B",
-            "2B",
-            "3B",
-            "4B",
-            "5B",
-            "6B",
-            "7B",
-            "8B",
-            "9B",
-            "10B",
-            "11B",
-            "12B",
-            "MB",
-            "EB",
-            "CB",
-            "FB"});
-            this.comboBox1.Location = new System.Drawing.Point(247, 9);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(68, 33);
-            this.comboBox1.TabIndex = 11;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
-            this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ComboBox1_KeyDown);
-            this.comboBox1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.ComboBox1_PreviewKeyDown);
-            this.comboBox1.Validating += new System.ComponentModel.CancelEventHandler(this.ComboBox1_Validating);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(252, 9);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(65, 31);
+            this.textBox1.TabIndex = 11;
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
+            this.textBox1.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_Validating);
+            this.textBox1.Validated += new System.EventHandler(this.TextBox1_Validated);
             // 
             // row_interface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.mtb_End);
             this.Controls.Add(this.mtb_Start);
             this.Controls.Add(this.rtb_Comment);
@@ -258,6 +224,6 @@
         private System.Windows.Forms.RichTextBox rtb_Comment;
         private System.Windows.Forms.MaskedTextBox mtb_Start;
         private System.Windows.Forms.MaskedTextBox mtb_End;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
