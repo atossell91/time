@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace time
 {
@@ -43,7 +42,10 @@ namespace time
 
         private void initControlsList()
         {
+<<<<<<< HEAD
             currentControl.Add(textBox1);
+=======
+>>>>>>> parent of 02db67f... I don't think I'll keep this
             currentControl.Add(mtb_Start);
             currentControl.Add(mtb_End);
             //currentControl.Add(nud_overtime);
@@ -734,6 +736,7 @@ namespace time
                 mtb.Select(0, 1000);
             }
         }
+<<<<<<< HEAD
 
         private void TextBox_Validating(object sender, CancelEventArgs e)
         {
@@ -770,5 +773,7 @@ namespace time
             TextBox tb = (TextBox)sender;
             tb.Text = tb.Text.ToUpper();
         }
+=======
+>>>>>>> parent of 02db67f... I don't think I'll keep this
     }
 }
