@@ -135,15 +135,13 @@ namespace time
         private int findFirstDateInstance(DateTime d, List<PremiumCode> c)
         {
             int index = c.BinarySearch(new PremiumCode(String.Empty, d.Date), PremiumCode.compareByStartDate());
-            Debug.WriteLine("INDEX: " + index);
 
             if (index < 0)
             {
                 return index;
             }
 
-            for (; index > 0 && c[index-1].StartDate.Date == d.Date; --index) ;
-            Debug.WriteLine("FINAL INDEX: " + index);
+            for (; index > 0 && c[index-1].StartDate.Date == d.Date; --index);
 
             return index;
         }
@@ -166,34 +164,66 @@ namespace time
             }
             return outputCodes;
         }
+        private void printCodes(ref TextBox[,] grid, int dayNum, DateTime startDate)
+        {
+            DateTime d = startDate.AddDays(dayNum);
+            int row = 0;
+            List<PremiumCode> pcodes = GetPremiumCodes(d);
+            foreach (PremiumCode c in pcodes)
+            {
+                grid[row, dayNum*2].Text = c.Hours.TotalHours.ToString();
+                grid[row, dayNum*2 + 1].Text = c.Code;
+                ++row;
+            }
+        }
+        private void printMinutes(ref TextBox[,] grid, int dayNum, DateTime tStart)
+        {
+            //This work period is wrong
+            int index = workPeriods.BinarySearch(new work_period(tStart.AddDays(dayNum)),
+                work_period.CompareByDate());
+
+            index = index < 0 ? ~index : index;
+            work_period p = workPeriods[index];
+
+            TimeSpan cumulMins = p != null ? p.CumulativeMins : TimeSpan.Zero;
+
+            int column = dayNum * 2;
+            grid[PhoenixOTSheetDims.RowsPerGrid - 2, column].Text =
+                "+" + ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime).TotalMinutes.ToString();
+            grid[PhoenixOTSheetDims.RowsPerGrid - 2, column + 1].Text = "Extra mins";
+            grid[PhoenixOTSheetDims.RowsPerGrid - 1, column].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
+            grid[PhoenixOTSheetDims.RowsPerGrid - 1, column].Text = cumulMins.TotalMinutes.ToString();
+            grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
+            grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Text = "Total mins";
+        }
+        // Plan to delete this
+        private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate, bool stopper)
+        {
+            //int ind = workPeriods.FindIndex((a) => { return a.Date.Date == d.Date; });
+
+            //  Find index of work period closest to the table start date
+            int ind = Search.FindIndexOrNext(workPeriods,
+                new work_period(tableStartDate), work_period.CompareByDate());
+
+            //  For each day
+            for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid/2; ++n)
+            {
+                int dayNum = n * 2;
+
+                //  Get rows based on the day (and increment)
+                printCodes(ref grid, dayNum, tableStartDate);
+
+                printMinutes(ref grid, dayNum, tableStartDate);
+            }
+        }
         private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate)
         {
-            DateTime d = tableStartDate;
-            int ind = workPeriods.FindIndex((a) => { return a.Date.Date == d.Date; });
-            for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
+            for (int n =0; n < PhoenixOTSheetDims.ColumnsPerGrid; n += 2)
             {
-                work_period p = workPeriods[ind];
-                int row = 0;
-                List<PremiumCode> pcodes = GetPremiumCodes(d);
-
-                foreach (PremiumCode c in pcodes)
-                {
-                    grid[row, n].Text = c.Hours.TotalHours.ToString();
-                    grid[row, n + 1].Text = c.Code;
-                    ++row;
-                }
-                d = d.AddDays(1.0);
-
-                //Need to add cumulative minutes here, but not treat it like a pcode
-                TimeSpan cumulMins = p != null ? p.CumulativeMins : TimeSpan.Zero;
-                grid[PhoenixOTSheetDims.RowsPerGrid - 2, n].Text = 
-                    "+" + ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime).TotalMinutes.ToString();
-                grid[PhoenixOTSheetDims.RowsPerGrid - 2, n + 1].Text = "Extra mins";
-                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
-                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n].Text = cumulMins.TotalMinutes.ToString();
-                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n+1].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
-                grid[PhoenixOTSheetDims.RowsPerGrid - 1, n+1].Text = "Total mins";
-                ++ind;
+                //  Codes
+                printCodes(ref grid, n / 2, tableStartDate);
+                //  Minutes
+                printMinutes(ref grid, n / 2, tableStartDate);
             }
         }
         public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate, List<work_period> wpData)
@@ -236,18 +266,6 @@ namespace time
             addDataToGrid(ref firstWeek, startDate);
             addDataToGrid(ref secondWeek, startDate.AddDays(7.0));
 
-        }
-        public void scaleTextBoxFont(float scaleFactor)
-        {
-            scaleFactor /= 2;
-            foreach (TextBox t in textboxes)
-            {
-                t.Font = new Font(t.Font.FontFamily.Name, (int)(t.Font.Height * scaleFactor));
-            }
-        }
-
-        private void Paint(object sender, PaintEventArgs e)
-        {
         }
         private void setAllBorders(BorderStyle b)
         {

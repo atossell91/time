@@ -116,12 +116,6 @@
     <Compile Include="PersonalnfoGetter.Designer.cs">
       <DependentUpon>PersonalnfoGetter.cs</DependentUpon>
     </Compile>
-    <Compile Include="PhoenixOTSheet.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PhoenixOTSheet.Designer.cs">
-      <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
-    </Compile>
     <Compile Include="PhoenixOTSheetDims.cs" />
     <Compile Include="PremiumCode.cs" />
     <Compile Include="Program.cs" />
@@ -146,6 +140,7 @@
     <Compile Include="row_interface_group.Designer.cs">
       <DependentUpon>row_interface_group.cs</DependentUpon>
     </Compile>
+    <Compile Include="Search.cs" />
     <Compile Include="Sheet.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -211,9 +206,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PersonalnfoGetter.resx">
       <DependentUpon>PersonalnfoGetter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PhoenixOTSheet.resx">
-      <DependentUpon>PhoenixOTSheet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
