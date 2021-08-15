@@ -232,5 +232,10 @@ namespace time
                 AddCumulativeOT.ToString() + s +
                 Comment;
         }
+        public bool IsValid()
+        {
+            return this.StartTime != DateTime.MinValue &&
+                this.EndTime != DateTime.MinValue;
+        }
     }
 }

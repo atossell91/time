@@ -77,7 +77,8 @@ namespace time
                 }
                 else
                 {
-                    periods.Add(new work_period(day));
+                    work_period p = new work_period(day);
+                    periods.Add(p);
                     rowList.Add(new row_interface(periods[periods.Count-1]));
                 }
                 periods.Sort(work_period.CompareByDate());

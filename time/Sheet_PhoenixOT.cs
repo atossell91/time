@@ -188,7 +188,7 @@ namespace time
             TimeSpan cumulMins = p != null ? p.CumulativeMins : TimeSpan.Zero;
 
             TimeSpan extraMins;
-            if (srchResult >= 0)
+            if (srchResult >= 0 && p.IsValid())
             {
                 extraMins = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
             }
@@ -206,26 +206,6 @@ namespace time
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column].Text = cumulMins.TotalMinutes.ToString();
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Text = "Total mins";
-        }
-        // Plan to delete this
-        private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate, bool stopper)
-        {
-            //int ind = workPeriods.FindIndex((a) => { return a.Date.Date == d.Date; });
-
-            //  Find index of work period closest to the table start date
-            int ind = Search.FindIndexOrNext(workPeriods,
-                new work_period(tableStartDate), work_period.CompareByDate());
-
-            //  For each day
-            for (int n = 0; n < PhoenixOTSheetDims.ColumnsPerGrid/2; ++n)
-            {
-                int dayNum = n * 2;
-
-                //  Get rows based on the day (and increment)
-                printCodes(ref grid, dayNum, tableStartDate);
-
-                printMinutes(ref grid, dayNum, tableStartDate);
-            }
         }
         private void addDataToGrid(ref TextBox[,] grid, DateTime tableStartDate)
         {
