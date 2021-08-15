@@ -14,6 +14,8 @@ namespace time
 {
     public partial class Form1 : Form
     {
+        Exception PeriodNotFoundException;
+        private const int DAY_CUTOFF = 35;
         private readonly WorkingDirectory MainDir;
 
         private List<work_period> wp;
@@ -459,33 +461,52 @@ namespace time
                 return prevDay.CumulativeMins;
             }
         }
-        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        private void calcCumulMins(work_period p)
         {
-            int dayCutOff = 35;
-            work_period p = e.Period;
+            //  If date modified is more than 35 days ago, do nothing
             DateTime day = p.Date;
-            if (day < DateTime.Now.AddDays(-dayCutOff))
+            if (day < DateTime.Now.AddDays(-DAY_CUTOFF))
             {
                 return;
             }
 
-            //Calculate cumulative minutes
+            //  Calculate extra minutes
             TimeSpan diff = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
-
             diff = diff < TimeSpan.Zero ? TimeSpan.Zero : diff;
 
+            //  Find cumulative minutes from before
             TimeSpan cumulMins = diff.Add(findCarryMins(wp, p.Date, 35));
-            
+
+            //  Set flag and reset minutes if >15
             if (cumulMins.TotalMinutes >= 15)
             {
-                e.Period.AddCumulativeOT = true;
+                p.AddCumulativeOT = true;
                 cumulMins = cumulMins.Subtract(new TimeSpan(0, 15, 0));
             }
             else
             {
-                e.Period.AddCumulativeOT = false;
+                p.AddCumulativeOT = false;
             }
-            e.Period.CumulativeMins = cumulMins;
+
+            p.CumulativeMins = cumulMins;
+        }
+        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        {
+            int index = wp.BinarySearch(e.Period, work_period.CompareByDate());
+
+            if (index < 0)
+            {
+                throw (PeriodNotFoundException);
+            }
+
+            work_period p = wp[index];
+            while (index < wp.Count && p.Date < DateTime.Now.AddDays(DAY_CUTOFF))
+            {
+                p = wp[index];
+                calcCumulMins(p);
+                ++index;
+            }
+            calcCumulMins(e.Period);
         }
     }
 }

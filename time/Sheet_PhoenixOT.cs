@@ -179,19 +179,30 @@ namespace time
         private void printMinutes(ref TextBox[,] grid, int dayNum, DateTime tStart)
         {
             //This work period is wrong
-            int index = workPeriods.BinarySearch(new work_period(tStart.AddDays(dayNum)),
+            int srchResult = workPeriods.BinarySearch(new work_period(tStart.AddDays(dayNum)),
                 work_period.CompareByDate());
 
-            index = index < 0 ? ~index : index;
+            int index = srchResult < 0 ? ~srchResult-1 : srchResult;
             work_period p = workPeriods[index];
 
             TimeSpan cumulMins = p != null ? p.CumulativeMins : TimeSpan.Zero;
 
+            TimeSpan extraMins;
+            if (srchResult >= 0)
+            {
+                extraMins = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
+            }
+            else
+            {
+                extraMins = TimeSpan.Zero;
+            }
+
             int column = dayNum * 2;
             grid[PhoenixOTSheetDims.RowsPerGrid - 2, column].Text =
-                "+" + ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime).TotalMinutes.ToString();
+                "+" + extraMins.TotalMinutes.ToString();
             grid[PhoenixOTSheetDims.RowsPerGrid - 2, column + 1].Text = "Extra mins";
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
+
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column].Text = cumulMins.TotalMinutes.ToString();
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Font = new Font("Arial", STANDARD_FONT_SIZE, FontStyle.Bold);
             grid[PhoenixOTSheetDims.RowsPerGrid - 1, column + 1].Text = "Total mins";
