@@ -490,9 +490,9 @@ namespace time
 
             p.CumulativeMins = cumulMins;
         }
-        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        private void calculateMinutes(work_period period)
         {
-            int index = wp.BinarySearch(e.Period, work_period.CompareByDate());
+            int index = wp.BinarySearch(period, work_period.CompareByDate());
 
             if (index < 0)
             {
@@ -506,7 +506,11 @@ namespace time
                 calcCumulMins(p);
                 ++index;
             }
-            calcCumulMins(e.Period);
+            calcCumulMins(period);
+        }
+        private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
+        {
+            calculateMinutes(e.Period);
         }
     }
 }
