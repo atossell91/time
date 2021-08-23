@@ -225,12 +225,12 @@ namespace time
         private TimeSpan calcOvertime()
         {
             return ShiftInformation.LockTimeToInterval(
-                ShiftInformation.CalcOvertime(period.StartTime, period.EndTime), false);
+                ShiftInformation.CalcOvertime(period.StartTime, period.EndTime));
         }
         private TimeSpan calcShiftPremium()
         {
             return ShiftInformation.LockTimeToInterval(
-                ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime), false);
+                ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime));
         }
         private void nud_overtime_ValueChanged(object sender, EventArgs e)
         {

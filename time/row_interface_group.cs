@@ -41,15 +41,17 @@ namespace time
             }
         }
 
-        private List<work_period> periods;
+        //  WorkPeriodData (capital P) is a publicly accessible way of interacting with workPeriodData (private)
+        private List<work_period> workPeriodData;
         public List<work_period> WorkPeriodData
         {
             set
             {
-                this.periods = value;
+                this.workPeriodData = value;
                 selectMonth(this.month);
             }
         }
+
         private List<row_interface> rowList;
 
         private int maxHeaderHeight;
@@ -67,21 +69,29 @@ namespace time
 
                 //Check if work period exists already
                 //  Init row with period if it exists already, or create a new period
-                int periodIndex = periods.BinarySearch(new work_period(day), work_period.CompareByDate());
+                int periodIndex = workPeriodData.BinarySearch(new work_period(day), work_period.CompareByDate());
 
                 if (periodIndex >= 0)
                 {
-                    work_period p = periods[periodIndex];
+                    work_period p = workPeriodData[periodIndex];
                     //periods.Add(p);
                     rowList.Add(new row_interface(p));
+                }
+                else if (workPeriodData.Count > 0)
+                {
+                    int indexComplement = ~periodIndex-1;
+                    work_period p = new work_period(day);
+                    p.CumulativeMins = workPeriodData[indexComplement].CumulativeMins;
+                    workPeriodData.Add(p);
+                    rowList.Add(new row_interface(workPeriodData[workPeriodData.Count - 1]));
                 }
                 else
                 {
                     work_period p = new work_period(day);
-                    periods.Add(p);
-                    rowList.Add(new row_interface(periods[periods.Count-1]));
+                    workPeriodData.Add(p);
+                    rowList.Add(new row_interface(workPeriodData[workPeriodData.Count-1]));
                 }
-                periods.Sort(work_period.CompareByDate());
+                workPeriodData.Sort(work_period.CompareByDate());
                 //Set row properties and events
                 //rowList[n].KeyDownEvent += row_interface_group_KeyDown;
                 rowList[n].Location = new Point(0, n * row_interface.rowHeight);
@@ -205,7 +215,7 @@ namespace time
         {
             InitializeComponent();
 
-            periods = new List<work_period>();
+            workPeriodData = new List<work_period>();
 
             rowList = new List<row_interface>();
             rowList.Add(sample_row_inteface);

@@ -46,6 +46,10 @@ namespace time
             long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);
         }
+        public static TimeSpan LockTimeToInterval(TimeSpan time)
+        {
+            return LockTimeToInterval(time, false);
+        }
         public static bool IsRestDay(DateTime d)
         {
             return (d.DayOfWeek == DayOfWeek.Saturday ||
@@ -134,7 +138,7 @@ namespace time
                 return TimeSpan.Zero;
             }
 
-            TimeSpan lockedTime = LockTimeToInterval(totalTime, false);
+            TimeSpan lockedTime = LockTimeToInterval(totalTime);
 
             return totalTime.Subtract(lockedTime);
         }

@@ -68,10 +68,10 @@ namespace time
                     {
                         pc.Hours = ShiftInformation.LockTimeToInterval(
                             ShiftInformation.CalcOvertime(p.StartTime,
-                            new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 0, 0, 0)), false);
+                            new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 0, 0, 0)));
 
                         PremiumCode holidayOT = new PremiumCode(DEFAULT_CODE, nextDay);
-                        holidayOT.Hours = ShiftInformation.LockTimeToInterval(p.EndTime.TimeOfDay, false);
+                        holidayOT.Hours = ShiftInformation.LockTimeToInterval(p.EndTime.TimeOfDay);
                         findAndAddHours(holidayOT, outputCodes);
                     }
                     else

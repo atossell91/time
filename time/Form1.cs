@@ -475,7 +475,7 @@ namespace time
             diff = diff < TimeSpan.Zero ? TimeSpan.Zero : diff;
 
             //  Find cumulative minutes from before
-            TimeSpan cumulMins = diff.Add(findCarryMins(wp, p.Date, 35));
+            TimeSpan cumulMins = diff.Add(findCarryMins(wp, p.Date, DAY_CUTOFF));
 
             //  Set flag and reset minutes if >15
             if (cumulMins.TotalMinutes >= 15)
