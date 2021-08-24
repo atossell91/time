@@ -8,11 +8,10 @@ using System.IO;
 
 namespace time
 {
-    class Settings
+    public class Settings
     {
         public bool RoundOT { get; set; } = true;
         public bool SplitSaturday { get; set; } = true;
-        private Settings() { }
         public static Settings LoadSettings(string path)
         {
 
@@ -29,6 +28,7 @@ namespace time
         {
             JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
             string content = JsonSerializer.Serialize<Settings>(this, options);
+            File.WriteAllText(path, content);
         }
     }
 }

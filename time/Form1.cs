@@ -25,7 +25,9 @@ namespace time
         //private row_interface_group displayedRows;
         //private row_interface_group row_interface_group1;
         private PersonalInfo personInfo;
-        private bool splitSunday = false;
+
+        private readonly string settingsName = "settings.json";
+        private Settings settings;
 
         private List<work_period> loadFromFile(string filepath)
         {
@@ -152,6 +154,7 @@ namespace time
 
             row_interface_group1.WorkPeriodData = wp;
 
+            settings = Settings.LoadSettings(MainDir.DirectoryPath + "\\" + settingsName);
 
             /*
             displayedRows = new row_interface_group(currentYear, currentMonth, wp);
@@ -174,6 +177,7 @@ namespace time
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             saveToFile(MainDir.DirectoryPath + "\\" + @"data.txt");
+            settings.Save(MainDir.DirectoryPath + "\\" + settingsName);
         }
         private string monthName(int month)
         {
@@ -258,7 +262,7 @@ namespace time
 
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
-            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, splitSunday);
+            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, settings.SplitSaturday);
             createOvertimeDataSheet(outCodes, date);
 
             Debug.WriteLine(outCodes.Count + " codes found.");
@@ -318,7 +322,7 @@ namespace time
             dataSheets.Add(new data_4600());
 
             List<PremiumCode> codes = new List<PremiumCode>(
-                CodeChecker.CheckCodes(periodCovered, splitSunday).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
+                CodeChecker.CheckCodes(periodCovered, settings.SplitSaturday).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
                 );
 
             int rowCount = 0;
@@ -511,6 +515,15 @@ namespace time
         private void onLeaveTimeBox(object sender, RowInterfaceEventArgs e)
         {
             calculateMinutes(e.Period);
+        }
+
+        private void ShowSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsView sv = new SettingsView();
+            if (sv.ShowDialog() == DialogResult.OK)
+            {
+                settings = sv.getSettings();
+            }
         }
     }
 }

@@ -36,6 +36,7 @@
             this.addCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewStatuatoryHolidaysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.row_interface_group1 = new time.row_interface_group();
+            this.showSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,7 +87,8 @@
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addCommentToolStripMenuItem,
-            this.viewStatuatoryHolidaysToolStripMenuItem});
+            this.viewStatuatoryHolidaysToolStripMenuItem,
+            this.showSettingsToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
             this.toolStripMenuItem1.Text = "Settings";
@@ -114,6 +116,13 @@
             this.row_interface_group1.Size = new System.Drawing.Size(1127, 491);
             this.row_interface_group1.TabIndex = 17;
             this.row_interface_group1.Year = 0;
+            // 
+            // showSettingsToolStripMenuItem
+            // 
+            this.showSettingsToolStripMenuItem.Name = "showSettingsToolStripMenuItem";
+            this.showSettingsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.showSettingsToolStripMenuItem.Text = "Show Settings";
+            this.showSettingsToolStripMenuItem.Click += new System.EventHandler(this.ShowSettingsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -147,6 +156,7 @@
         private System.Windows.Forms.ToolStripMenuItem addCommentToolStripMenuItem;
         private row_interface_group row_interface_group1;
         private System.Windows.Forms.ToolStripMenuItem viewStatuatoryHolidaysToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showSettingsToolStripMenuItem;
     }
 }
 
