@@ -40,6 +40,8 @@ namespace time
         private readonly Color weekDayColor = Color.Transparent;
         private readonly Color sundayColor = Color.LightGray;
 
+        Settings settings;
+
         private void initControlsList()
         {
             currentControl.Add(mtb_Start);
@@ -49,9 +51,14 @@ namespace time
             //currentControl.Add(cb_Washup);
             currentControl.Add(rtb_Comment);
         }
+        private void setup(work_period p, ref Settings s)
+        {
 
+        }
         public row_interface() : this(new work_period(DateTime.Now))
         {
+            Settings s = new Settings();
+            ApplySettings(ref s);
         }
         public row_interface(work_period p)
         {
@@ -99,6 +106,10 @@ namespace time
             {
                 this.BackColor = this.weekDayColor;
             }
+        }
+        public void ApplySettings(ref Settings s)
+        {
+            this.settings = s;
         }
         private void showNuds(bool flag)
         {
@@ -224,13 +235,16 @@ namespace time
         }
         private TimeSpan calcOvertime()
         {
+            TimeSpan ot = ShiftInformation.CalcOvertime(period.StartTime, period.EndTime);
+            TimeSpan lockedOT = ShiftInformation.LockTimeToInterval(ot, settings.RoundOT);
+            //TODO: Continue trying to get OT to calculate correctly based on settings
             return ShiftInformation.LockTimeToInterval(
-                ShiftInformation.CalcOvertime(period.StartTime, period.EndTime));
+                ShiftInformation.CalcOvertime(period.StartTime, period.EndTime), settings.RoundOT);
         }
         private TimeSpan calcShiftPremium()
         {
             return ShiftInformation.LockTimeToInterval(
-                ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime));
+                ShiftInformation.CalcShiftPremium(period.StartTime, period.EndTime), settings.RoundOT);
         }
         private void nud_overtime_ValueChanged(object sender, EventArgs e)
         {

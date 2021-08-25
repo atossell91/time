@@ -135,6 +135,8 @@ namespace time
             {
                 Debug.WriteLine("Directory found at: " + MainDir.DirectoryPath);
             }
+            settings = Settings.LoadSettings(MainDir.DirectoryPath + "\\" + settingsName);
+            row_interface_group1.ApplySettings(ref settings);
 
             wp = new List<work_period>();
 
@@ -154,7 +156,6 @@ namespace time
 
             row_interface_group1.WorkPeriodData = wp;
 
-            settings = Settings.LoadSettings(MainDir.DirectoryPath + "\\" + settingsName);
 
             /*
             displayedRows = new row_interface_group(currentYear, currentMonth, wp);
@@ -262,12 +263,12 @@ namespace time
 
             String name = this.personInfo.GivenNames + " " + this.personInfo.Surname;
 
-            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, settings.SplitSaturday);
+            List<PremiumCode> outCodes = CodeChecker.CheckCodes(DayRange, ref settings);
             createOvertimeDataSheet(outCodes, date);
 
             Debug.WriteLine(outCodes.Count + " codes found.");
 
-            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart, wp);
+            Sheet_PhoenixOT sheet = new Sheet_PhoenixOT(personInfo, outCodes, rangeStart, wp, ref settings);
             List<Sheet> sheets = new List<Sheet>();
             sheets.Add(sheet);
 
@@ -322,7 +323,7 @@ namespace time
             dataSheets.Add(new data_4600());
 
             List<PremiumCode> codes = new List<PremiumCode>(
-                CodeChecker.CheckCodes(periodCovered, settings.SplitSaturday).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
+                CodeChecker.CheckCodes(periodCovered, ref settings).Where((x) => x.Code == CodeChecker.Code290.DEFAULT_CODE)
                 );
 
             int rowCount = 0;
@@ -475,7 +476,7 @@ namespace time
             }
 
             //  Calculate extra minutes
-            TimeSpan diff = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
+            TimeSpan diff = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime, settings.RoundOT);
             diff = diff < TimeSpan.Zero ? TimeSpan.Zero : diff;
 
             //  Find cumulative minutes from before
@@ -519,10 +520,10 @@ namespace time
 
         private void ShowSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsView sv = new SettingsView();
+            SettingsView sv = new SettingsView(settings);
             if (sv.ShowDialog() == DialogResult.OK)
             {
-                settings = sv.getSettings();
+                settings.CopySettings(sv.getSettings());
             }
         }
     }

@@ -30,5 +30,10 @@ namespace time
             string content = JsonSerializer.Serialize<Settings>(this, options);
             File.WriteAllText(path, content);
         }
+        public void CopySettings(Settings s)
+        {
+            this.RoundOT = s.RoundOT;
+            this.SplitSaturday = s.SplitSaturday;
+        }
     }
 }

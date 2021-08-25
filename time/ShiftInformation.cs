@@ -46,10 +46,6 @@ namespace time
             long correctedTime = ((long)((totalTime + cut) / increment)) * increment;
             return new TimeSpan(correctedTime);
         }
-        public static TimeSpan LockTimeToInterval(TimeSpan time)
-        {
-            return LockTimeToInterval(time, false);
-        }
         public static bool IsRestDay(DateTime d)
         {
             return (d.DayOfWeek == DayOfWeek.Saturday ||
@@ -129,7 +125,7 @@ namespace time
                 return TimeSpan.Zero;
             }
         }
-        public static TimeSpan CalcExtraTime(DateTime start, DateTime end)
+        public static TimeSpan CalcExtraTime(DateTime start, DateTime end, bool roundOT)
         {
             TimeSpan totalTime = CalcHoursWorked(start, end, LunchLength);
 
@@ -138,9 +134,12 @@ namespace time
                 return TimeSpan.Zero;
             }
 
-            TimeSpan lockedTime = LockTimeToInterval(totalTime);
+            TimeSpan lockedTime = LockTimeToInterval(totalTime, roundOT);
 
-            return totalTime.Subtract(lockedTime);
+            TimeSpan diff = totalTime.Subtract(lockedTime);
+            diff = diff >= TimeSpan.Zero ? diff : TimeSpan.Zero;
+            return diff;
+            // TODO: Ensure hours round correctly according to settings (might need to recalculate on settings change
         }
     }
 }

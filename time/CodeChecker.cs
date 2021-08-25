@@ -11,20 +11,20 @@ namespace time
     {
         private static List<Code_Interface> ComputableCodes = 
             new List<Code_Interface>{new Code260(), new Code055(), new Code290(), new Extra260()};
-        public static List<PremiumCode> CheckCodes(List<work_period> inputPeriods, bool splitSunday)
+        public static List<PremiumCode> CheckCodes(List<work_period> inputPeriods, ref Settings settings)
         {
             List<PremiumCode> outputCodes = new List<PremiumCode>();
 
             foreach (Code_Interface code in CodeChecker.ComputableCodes)
             {
-                outputCodes.AddRange(code.GenerateCodes(inputPeriods, splitSunday));
+                outputCodes.AddRange(code.GenerateCodes(inputPeriods, settings));
             }
             return outputCodes;
         }
 
         interface Code_Interface
         {
-            List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday);
+            List<PremiumCode> GenerateCodes(List<work_period> wp, Settings settings);
         }
 
         public class Code260 : Code_Interface
@@ -48,7 +48,7 @@ namespace time
                     outputCodes.Sort(PremiumCode.compareByStartDate());
                 }
             }
-            public List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday)
+            public List<PremiumCode> GenerateCodes(List<work_period> wp, Settings settings)
             {
                 List<PremiumCode> outputCodes = new List<PremiumCode>();
                 for (int n = 0; n < wp.Count; ++n)
@@ -56,6 +56,7 @@ namespace time
                     work_period p = wp[n];
 
                     DateTime nextDay = p.Date.AddDays(1.0);
+                    nextDay = new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 0, 0, 0);
 
                     PremiumCode pc = new PremiumCode(DEFAULT_CODE, p.Date);
 
@@ -68,10 +69,12 @@ namespace time
                     {
                         pc.Hours = ShiftInformation.LockTimeToInterval(
                             ShiftInformation.CalcOvertime(p.StartTime,
-                            new DateTime(nextDay.Year, nextDay.Month, nextDay.Day, 0, 0, 0)));
+                            nextDay), settings.RoundOT);
 
                         PremiumCode holidayOT = new PremiumCode(DEFAULT_CODE, nextDay);
-                        holidayOT.Hours = ShiftInformation.LockTimeToInterval(p.EndTime.TimeOfDay);
+                        holidayOT.Hours = ShiftInformation.LockTimeToInterval(
+                            ShiftInformation.CalcHoursWorked(p.StartTime, p.EndTime,
+                            ShiftInformation.LunchLength).Subtract(pc.Hours), settings.RoundOT);
                         findAndAddHours(holidayOT, outputCodes);
                     }
                     else
@@ -91,7 +94,7 @@ namespace time
         public class Code055 : Code_Interface
         {
             public readonly static string DEFAULT_CODE = "055";
-            public List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday)
+            public List<PremiumCode> GenerateCodes(List<work_period> wp, Settings settings)
             {
                 List<PremiumCode> outputCodes = new List<PremiumCode>();
 
@@ -111,7 +114,7 @@ namespace time
         public class Code290 : Code_Interface
         {
             public readonly static string DEFAULT_CODE = "290";
-            public List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday)
+            public List<PremiumCode> GenerateCodes(List<work_period> wp, Settings settings)
             {
                 List<PremiumCode> outputcodes = new List<PremiumCode>();
 
@@ -138,7 +141,7 @@ namespace time
                     }
                     else if (p.EndTime.DayOfWeek == DayOfWeek.Sunday &&
                         washupEnd.DayOfWeek == DayOfWeek.Sunday &&
-                        splitSunday) // Shift ends on a sunday
+                        settings.SplitSaturday) // Shift ends on a sunday
                     {
                         PremiumCode x20 = new PremiumCode(DEFAULT_CODE, p.EndTime);
                         x20.EndDate = washupEnd;
@@ -176,7 +179,7 @@ namespace time
         public class Extra260 : Code_Interface
         {
             public readonly static string DEFAULT_CODE = "260*";
-            public List<PremiumCode> GenerateCodes(List<work_period> wp, bool splitSunday)
+            public List<PremiumCode> GenerateCodes(List<work_period> wp, Settings settings)
             {
                 List<PremiumCode> li = new List<PremiumCode>();
                 foreach (work_period p in wp)

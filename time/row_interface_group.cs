@@ -15,6 +15,7 @@ namespace time
     {
         public event RowInterfaceEvent LeaveTimeBox;
         private int year;
+        private Settings settings;
         public int Year
         {
             get
@@ -75,7 +76,10 @@ namespace time
                 {
                     work_period p = workPeriodData[periodIndex];
                     //periods.Add(p);
-                    rowList.Add(new row_interface(p));
+                    row_interface ri = new row_interface(p);
+                    ri.ApplySettings(ref settings);
+                    rowList.Add(ri);
+                    
                 }
                 else if (workPeriodData.Count > 0)
                 {
@@ -83,13 +87,17 @@ namespace time
                     work_period p = new work_period(day);
                     p.CumulativeMins = workPeriodData[indexComplement].CumulativeMins;
                     workPeriodData.Add(p);
-                    rowList.Add(new row_interface(workPeriodData[workPeriodData.Count - 1]));
+                    row_interface ri = new row_interface(workPeriodData[workPeriodData.Count - 1]);
+                    ri.ApplySettings(ref settings);
+                    rowList.Add(ri);
                 }
                 else
                 {
                     work_period p = new work_period(day);
                     workPeriodData.Add(p);
-                    rowList.Add(new row_interface(workPeriodData[workPeriodData.Count-1]));
+                    row_interface ri = new row_interface(workPeriodData[workPeriodData.Count - 1]);
+                    ri.ApplySettings(ref settings);
+                    rowList.Add(ri);
                 }
                 workPeriodData.Sort(work_period.CompareByDate());
                 //Set row properties and events
@@ -122,6 +130,7 @@ namespace time
         private void createHeaders()
         {
             row_interface dummy = new row_interface(new work_period(DateTime.Now));
+            dummy.ApplySettings(ref settings);
             maxHeaderHeight = 0;
 
             int maxHeaderWidth = 80;
@@ -196,6 +205,7 @@ namespace time
         private void autoCreateHeaders()
         {
             row_interface dummy = new row_interface(new work_period(DateTime.Now));
+            dummy.ApplySettings(ref settings);
 
             foreach (Control c in dummy.Controls)
             {
@@ -219,6 +229,15 @@ namespace time
 
             rowList = new List<row_interface>();
             rowList.Add(sample_row_inteface);
+            settings = new Settings();
+        }
+        public void ApplySettings(ref Settings s)
+        {
+            this.settings = s;
+        }
+        public Settings getSettingS()
+        {
+            return this.settings;
         }
 
         public void selectMonth(int m)
