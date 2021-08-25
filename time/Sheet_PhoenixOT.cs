@@ -27,6 +27,7 @@ namespace time
         private List<PremiumCode> codes;
         private DateTime startDate;
         private PersonalInfo pInfo;
+        private Settings settings;
 
         public readonly static string[] ValidCodes = {"055", "260", CodeChecker.Extra260.DEFAULT_CODE};
 
@@ -190,7 +191,7 @@ namespace time
             TimeSpan extraMins;
             if (srchResult >= 0 && p.IsValid())
             {
-                extraMins = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime);
+                extraMins = ShiftInformation.CalcExtraTime(p.StartTime, p.EndTime, settings.RoundOT);
             }
             else
             {
@@ -217,10 +218,12 @@ namespace time
                 printMinutes(ref grid, n / 2, tableStartDate);
             }
         }
-        public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate, List<work_period> wpData)
+        public Sheet_PhoenixOT(PersonalInfo info, List<PremiumCode> range, DateTime startDate,
+            List<work_period> wpData, ref Settings settings)
         {
             this.pInfo = info;
             this.startDate = startDate;
+            this.settings = settings;
 
             workPeriods = wpData;
 
