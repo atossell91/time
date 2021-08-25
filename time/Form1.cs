@@ -524,7 +524,6 @@ namespace time
             if (sv.ShowDialog() == DialogResult.OK)
             {
                 settings.CopySettings(sv.getSettings());
-                //Test
             }
         }
     }
