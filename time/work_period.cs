@@ -222,9 +222,12 @@ namespace time
         public override string ToString()
         {
             char s = ',';
-            return Date.ToString() + s +
-                StartTime.ToString() + s +
-                EndTime.ToString() + s +
+            string dateOnlyFormat = "yyyy-MM-dd";
+            string dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+            return Date.ToString(dateOnlyFormat) + s +
+                StartTime.ToString(dateTimeFormat) + s +
+                EndTime.ToString(dateTimeFormat) + s +
                 Overtime.ToString() + s +
                 ShiftPremiums.ToString() + s +
                 WashupTime.ToString() + s +
