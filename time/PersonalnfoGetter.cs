@@ -41,6 +41,7 @@ namespace time
 
             string[] file = File.ReadAllLines(filename);
 
+
             PersonalInfo p;
 
             if (PersonalInfo.TryParse(file[0], out p))
